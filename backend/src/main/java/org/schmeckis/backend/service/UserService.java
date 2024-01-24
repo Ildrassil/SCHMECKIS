@@ -1,4 +1,4 @@
-package org.schmeckis.backend;
+package org.schmeckis.backend.service;
 
 
 import lombok.RequiredArgsConstructor;

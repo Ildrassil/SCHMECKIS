@@ -9,10 +9,11 @@ public record User(
         String id,
         String username,
         String password,
-        String email
+        String email,
+        String masterPassword
 ) {
-    public User(String username, String password, String email) {
-        this(UUID.randomUUID().toString(), username, password, email);
+    public User(String username, String password, String email, String masterPassword) {
+        this(UUID.randomUUID().toString(), username, password, email, masterPassword);
     }
 
 }

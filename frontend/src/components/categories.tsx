@@ -6,7 +6,11 @@ import MenuItem from "@mui/material/MenuItem";
 import Menu from "@mui/material/Menu";
 
 
-export default function categorieMenu(categoriesList: string[]) {
+type Categories = {
+    categoriesList: string[]
+}
+
+export default function CategorieMenu(categoriesList: Categories) {
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
     const [selectedIndex, setSelectedIndex] = useState(1);
     const open = Boolean(anchorEl);
@@ -43,7 +47,7 @@ export default function categorieMenu(categoriesList: string[]) {
                 >
                     <ListItemText
                         primary="CATEGORIES"
-                        secondary={categoriesList[selectedIndex]}
+                        secondary={categoriesList.categoriesList[selectedIndex]}
                     />
                 </ListItemButton>
             </List>
@@ -57,7 +61,7 @@ export default function categorieMenu(categoriesList: string[]) {
                     role: "listbox",
                 }}
             >
-                {categoriesList.map((categorie, index) => (
+                {categoriesList.categoriesList.map((categorie, index) => (
                     <MenuItem
                         key={categorie}
                         disabled={index === 0}

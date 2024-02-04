@@ -65,7 +65,14 @@ public class RezeptService {
     }
 
     public List<Rezept> getRezepteByKategorie(String kategorieName) {
-        return rezeptRepo.getRezeptByKategorieListContaining(kategorie);
+        List<Rezept> allRezepte = rezeptRepo.findAll();
+        List<Rezept> rezepteByKategorie = new ArrayList<>();
+        for (Rezept rezept : allRezepte) {
+            if (rezept.kategorieList().contains(kategorieName)) {
+                rezepteByKategorie.add(rezept);
+            }
+        }
+        return rezepteByKategorie;
     }
 
 

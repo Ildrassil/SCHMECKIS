@@ -1,5 +1,7 @@
+import {Recepie} from "./Recepie.tsx";
+
 type RecepieGalleryProps = {
-    recepiesList: string[]
+    recepiesList: Recepie[]
 }
 
 export default function RecepieGallery(recepiesList: RecepieGalleryProps) {

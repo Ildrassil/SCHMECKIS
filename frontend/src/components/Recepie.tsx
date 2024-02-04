@@ -1,4 +1,5 @@
-export type RecepieRequest = {
+export type Recepie = {
+    id: string,
     recepieName: string,
     recepieDescription: string,
     recepieIngredients: string[],

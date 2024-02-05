@@ -1,94 +1,55 @@
-import './App.css'
+import {Link, Route, Routes} from "react-router-dom";
 import React, {useEffect, useState} from "react";
+import {Rezept} from "./models/Rezept.tsx";
 import axios from "axios";
-import CategorieMenu from './components/categories.tsx';
-import {Route, Routes} from "react-router-dom";
-import RecepieGallery from "./components/RecepieGallery.tsx";
-import {Recepie} from "./components/Recepie.tsx";
-import {RecepieRequest} from "./components/RecepieRequest.tsx";
+
+import {Kategorie} from "./models/Kategorie.tsx";
+import KategorieMenu from "./components/KategorieMenu.tsx";
+import RezeptGallery from "./components/RecepieGallery.tsx";
+import './App.css'
+
 
 function App() {
-    const [categoriesList, setCategoriesList] = useState<string[]>(["REGULAR", "VEGETARIAN", "VEGAN", "DESSERT"])
-    const [recipesList, setRecipesList] = useState<Recepie[]>([])
+    const [kategorieList, setKategorieList] = useState<Kategorie[]>([]);
+    const [rezeptList, setRezeptList] = useState<Rezept[]>([]);
 
-    function getAllData() {
-        axios.get('http://localhost:8080/api/recipes').then((response) => {
-                setRecipesList(response.data)
-            }
-        )
+    function fetchRecipes() {
+        axios.get("/api/rezepte").then(response => {
+            setRezeptList(response.data);
+            getKategories(response.data);
+            console.log(response.data);
+        });
+
     }
 
-    function getRecipesByCategory(category: string) {
-        axios.get(`http://localhost:8080/api/recipes/${category}`).then((response) => {
-                setRecipesList(response.data)
+    function getKategories(rezeptListUpdate: Rezept[]) {
+        for (let i = 0; i < rezeptListUpdate.length; i++) {
+            for (let z = 0; z < rezeptListUpdate[i].kategorieList.length; z++) {
+                if (!kategorieList.includes(rezeptListUpdate[i].kategorieList[z])) {
+                    setKategorieList([...kategorieList, rezeptListUpdate[i].kategorieList[z]]);
+                }
             }
-        )
-    }
-
-    function updateCategoryList(category: string) {
-        if (category === "REGULAR" || category === "VEGETARIAN" || category === "VEGAN" || category === "DESSERT") {
-            getAllData()
-        } else {
-            setCategoriesList([...categoriesList, category])
         }
     }
 
-    function deleteRecipe(recipe: Recepie) {
-        axios.delete<boolean>(`http://localhost:8080/api/recipes/${recipe.id}`).then((response) => {
-                if (response.data === true) {
-                    const id = recipe.id;
-                    setRecipesList(recipesList.filter(recipe => recipe.id !== id))
-                }
-            }
-        )
+    function onCategoryClick(kategorie: string) {
+        if (kategorie === "Home") {
+            fetchRecipes();
+        }
+        setRezeptList(rezeptList.filter(rezept => rezept.kategorieList.map(kategorie => kategorie.kategorieName).includes(kategorie)));
     }
-
-    function updateRecipe(recepie: Recepie) {
-        axios.put<boolean>(`http://localhost:8080/api/recipes/${recipe.id}`, {
-            recipeName: recepie.recepieName,
-            recipeDescription: recepie.recepieDescription,
-            recipeCategory: recepie.recepieCategory,
-            recipeIngredients: recepie.recepieIngredients,
-            recipeInstructions: recepie.recepieInstructions,
-            recipeImage: recepie.recepieImage
-        }).then((response) => {
-                if (response.data === true) {
-                    const id = recepie.id;
-                    setRecipesList(recipesList.filter(recipe => recipe.id !== id))
-                }
-            }
-        )
-    }
-
-    function updateRecipeList(recipe: Recepie) {
-        const id = recipe.id;
-        setRecipesList(recipesList.filter(recipe => recipe.id !== id))
-    }
-
-    function addRecipe(recipe: RecepieRequest) {
-        axios.post("/api/recipes", {
-            recipeName: recipe.recepieName,
-            recipeDescription: recipe.recepieDescription,
-            recipeCategory: recipe.recepieCategory,
-            recipeIngredients: recipe.recepieIngredients,
-            recipeInstructions: recipe.recepieInstructions
-        }).then(response =>
-            setRecipesList([...recipesList, response.data]))
-    }
-
 
     useEffect(() => {
-        getAllData()
-
-    }, [])
-
+        fetchRecipes();
+    }, []);
+    console.log(rezeptList)
     return (
         <>
-            <h1>#SCHMECKIS</h1>
-            <CategorieMenu categoriesList={categoriesList}/>
+            <Link to={"/"}><h1>#SCHMECKIS</h1></Link>
+            <KategorieMenu kategorieList={kategorieList} onCategoryClick={onCategoryClick}/>
             <Routes>
                 <Route path={"/"}
-                       element={<RecepieGallery recepiesList={recipesList}/>}/>
+                       element={<RezeptGallery rezeptList={rezeptList}/>}/>
             </Routes>
 
         </>

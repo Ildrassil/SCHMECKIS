@@ -24,8 +24,8 @@ public class RezepteController {
 
     @PostMapping("/create")
     @ResponseStatus(HttpStatus.CREATED)
-    public void createRezept(@RequestBody RequestRezept rezept) {
-        rezeptService.createRezept(rezept);
+    public Rezept createRezept(@RequestBody RequestRezept rezept) {
+        return rezeptService.createRezept(rezept);
     }
 
     @GetMapping("/{id}")

@@ -15,15 +15,15 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class RezeptService {
 
-    RezeptRepo rezeptRepo;
+    private final RezeptRepo rezeptRepo;
 
-    public void createRezept(RequestRezept rezept) {
+    public Rezept createRezept(RequestRezept rezept) {
         Optional<Rezept> isRezept = rezeptRepo.findByRezeptName(rezept.rezeptName());
         if (isRezept.isPresent()) {
             throw new IllegalArgumentException("Rezept already exists");
         }
         rezeptRepo.save(new Rezept(rezept.rezeptName(), rezept.rezeptImageUrl(), rezept.rezeptKurzbeschreibung(), rezept.rezeptBeschreibung(), rezept.kategorieList()));
-
+        return rezeptRepo.findByRezeptName(rezept.rezeptName()).get();
     }
 
     public Rezept getRezept(String id) throws IllegalArgumentException {

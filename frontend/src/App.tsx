@@ -2,7 +2,6 @@ import {Link, Route, Routes} from "react-router-dom";
 import React, {useEffect, useState} from "react";
 import {Rezept} from "./models/Rezept.tsx";
 import axios from "axios";
-
 import {Kategorie} from "./models/Kategorie.tsx";
 import KategorieMenu from "./components/KategorieMenu.tsx";
 import RezeptGallery from "./components/RecepieGallery.tsx";
@@ -45,8 +44,8 @@ function App() {
     console.log(rezeptList)
     return (
         <>
-            <Link to={"/"}><h1>#SCHMECKIS</h1></Link>
-            <KategorieMenu kategorieList={kategorieList} onCategoryClick={onCategoryClick}/>
+            <Link className="HeadLine" to={"/"}><h1>#SCHMECKIS</h1></Link>
+            <KategorieMenu overallKategories={kategorieList} onCategoryClick={onCategoryClick}/>
             <Routes>
                 <Route path={"/"}
                        element={<RezeptGallery rezeptList={rezeptList}/>}/>

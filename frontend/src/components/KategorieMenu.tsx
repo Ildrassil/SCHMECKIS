@@ -1,57 +1,19 @@
+import {motion} from "framer-motion";
 import {Kategorie} from "../models/Kategorie.tsx";
 import * as React from 'react';
 import {useEffect} from 'react';
-import Accordion from '@mui/material/Accordion';
-import AccordionSummary from '@mui/material/AccordionSummary';
-import AccordionDetails from '@mui/material/AccordionDetails';
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import {Button} from "@mui/material";
-import {styled} from "@mui/material/styles";
 
 
 type KategorieList = {
     overallKategories: Kategorie[],
     onCategoryClick: (kategorie: string) => void
 }
-const StyledButtonHeader = styled(Button)(() => ({
-    backgroundColor: 'transparent',
-    color: '#6CB6D9',
-    fontSize: '5rem',
-    fontFamily: 'Montserrat',
-    textAlign: 'center',
-    fontWeight: 'semiBold',
-}));
-
-const SytledAccordion = styled(Accordion)(() => ({
-    backgroundColor: 'transparent',
-    flexDirection: 'column',
-    color: '#6CB6D9',
-    fontSize: '5rem',
-    fontFamily: 'Montserrat',
-    textAlign: 'center',
-    borderRadius: 5,
-    elevation: 0,
-    px: 1,
-    py: 0.25,
-    IconComponentcon: {
-        color: '#6CB6D9',
-    }
-}));
-const StyledButton = styled(Button)(() => ({
-    backgroundColor: 'transparent',
-    color: '#FFFFFF',
-    fontSize: '4rem',
-    fontFamily: 'Montserrat',
-    fontWeight: 'regular',
-    textAlign: 'center',
-}));
-
 
 export default function KategorieMenu({overallKategories, onCategoryClick}: KategorieList) {
-    const [currentCategorie, setCurrentCategorie] = React.useState<string>("Kategorien");
+    const [currentCategorie, setCurrentCategorie] = React.useState<string>("KATEGORIEN");
     const [kategorieList, setKategorieList] = React.useState<Kategorie[]>(overallKategories);
     const Home = "Philipp and Jakobs list of Recipes from Websites, TikTok, Instagram and also own creations.";
-
+    const [unfold, setUnfold] = React.useState<boolean>(false);
     function onCategorie(event: React.MouseEvent<HTMLButtonElement>) {
         setCurrentCategorie(event.currentTarget.value);
         kategorieList.map(kategorie => {
@@ -60,44 +22,52 @@ export default function KategorieMenu({overallKategories, onCategoryClick}: Kate
                 }
             }
         )
-        if (kategorieList.map(kategorie => !kategorie.kategorieName.includes(Home))) {
+        if (kategorieList.map(kategorie => !kategorie.kategorieName.includes("KATEGORIEN"))) {
             kategorieList.push({
-                kategorieName: "Home",
-                kategorieBeschreibung: "Philipp and Jakobs list of Recipes from Websites, TikTok, Instagram and also own cartoon."
+                kategorieName: "KATEGORIEN",
+                kategorieBeschreibung: Home
             });
         }
+        const kategorie: Kategorie = kategorieList?.find(kategorie => kategorie.kategorieName === event.currentTarget.value);
         setKategorieList(kategorieList.filter(kategorie => kategorie.kategorieName !== event.currentTarget.value));
-        setKategorieList([...kategorieList, event.target.value]);
+        setKategorieList([...kategorieList, kategorie]);
     }
 
     useEffect(() => {
 
     }, []);
 
+    function menuTrigger() {
+        setUnfold(!unfold);
+    }
+
     return (
-        <div>
-            <SytledAccordion>
-                <AccordionSummary
-                    expandIcon={<ExpandMoreIcon/>}
-                    aria-controls="panel1-content"
-                    id="panel1-header"
-                >
-                    <StyledButtonHeader value={currentCategorie} type={"button"}>{currentCategorie}</StyledButtonHeader>
-                </AccordionSummary>
-                <AccordionDetails>
-                    {kategorieList && kategorieList.map(kategorie => {
-                        return <StyledButton type="button" onClick={onCategorie} value={kategorie.kategorieName}>
-                            {kategorie.kategorieName}</StyledButton>
+        <div className="Menu">
+            <div>
+                <button onClick={menuTrigger}><h1>{currentCategorie}</h1>
+                    <motion.svg animate={{rotate: unfold ? 90 : 0}} transition={{delay: 0.2, type: "tween"}}
+                                xmlns="http://www.w3.org/2000/svg" width="30" height="50" viewBox="0 0 20 30">
+                        <path id="Polygon_1" data-name="Polygon 1" d="M15,0,30,20H0Z"
+                              transform="translate(20) rotate(90)" fill="#393939"/>
+                    </motion.svg>
+                </button>
+                <motion.div animate={{y: unfold ? 50 : 0, scale: unfold ? 1 : 0, opacity: unfold ? 1 : 0}}
+                            transition={{delay: 0.5, type: "tween"}}>
+                    {kategorieList.map(kategorie => {
+                        return <button className="MenuItem" onClick={onCategorie} value={kategorie.kategorieName}
+                                       key={kategorie.kategorieName}>{kategorie.kategorieName}</button>
                     })}
-                </AccordionDetails>
-            </SytledAccordion>
+                </motion.div>
+
+            </div>
+
             <h4>
-                {currentCategorie !== "Kategorien" && kategorieList
+                {currentCategorie !== "KATEGORIEN" && kategorieList
                     .filter(kategorie => kategorie.kategorieName === currentCategorie)
                     .map(kategorie => {
                         return kategorie.kategorieBeschreibung
                     })}
-                {currentCategorie === "Kategorien" && Home}
+                {currentCategorie === "KATEGORIEN" && Home}
             </h4>
 
         </div>

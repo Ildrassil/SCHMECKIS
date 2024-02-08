@@ -69,7 +69,7 @@ public class RezeptService {
         List<Rezept> allRezepte = rezeptRepo.findAll();
         List<Rezept> rezepteByKategorie = new ArrayList<>();
         for (Rezept rezept : allRezepte) {
-            if (rezept.kategorieList().contains(kategorieName)) {
+            if (rezept.kategorieList().stream().anyMatch(kategorie -> kategorie.kategorieName().equals(kategorieName))) {
                 rezepteByKategorie.add(rezept);
             }
         }

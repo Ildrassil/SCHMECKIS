@@ -146,7 +146,7 @@ public class RezeptServiceTest {
     @Test
     void getRezepteByKategorieTest() {
         //ARRANGE
-        List<Rezept> expected = List.of(new Rezept("1", "Kartoffelsalat", "www.kartoffelsalat.de", "Kartoffelsalat", "Kartoffelsalat", List.of(new Kategorie("Salat", "Salat"))));
+        List<Rezept> expected = List.of(new Rezept("1", "Kartoffelsalat", "www.kartoffelsalat.de", "Kartoffelsalat", "Kartoffelsalat", List.of(new Kategorie("Salat", "Salat"), new Kategorie("Gemüse", "Gemüse"))));
         when(rezeptRepo.findAll()).thenReturn(expected);
         //ACT
         List<Rezept> actual = rezeptService.getRezepteByKategorie("Salat");

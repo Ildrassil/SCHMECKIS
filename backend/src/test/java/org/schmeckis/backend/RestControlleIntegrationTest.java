@@ -84,4 +84,222 @@ class RestControlleIntegrationTest {
 
     }
 
+    @Test
+    @DirtiesContext
+    void testCreateRezept() throws Exception {
+        //ARRANGE
+        String rezept = """
+                {
+                    "rezeptName": "Kartoffelsalat",
+                    "rezeptImageUrl": "Kartoffelsalat mit Mayo",
+                    "rezeptKurzbeschreibung": "Kartoffelsalat",
+                    "rezeptBeschreibung": "Kartoffelsalat",
+                    "kategorieList": [
+                        {
+                            "kategorieName": "Salat",
+                            "kategorieBeschreibung": "Salat"
+                        }
+                    ]
+                }
+                """;
+
+        //ACT
+        MvcResult result = mockMvc.perform(MockMvcRequestBuilders.post("/api/rezepte/create")
+                        .contentType("application/json")
+                        .content(rezept))
+                .andExpect(status().isCreated())
+                .andReturn();
+
+        //ASSERT
+        assertEquals(201, result.getResponse().getStatus());
+    }
+
+    @Test
+    @DirtiesContext
+    void testGetRezept() throws Exception {
+        //ARRANGE
+        Rezept rezept = new Rezept("1", "Kartoffelsalat", "Kartoffelsalat mit Mayo", "Kartoffelsalat", "Kartoffelsalat",
+                List.of(new Kategorie("Salat", "Salat")));
+        rezeptRepo.save(rezept);
+        String expected = """
+                {
+                    "id": "1",
+                    "rezeptName": "Kartoffelsalat",
+                    "rezeptImageUrl": "Kartoffelsalat mit Mayo",
+                    "rezeptKurzbeschreibung": "Kartoffelsalat",
+                    "rezeptBeschreibung": "Kartoffelsalat",
+                    "kategorieList": [
+                        {
+                            "kategorieName": "Salat",
+                            "kategorieBeschreibung": "Salat"
+                        }
+                    ]
+                }
+                """;
+        //ACT
+        MvcResult result = mockMvc.perform(MockMvcRequestBuilders.get("/api/rezepte/1"))
+                .andExpect(status().isOk())
+                .andExpect(content().json(expected))
+                .andReturn();
+
+        //ASSERT
+        assertEquals(200, result.getResponse().getStatus());
+    }
+
+    @Test
+    @DirtiesContext
+    void testDeleteRezept() throws Exception {
+        //ARRANGE
+        Rezept rezept = new Rezept("1", "Kartoffelsalat", "Kartoffelsalat mit Mayo", "Kartoffelsalat", "Kartoffelsalat",
+                List.of(new Kategorie("Salat", "Salat")));
+        rezeptRepo.save(rezept);
+
+        //ACT
+        MvcResult result = mockMvc.perform(MockMvcRequestBuilders.delete("/api/rezepte/1"))
+                .andExpect(status().isNoContent())
+                .andReturn();
+
+        //ASSERT
+        assertEquals(204, result.getResponse().getStatus());
+    }
+
+    @Test
+    @DirtiesContext
+    void testUpdateRezept() throws Exception {
+        //ARRANGE
+        Rezept rezept = new Rezept("1", "Kartoffelsalat", "Kartoffelsalat mit Mayo", "Kartoffelsalat", "Kartoffelsalat",
+                List.of(new Kategorie("Salat", "Salat")));
+        rezeptRepo.save(rezept);
+        String rezeptUpdate = """
+                {
+                    "rezeptName": "Nudelsalat",
+                    "rezeptImageUrl": "Nudelsalat mit Mayo",
+                    "rezeptKurzbeschreibung": "Nudelsalat",
+                    "rezeptBeschreibung": "Nudelsalat",
+                    "kategorieList": [
+                        {
+                            "kategorieName": "Salat",
+                            "kategorieBeschreibung": "Salat"
+                        }
+                    ]
+                }
+                """;
+        String expect = """
+                {
+                    "id": "1",
+                    "rezeptName": "Nudelsalat",
+                    "rezeptImageUrl": "Nudelsalat mit Mayo",
+                    "rezeptKurzbeschreibung": "Nudelsalat",
+                    "rezeptBeschreibung": "Nudelsalat",
+                    "kategorieList": [
+                        {
+                            "kategorieName": "Salat",
+                            "kategorieBeschreibung": "Salat"
+                        }
+                    ]
+                }
+                """;
+        //ACT
+        MvcResult result = mockMvc.perform(MockMvcRequestBuilders.put("/api/rezepte/1")
+                        .contentType("application/json")
+                        .content(rezeptUpdate))
+                .andExpect(status().isOk())
+                .andExpect(content().json(expect))
+                .andReturn();
+
+        //ASSERT
+        assertEquals(200, result.getResponse().getStatus());
+    }
+
+    @Test
+    @DirtiesContext
+    void addKategorieTest() throws Exception {
+        Rezept rezept = new Rezept("1", "Nudelsalat", "Nudelsalat mit Mayo", "Nudelsalat", "Nudelsalat",
+                List.of(new Kategorie("Salat", "Salat")));
+        rezeptRepo.save(rezept);
+        Kategorie kategorie = new Kategorie("Nudeln", "Nudeln");
+        String kategorieUpDate = """
+                {
+                            "kategorieName": "Nudeln",
+                            "kategorieBeschreibung": "Nudeln"
+                }
+                """;
+        String expect = """
+                {
+                    "id": "1",
+                    "rezeptName": "Nudelsalat",
+                    "rezeptImageUrl": "Nudelsalat mit Mayo",
+                    "rezeptKurzbeschreibung": "Nudelsalat",
+                    "rezeptBeschreibung": "Nudelsalat",
+                    "kategorieList": [
+                        {
+                            "kategorieName": "Salat",
+                            "kategorieBeschreibung": "Salat"
+                        },
+                        {
+                            "kategorieName": "Nudeln",
+                            "kategorieBeschreibung": "Nudeln"
+                            }
+                    ]
+                }
+                """;
+        //ACT
+        MvcResult result = mockMvc.perform(MockMvcRequestBuilders.put("/api/rezepte/1/addKategorie")
+                        .contentType("application/json")
+                        .content(kategorieUpDate))
+                .andExpect(status().isOk())
+                .andExpect(content().json(expect))
+                .andReturn();
+
+
+        //ASSERT
+
+        assertEquals(200, result.getResponse().getStatus());
+
+
+    }
+
+    @Test
+    @DirtiesContext
+    void deleteKategorieTest() throws Exception {
+        Rezept rezept = new Rezept("1", "Nudelsalat", "Nudelsalat mit Mayo", "Nudelsalat", "Nudelsalat",
+                List.of(new Kategorie("Salat", "Salat"), new Kategorie("Nudeln", "Nudeln")));
+        rezeptRepo.save(rezept);
+        Kategorie kategorie = new Kategorie("Nudeln", "Nudeln");
+        String kategorieUpDate = """
+                {
+                            "kategorieName": "Nudeln",
+                            "kategorieBeschreibung": "Nudeln"
+                }
+                """;
+        String expect = """
+                {
+                    "id": "1",
+                    "rezeptName": "Nudelsalat",
+                    "rezeptImageUrl": "Nudelsalat mit Mayo",
+                    "rezeptKurzbeschreibung": "Nudelsalat",
+                    "rezeptBeschreibung": "Nudelsalat",
+                    "kategorieList": [
+                        {
+                            "kategorieName": "Salat",
+                            "kategorieBeschreibung": "Salat"
+                        }
+                    ]
+                }
+                """;
+        //ACT
+        MvcResult result = mockMvc.perform(MockMvcRequestBuilders.delete("/api/rezepte/1/deleteKategorie")
+                        .contentType("application/json")
+                        .content(kategorieUpDate))
+                .andExpect(status().isOk())
+                .andExpect(content().json(expect))
+                .andReturn();
+        //ASSERT
+        assertEquals(200, result.getResponse().getStatus());
+    }
+
+
+
+
+
 }

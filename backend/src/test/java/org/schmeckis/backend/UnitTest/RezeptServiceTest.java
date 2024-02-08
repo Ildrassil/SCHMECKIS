@@ -14,7 +14,7 @@ import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
 
-public class RezeptServiceTest {
+class RezeptServiceTest {
 
     private final RezeptRepo rezeptRepo = mock(RezeptRepo.class);
     private final IdService idService = mock(IdService.class);

@@ -12,4 +12,6 @@ public interface RezeptRepo extends MongoRepository<Rezept, String> {
     Optional<Rezept> findByRezeptName(String rezeptName);
 
     List<Rezept> getRezeptByKategorieListContaining(String kategorie);
+
+
 }

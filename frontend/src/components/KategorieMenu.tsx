@@ -11,7 +11,7 @@ type KategorieList = {
 
 export default function KategorieMenu({overallKategories, onCategoryClick}: KategorieList) {
     const [currentCategorie, setCurrentCategorie] = React.useState<string>("KATEGORIEN");
-    const [kategorieList, setKategorieList] = React.useState<Kategorie[]>(overallKategories);
+    const kategorieList: Kategorie[] = overallKategories;
     const Home = "Philipp and Jakobs list of Recipes from Websites, TikTok, Instagram and also own creations.";
     const [unfold, setUnfold] = React.useState<boolean>(false);
     function onCategorie(event: React.MouseEvent<HTMLButtonElement>) {
@@ -22,13 +22,13 @@ export default function KategorieMenu({overallKategories, onCategoryClick}: Kate
                 }
             }
         )
-        if (kategorieList.map(kategorie => !kategorie.kategorieName.includes("KATEGORIEN"))) {
+        if (kategorieList.find(kategorie => kategorie.kategorieName === "KATEGORIEN") === undefined) {
             kategorieList.push({
                 kategorieName: "KATEGORIEN",
                 kategorieBeschreibung: Home
             });
         }
-        const kategorie: Kategorie = kategorieList?.find(kategorie => kategorie.kategorieName === event.currentTarget.value);
+        const kategorie: Kategorie = kategorieList.find(kategorie => kategorie.kategorieName === event.currentTarget.value);
         setKategorieList(kategorieList.filter(kategorie => kategorie.kategorieName !== event.currentTarget.value));
         setKategorieList([...kategorieList, kategorie]);
     }
@@ -51,8 +51,14 @@ export default function KategorieMenu({overallKategories, onCategoryClick}: Kate
                               transform="translate(20) rotate(90)" fill="#393939"/>
                     </motion.svg>
                 </button>
-                <motion.div animate={{y: unfold ? 50 : 0, scale: unfold ? 1 : 0, opacity: unfold ? 1 : 0}}
-                            transition={{delay: 0.5, type: "tween"}}>
+                <motion.div animate={{
+                    y: unfold ? 50 : 0, scale: unfold ? 1 : 0, opacity: unfold ? 1 : 0,
+                    originY: 0
+                }}
+                            transition={{staggerChildren: 0.5, type: "tween"}}
+                            className={unfold ? "MenuItems" : "MenuItemsHidden"}
+
+                >
                     {kategorieList.map(kategorie => {
                         return <button className="MenuItem" onClick={onCategorie} value={kategorie.kategorieName}
                                        key={kategorie.kategorieName}>{kategorie.kategorieName}</button>

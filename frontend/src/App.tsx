@@ -16,23 +16,24 @@ function App() {
         axios.get("/api/rezepte").then(response => {
             setRezeptList(response.data);
             getKategories(response.data);
-            console.log(response.data);
         });
 
     }
 
     function getKategories(rezeptListUpdate: Rezept[]) {
+        const allKategories: Kategorie[] = [...kategorieList];
         for (let i = 0; i < rezeptListUpdate.length; i++) {
             for (let z = 0; z < rezeptListUpdate[i].kategorieList.length; z++) {
-                if (!kategorieList.includes(rezeptListUpdate[i].kategorieList[z])) {
-                    setKategorieList([...kategorieList, rezeptListUpdate[i].kategorieList[z]]);
+                if (!allKategories.includes(rezeptListUpdate[i].kategorieList[z])) {
+                    allKategories.push(rezeptListUpdate[i].kategorieList[z]);
                 }
             }
         }
+        setKategorieList(allKategories);
     }
 
     function onCategoryClick(kategorie: string) {
-        if (kategorie === "Home") {
+        if (kategorie === "KATEGORIEN") {
             fetchRecipes();
         }
         setRezeptList(rezeptList.filter(rezept => rezept.kategorieList.map(kategorie => kategorie.kategorieName).includes(kategorie)));
@@ -41,7 +42,7 @@ function App() {
     useEffect(() => {
         fetchRecipes();
     }, []);
-    console.log(rezeptList)
+
     return (
         <>
             <Link className="HeadLine" to={"/"}><h1>#SCHMECKIS</h1></Link>

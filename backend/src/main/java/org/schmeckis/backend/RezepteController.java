@@ -40,21 +40,21 @@ public class RezepteController {
     }
 
     @PutMapping("/{id}")
-    @ResponseStatus(HttpStatus.ACCEPTED)
-    public void updateRezept(@PathVariable String id, @RequestBody RequestRezept rezept) {
-        rezeptService.updateRezept(id, rezept);
+    @ResponseStatus(HttpStatus.OK)
+    public Rezept updateRezept(@PathVariable String id, @RequestBody RequestRezept rezept) {
+        return rezeptService.updateRezept(id, rezept);
     }
 
     @PutMapping("/{id}/addKategorie")
-    @ResponseStatus(HttpStatus.ACCEPTED)
-    public void addKategorieToRezept(@PathVariable String id, @RequestBody Kategorie kategorie) {
-        rezeptService.addKategorieToRezept(id, kategorie);
+    @ResponseStatus(HttpStatus.OK)
+    public Rezept addKategorieToRezept(@PathVariable String id, @RequestBody Kategorie kategorie) {
+        return rezeptService.addKategorieToRezept(id, kategorie);
     }
 
     @DeleteMapping("/{id}/deleteKategorie")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deleteKategorieFromRezept(@PathVariable String id, @RequestBody Kategorie kategorie) {
-        rezeptService.deleteKategorieFromRezept(id, kategorie);
+    @ResponseStatus(HttpStatus.OK)
+    public Rezept deleteKategorieFromRezept(@PathVariable String id, @RequestBody Kategorie kategorie) {
+        return rezeptService.deleteKategorieFromRezept(id, kategorie);
     }
 
     @GetMapping("/kategorie/{kategorieName}")

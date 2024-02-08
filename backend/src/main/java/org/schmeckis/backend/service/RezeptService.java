@@ -5,6 +5,7 @@ import org.schmeckis.backend.model.Rezept;
 import org.schmeckis.backend.model.dto.RequestRezept;
 import org.schmeckis.backend.model.submodel.Kategorie;
 import org.schmeckis.backend.repo.RezeptRepo;
+import org.schmeckis.backend.util.IdService;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -17,13 +18,13 @@ public class RezeptService {
 
     private final RezeptRepo rezeptRepo;
 
+    private final IdService idService;
     public Rezept createRezept(RequestRezept rezept) {
         Optional<Rezept> isRezept = rezeptRepo.findByRezeptName(rezept.rezeptName());
         if (isRezept.isPresent()) {
             throw new IllegalArgumentException("Rezept already exists");
         }
-        rezeptRepo.save(new Rezept(rezept.rezeptName(), rezept.rezeptImageUrl(), rezept.rezeptKurzbeschreibung(), rezept.rezeptBeschreibung(), rezept.kategorieList()));
-        return rezeptRepo.findByRezeptName(rezept.rezeptName()).get();
+        return rezeptRepo.save(new Rezept(idService.generateId(), rezept.rezeptName(), rezept.rezeptImageUrl(), rezept.rezeptKurzbeschreibung(), rezept.rezeptBeschreibung(), rezept.kategorieList()));
     }
 
     public Rezept getRezept(String id) throws IllegalArgumentException {
@@ -38,26 +39,26 @@ public class RezeptService {
         });*/
     }
 
-    public void updateRezept(String id, RequestRezept rezept) {
+    public Rezept updateRezept(String id, RequestRezept rezept) {
         Rezept isRezept = rezeptRepo.findById(id).orElseThrow(() -> new IllegalArgumentException("Rezept not found"));
         Rezept rezeptToUpdate = new Rezept(id, rezept.rezeptName(), rezept.rezeptImageUrl(), rezept.rezeptKurzbeschreibung(), rezept.rezeptBeschreibung(), rezept.kategorieList());
-        rezeptRepo.save(rezeptToUpdate);
+        return rezeptRepo.save(rezeptToUpdate);
     }
 
-    public void addKategorieToRezept(String id, Kategorie kategorie) {
+    public Rezept addKategorieToRezept(String id, Kategorie kategorie) {
         Rezept rezept = rezeptRepo.findById(id).orElseThrow(() -> new IllegalArgumentException("Rezept not found"));
         List<Kategorie> kategorieList = new ArrayList<>(rezept.kategorieList());
         kategorieList.add(kategorie);
         Rezept rezeptToBeSafed = new Rezept(id, rezept.rezeptName(), rezept.rezeptImageUrl(), rezept.rezeptKurzbeschreibung(), rezept.rezeptBeschreibung(), kategorieList);
-        rezeptRepo.save(rezeptToBeSafed);
+        return rezeptRepo.save(rezeptToBeSafed);
     }
 
-    public void deleteKategorieFromRezept(String id, Kategorie kategorie) {
+    public Rezept deleteKategorieFromRezept(String id, Kategorie kategorie) {
         Rezept rezept = rezeptRepo.findById(id).orElseThrow(() -> new IllegalArgumentException("Rezept not found"));
         List<Kategorie> kategorieList = new ArrayList<>(rezept.kategorieList());
         kategorieList.remove(kategorie);
         Rezept rezeptToBeSafed = new Rezept(id, rezept.rezeptName(), rezept.rezeptImageUrl(), rezept.rezeptKurzbeschreibung(), rezept.rezeptBeschreibung(), kategorieList);
-        rezeptRepo.save(rezeptToBeSafed);
+        return rezeptRepo.save(rezeptToBeSafed);
     }
 
     public List<Rezept> getAllRezepte() {

@@ -65,7 +65,7 @@ body {
 
 .Menu button:active {
     color: #70b4ff;
-    animation-delay: 2s;
+    animation-delay: 1s;
     border: none;
     background-color: transparent;
     inner-shadow: rgba(0, 0, 0, 0.1) 0px 5px 15px;
@@ -81,6 +81,7 @@ body {
 .Menu motion.div {
     display: flex;
     flex-direction: row;
+    position: relative;
     border: transparent;
     border: none;
     box-shadow: inset rgba(0, 0, 0, 0.5) -5px -5px 40px;
@@ -96,7 +97,18 @@ body {
     border: transparent;
 }
 
-.Menu motion.div .MenuItem {
+.MenuItemsHidden {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 0.5rem;
+    margin: 0;
+    width: 0;
+    height: 0;
+}
+
+.MenuItems {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -109,6 +121,22 @@ body {
     font-family: 'Roboto', sans-serif;
     font-size: 1rem;
     color: rgba(156, 156, 156, 0.69);
+    margin-bottom: 10rem;
+}
+
+.MenuItems button {
+    display: flex;
+    flex-direction: row;
+    border: none;
+    background-color: transparent;
+    color: rgba(156, 156, 156, 0.69);
+    font-size: 1.5rem;
+}
+
+.MenuItems button:active {
+    color: #70b4ff;
+    font-size: 2rem;
+    animation-delay: 0.2s;
 }
 
 .root {

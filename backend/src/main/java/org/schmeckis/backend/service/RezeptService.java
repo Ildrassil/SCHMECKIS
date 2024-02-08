@@ -33,9 +33,9 @@ public class RezeptService {
     public void deleteRezept(String id) {
         Rezept rezept = rezeptRepo.findById(id).orElseThrow(() -> new IllegalArgumentException("Rezept not found"));
         rezeptRepo.delete(rezept);
-        rezeptRepo.findById(id).ifPresent(rezept1 -> {
+        /*rezeptRepo.findById(id).ifPresent(rezept1 -> {
             throw new IllegalArgumentException("Rezept not deleted");
-        });
+        });*/
     }
 
     public void updateRezept(String id, RequestRezept rezept) {

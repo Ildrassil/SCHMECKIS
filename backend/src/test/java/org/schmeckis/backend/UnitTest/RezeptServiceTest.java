@@ -102,7 +102,7 @@ public class RezeptServiceTest {
         Rezept expected = new Rezept("1", "Kartoffelsalat", "www.kartoffelsalat.de", "Kartoffelsalat", "Kartoffelsalat", List.of(new Kategorie("Salat", "Salat"), new Kategorie("Gemüse", "Gemüse")));
         Rezept tobeUpdated = new Rezept("1", "Kartoffelsalat", "www.kartoffelsalat.de", "Kartoffelsalat", "Kartoffelsalat", List.of(new Kategorie("Salat", "Salat")));
         Kategorie kategorie = new Kategorie("Gemüse", "Gemüse");
-        List<Kategorie> kategorieList = List.of(new Kategorie("Salat", "Salat"));
+        List<Kategorie> kategorieList = List.of(new Kategorie("Salat", "Salat"), kategorie);
         when(rezeptRepo.findById("1")).thenReturn(Optional.of(tobeUpdated));
         when(rezeptRepo.save(new Rezept("1", "Kartoffelsalat", "www.kartoffelsalat.de", "Kartoffelsalat", "Kartoffelsalat", kategorieList))).thenReturn(expected);
         //ACT

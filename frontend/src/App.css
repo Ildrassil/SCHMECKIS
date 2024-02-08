@@ -21,7 +21,7 @@ body {
     font-size: 2.5em;
     font-weight: 500;
     color: #70b4ff;
-    text-shadow: rgba(0, 0, 0, 0.1) 0px 5px 15px;
+    text-shadow: rgba(0, 0, 0, 0.2) 5px 5px 15px, rgba(255, 255, 255, 0.79) -5px -5px 15px;
     margin-top: 4rem;
     padding: 10rem;
     align-self: center;
@@ -41,7 +41,6 @@ body {
     background-color: transparent;
     font-family: 'Roboto', sans-serif;
     font-size: 1.5em;
-    background-color: transparent;
 
 }
 
@@ -50,7 +49,6 @@ body {
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    height: fit-content;
 
 }
 
@@ -61,14 +59,18 @@ body {
     background-color: transparent;
     color: rgb(57, 57, 57);
     font-size: 2rem;
+    text-shadow: rgba(0, 0, 0, 0.12) 5px 5px 15px, rgba(255, 255, 255, 0.85) -5px -5px 15px;
+    padding: 2rem;
 }
 
 .Menu button:active {
     color: #70b4ff;
-    animation-delay: 1s;
+    border-radius: 5rem;
+    animation-delay: 0.2s;
     border: none;
     background-color: transparent;
-    inner-shadow: rgba(0, 0, 0, 0.1) 0px 5px 15px;
+    box-shadow: inset rgba(0, 0, 0, 0.1) 0px 5px 15px;
+    width: max-content;
 }
 
 .Menu button: focus {

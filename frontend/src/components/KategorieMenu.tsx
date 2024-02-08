@@ -16,6 +16,7 @@ export default function KategorieMenu({overallKategories, onCategoryClick}: Kate
     const [unfold, setUnfold] = React.useState<boolean>(false);
     function onCategorie(event: React.MouseEvent<HTMLButtonElement>) {
         setCurrentCategorie(event.currentTarget.value);
+        setUnfold(false);
         kategorieList.map(kategorie => {
                 if (kategorie.kategorieName === event.currentTarget.value) {
                     onCategoryClick(kategorie.kategorieName);
@@ -31,6 +32,7 @@ export default function KategorieMenu({overallKategories, onCategoryClick}: Kate
         const kategorie: Kategorie = kategorieList.find(kategorie => kategorie.kategorieName === event.currentTarget.value);
         setKategorieList(kategorieList.filter(kategorie => kategorie.kategorieName !== event.currentTarget.value));
         setKategorieList([...kategorieList, kategorie]);
+
     }
 
     useEffect(() => {

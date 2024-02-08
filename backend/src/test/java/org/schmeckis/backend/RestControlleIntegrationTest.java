@@ -73,7 +73,7 @@ class RestControlleIntegrationTest {
                 ]
                 """;
         //ACT
-        MvcResult result = mockMvc.perform(MockMvcRequestBuilders.get("/rezepte"))
+        MvcResult result = mockMvc.perform(MockMvcRequestBuilders.get("/api/rezepte"))
                 .andExpect(status().isOk())
                 .andExpect(content().json(expected))
                 .andReturn();
@@ -81,6 +81,7 @@ class RestControlleIntegrationTest {
 
         //ASSERT
         assertEquals(200, result.getResponse().getStatus());
+
     }
 
 }

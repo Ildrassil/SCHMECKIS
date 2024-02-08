@@ -298,7 +298,42 @@ class RestControlleIntegrationTest {
         assertEquals(200, result.getResponse().getStatus());
     }
 
+    @Test
+    @DirtiesContext
+    void getRezeptByKategorieTest() throws Exception {
+        //ARRANGE
+        List<Rezept> allRezepts = List.of(new Rezept("1", "Kartoffelsalat", "Kartoffelsalat mit Mayo", "Kartoffelsalat", "Kartoffelsalat",
+                List.of(new Kategorie("Salat", "Salat"))), new Rezept("2", "Nudelsalat", "Nudelsalat mit Mayo", "Nudelsalat", "Nudelsalat",
+                List.of(new Kategorie("Salat", "Salat"))), new Rezept("3", "Bohnen", "Bohnen", "Bohnen", "Bohnen",
+                List.of(new Kategorie("Bohnen", "Bohnen"))));
+        rezeptRepo.saveAll(allRezepts);
+        String expect = """
+                [
+                {
+                    "id": "3",
+                    "rezeptName": "Bohnen",
+                    "rezeptImageUrl": "Bohnen",
+                    "rezeptKurzbeschreibung": "Bohnen",
+                    "rezeptBeschreibung": "Bohnen",
+                    "kategorieList": [
+                        {
+                            "kategorieName": "Bohnen",
+                            "kategorieBeschreibung": "Bohnen"
+                        }
+                    ]
+                }
+                ]
+                """;
+        //ACT
+        MvcResult result = mockMvc.perform(MockMvcRequestBuilders.get("/api/rezepte/kategorie/Bohnen"))
+                .andExpect(status().isOk())
+                .andExpect(content().json(expect))
+                .andReturn();
 
+        //ASSERT
+        assertEquals(200, result.getResponse().getStatus());
+
+    }
 
 
 

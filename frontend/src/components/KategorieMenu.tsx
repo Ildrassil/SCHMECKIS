@@ -55,15 +55,16 @@ export default function KategorieMenu({overallKategories, onCategoryClick}: Kate
                 </button>
                 <motion.div animate={{
                     y: unfold ? 50 : 0, scale: unfold ? 1 : 0, opacity: unfold ? 1 : 0,
-                    originY: 0
+                    originY: 0,
                 }}
-                            transition={{staggerChildren: 0.5, type: "tween"}}
+                            transition={{staggerChildren: 2}}
                             className={unfold ? "MenuItems" : "MenuItemsHidden"}
 
                 >
                     {kategorieList.map(kategorie => {
-                        return <button className="MenuItem" onClick={onCategorie} value={kategorie.kategorieName}
-                                       key={kategorie.kategorieName}>{kategorie.kategorieName}</button>
+                        return <motion.button animate={{originY: 0}} className="MenuItem" onClick={onCategorie}
+                                              value={kategorie.kategorieName}
+                                              key={kategorie.kategorieName}>{kategorie.kategorieName}</motion.button>
                     })}
                 </motion.div>
 

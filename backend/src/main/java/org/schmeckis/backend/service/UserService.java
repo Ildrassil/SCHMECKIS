@@ -19,7 +19,7 @@ public class UserService {
     }
 
     public User getUser(String username, String password) {
-        Optional<User> isUser= userRepo.findByUsernaem(username);
+        Optional<User> isUser = userRepo.findByUsername(username);
         boolean isPasswordCorrect = isUser.map(user -> user.password().equals(password)).orElse(false);
 
         if (isPasswordCorrect) {

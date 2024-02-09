@@ -5,7 +5,6 @@ import axios from "axios";
 import {Kategorie} from "./models/Kategorie.tsx";
 import KategorieMenu from "./components/KategorieMenu.tsx";
 import RezeptGallery from "./components/RecepieGallery.tsx";
-import './App.css'
 
 
 function App() {
@@ -46,7 +45,8 @@ function App() {
     return (
         <>
             <div className="Header">
-            <Link className="HeadLine" to={"/"}><h1>#SCHMECKIS</h1></Link>
+                <Link className="HeadLine" to={"/"}><h1
+                    className="HeadLine justify-center sticky align-middle">#SCHMECKIS</h1></Link>
             </div>
             <KategorieMenu overallKategories={kategorieList} onCategoryClick={onCategoryClick}/>
             <Routes>

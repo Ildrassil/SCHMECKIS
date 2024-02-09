@@ -1,4 +1,4 @@
-import {motion} from "framer-motion";
+import {AnimatePresence, motion} from "framer-motion";
 import {Kategorie} from "../models/Kategorie.tsx";
 import * as React from 'react';
 import {useEffect} from 'react';
@@ -8,6 +8,29 @@ type KategorieList = {
     overallKategories: Kategorie[],
     onCategoryClick: (kategorie: string) => void
 }
+
+const variants = {
+    type: "tween",
+    initial: {opacity: 0, y: -50, marginBottom: 0, padding: 0},
+    animate: {opacity: 1, y: 0, marginBottom: 35, padding: 0.5},
+    exit: {opacity: 0, y: -50, marginBottom: 0, padding: 0},
+    container: {
+        animate: {
+            transition: {
+                staggerChildren: 0.5,
+                delayChildren: 0.2,
+                ease: "easeIn"
+            }
+        },
+        exit: {
+            transition: {
+                staggerChildren: 0.5,
+                delayChildren: 0.2,
+                ease: "easeInOut"
+            }
+        }
+    }
+};
 
 export default function KategorieMenu({overallKategories, onCategoryClick}: KategorieList) {
     const [currentCategorie, setCurrentCategorie] = React.useState<string>("KATEGORIEN");
@@ -53,22 +76,27 @@ export default function KategorieMenu({overallKategories, onCategoryClick}: Kate
                               transform="translate(20) rotate(90)" fill="#393939"/>
                     </motion.svg>
                 </button>
-                <motion.div animate={{
-                    y: unfold ? 50 : 0, scale: unfold ? 1 : 0, opacity: unfold ? 1 : 0,
-                    originY: 0,
-                }}
-                            transition={{staggerChildren: 2}}
-                            className={unfold ? "MenuItems" : "MenuItemsHidden"}
-
-                >
+                <AnimatePresence>
+                    {unfold && (
+                        <motion.div variants={variants.container} initial="initial"
+                                    animate={unfold ? "animate" : "initial"}
+                                    exit="exit" className="MenuItems">
                     {kategorieList.map(kategorie => {
-                        return <motion.button animate={{originY: 0}} className="MenuItem" onClick={onCategorie}
-                                              value={kategorie.kategorieName}
-                                              key={kategorie.kategorieName}>{kategorie.kategorieName}</motion.button>
+                        return <motion.button
+                            initial={variants.initial}
+                            animate={{...variants.animate, transition: {delay: 0.2}, padding: 10}}
+                            exit={variants.exit}
+                            className="MenuItem"
+                            onClick={onCategorie}
+                            value={kategorie.kategorieName}
+                            key={kategorie.kategorieName}>
+                            {kategorie.kategorieName}</motion.button>
                     })}
                 </motion.div>
-
+                    )}
+                </AnimatePresence>
             </div>
+
 
             <h4>
                 {currentCategorie !== "KATEGORIEN" && kategorieList

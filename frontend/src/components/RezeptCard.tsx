@@ -1,40 +1,6 @@
 import * as React from 'react';
-import {styled} from '@mui/material/styles';
-import Card from '@mui/material/Card';
-import CardHeader from '@mui/material/CardHeader';
-import CardMedia from '@mui/material/CardMedia';
-import CardContent from '@mui/material/CardContent';
-import CardActions from '@mui/material/CardActions';
-import Collapse from '@mui/material/Collapse';
-import IconButton, {IconButtonProps} from '@mui/material/IconButton';
-import Typography from '@mui/material/Typography';
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import {Rezept} from '../models/Rezept.tsx';
-import {Button} from "@mui/material";
-import {InfoRounded} from "@mui/icons-material";
-
-interface ExpandMoreProps extends IconButtonProps {
-    expand: boolean;
-}
-
-const ExpandMore = styled((props: ExpandMoreProps) => {
-    const {expand, ...other} = props;
-    return <IconButton {...other} />;
-})(({theme, expand}) => ({
-    transform: !expand ? 'rotate(0deg)' : 'rotate(180deg)',
-    marginLeft: 'auto',
-    fontFamily: 'Montserrat',
-    backgroundColor: 'transparent',
-    transition: theme.transitions.create('transform', {
-        duration: theme.transitions.duration.shortest,
-    }),
-}));
-const StyledButton = styled(Button)(() => ({
-    backgroundColor: 'transparent',
-    color: '#FFFFFF',
-    borderColor: '#FFFFFF',
-    flexDirection: 'row',
-}));
+import {useNavigate} from "react-router-dom";
 
 
 type RezeptProps = {
@@ -42,60 +8,34 @@ type RezeptProps = {
 }
 
 export default function RezeptCard({rezept}: RezeptProps) {
-    const [expanded, setExpanded] = React.useState(false);
+    const navigate = useNavigate();
 
-    const handleExpandClick = () => {
-        setExpanded(!expanded);
-    };
-
+    function openEdit() {
+        navigate("/rezept/" + rezept.id);
+    }
     return (
-        <Card key={rezept.id} sx={{maxWidth: 345}}>
-            <CardHeader
-                action={
+        <div className="bg-transparent rounded-xl shadow-double p-4 m-2 border-transparent">
+            <div className="flex justify-between items-center">
+                <h2 className="text-xl font-bold">{rezept.rezeptName}</h2>
+                <button className="bg-gray-200 rounded-full p-2" onClick={openEdit}>
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"
+                         className="h-6 w-6 text-gray-500">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
+                              d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
+                              d="M12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
+                    </svg>
+                </button>
+            </div>
+            <img className="w-50 object-cover mt-2 rounded" src={rezept.rezeptImageUrl} alt={rezept.rezeptName}/>
+            <p className="text-gray-700 mt-2">{rezept.rezeptKurzbeschreibung}</p>
+            <div className="flex mt-2">
+                {rezept.kategorieList.map(kategorie => (
+                    <button key={kategorie.kategorieName}
+                            className="flex-row bg-transparent rounded-full px-3 text-sm font-semibold text-gray-700 mr-2 mb-2 p-1">#{kategorie.kategorieName}</button>
+                ))}
+            </div>
+        </div>
 
-                    <IconButton href={'/rezept/' + rezept.id} aria-label="infoIcon">
-                        <InfoRounded/>
-                    </IconButton>
-
-                }
-                title={rezept.rezeptName}
-                subheader=""
-            />
-            <CardMedia
-                component="img"
-                height="194"
-                image={rezept.rezeptImageUrl}
-                alt={rezept.rezeptName}
-            />
-            <CardContent>
-                <Typography variant="body2" color="text.secondary">
-                    {rezept.rezeptKurzbeschreibung}
-                </Typography>
-            </CardContent>
-            <CardActions>
-                {rezept.kategorieList.map((kategorie) => {
-                    return <StyledButton variant="outlined" aria-label="#Kategorie"
-                                         href={"/kategorie/" + kategorie}>
-                        {"#" + kategorie.kategorieName}
-                    </StyledButton>
-                })}
-                <ExpandMore
-                    expand={expanded}
-                    onClick={handleExpandClick}
-                    aria-expanded={expanded}
-                    aria-label="show more"
-                >
-                    <ExpandMoreIcon/>
-                </ExpandMore>
-            </CardActions>
-            <Collapse in={expanded} timeout="auto" unmountOnExit>
-                <CardContent>
-                    <Typography paragraph>Beschreibung:</Typography>
-                    <Typography paragraph>
-                        {rezept.rezeptBeschreibung}
-                    </Typography>
-                </CardContent>
-            </Collapse>
-        </Card>
     );
 }

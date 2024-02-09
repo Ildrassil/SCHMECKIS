@@ -45,7 +45,9 @@ function App() {
 
     return (
         <>
+            <div className="Header">
             <Link className="HeadLine" to={"/"}><h1>#SCHMECKIS</h1></Link>
+            </div>
             <KategorieMenu overallKategories={kategorieList} onCategoryClick={onCategoryClick}/>
             <Routes>
                 <Route path={"/"}

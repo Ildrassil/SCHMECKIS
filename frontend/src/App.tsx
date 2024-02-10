@@ -45,7 +45,8 @@ function App() {
     return (
         <>
             <div className="Header">
-                <Link to={"/"}><h1 className="HeadLine justify-center sticky align-middle">#SCHMECKIS</h1></Link>
+                <Link to={"/"}><h1 className="HeadLine justify-center sticky align-middle text-3xl text-center
+                pt-2 m-2">#SCHMECKIS</h1></Link>
             </div>
             <KategorieMenu onCategoryClick={onCategoryClick}/>
             <Routes>

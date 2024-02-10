@@ -1,31 +1,49 @@
 import {AnimatePresence, motion} from "framer-motion";
 import {Kategorie} from "../models/Kategorie.tsx";
 import * as React from 'react';
-import {useEffect} from 'react';
 
 
-const variants = {
-    type: "tween",
-    initial: {opacity: 0, y: -50, marginBottom: 0, padding: 0},
-    animate: {opacity: 1, y: 0, marginBottom: 35, padding: 0.5},
-    exit: {opacity: 0, y: -50, marginBottom: 0, padding: 0},
-    container: {
-        animate: {
-            transition: {
-                staggerChildren: 0.5,
-                delayChildren: 0.2,
-                ease: "easeIn"
-            }
-        },
-        exit: {
-            transition: {
-                staggerChildren: 0.5,
-                delayChildren: 0.2,
-                ease: "easeInOut"
-            }
-        }
-    }
+const menuItems = {
+    initial: {opacity: 0, y: -50, margin: 0},
+    animate: (index: number) => ({
+        opacity: 1,
+        y: 0,
+        paddibg: `${5 * index}px 0px`,
+        transition: {delay: index * 0.2, when: "beforeChildren"}
+    }),
+    exit: (index: number) => ({
+        opacity: 0,
+        y: -50,
+        padding: `${5 * index}px 0px`,
+        transition: {delay: index * 0.2, when: "afterChildren"}
+    }),
 };
+const conatainer = {
+    initial: {opacity: 0, y: -50, marginBottom: 0, padding: 0.5},
+    animate: {
+        y: 0,
+        opacity: 1,
+        maxHeight: 500,
+        transition: {
+
+            type: "spring",
+            staggerChildren: 0.2,
+            duration: 0.5,
+        }
+    },
+    exit: {
+        y: -50,
+        opacity: 0,
+        maxHeight: 0,
+        transition: {
+            type: "tween",
+            staggerChildren: 0.2,
+            duration: 0.5,
+        }
+        }
+};
+
+
 
 type KategorieMenuProps = {
     onCategoryClick: (kategorie: string) => void
@@ -61,6 +79,7 @@ export default function KategorieMenu({onCategoryClick}: KategorieMenuProps) {
     const [kategorie, setKategorie] = React.useState<Kategorie[]>(kategorieList);
     const [currentCategorie, setCurrentCategorie] = React.useState<string>(kategorieList[5].kategorieName);
     const [unfold, setUnfold] = React.useState<boolean>(false);
+
     function onCategorie(event: React.MouseEvent<HTMLButtonElement>) {
         setKategorie(kategorieList.filter(kategorie => kategorie.kategorieName !== event.currentTarget.value));
         const onkategorie: Kategorie = kategorieList.find(kategorie => kategorie.kategorieName === event.currentTarget.value);
@@ -71,9 +90,6 @@ export default function KategorieMenu({onCategoryClick}: KategorieMenuProps) {
 
     }
 
-    useEffect(() => {
-
-    }, []);
 
     function menuTrigger() {
         setUnfold(!unfold);
@@ -84,64 +100,26 @@ export default function KategorieMenu({onCategoryClick}: KategorieMenuProps) {
             <div>
                 <button className="flex flex-row bg-transparent text-2xl text-current" onClick={menuTrigger}>
                     <h1>{currentCategorie}</h1>
-                    <motion.svg animate={{rotate: unfold ? 90 : 0}} transition={{delay: 0.2, type: "tween"}}
-                                xmlns="http://www.w3.org/2000/svg" width="30" height="50" viewBox="0 0 20 30">
-                        <path id="Polygon_1" data-name="Polygon 1" d="M15,0,30,20H0Z"
-                              transform="translate(20) rotate(90)" fill="#393939"/>
-                    </motion.svg>
                 </button>
                 <AnimatePresence>
-                    {unfold && (
-                        <motion.div variants={variants.container} initial="initial"
-                                    animate={unfold ? "animate" : "initial"}
-                                    exit="exit" className="MenuItems">
+                    {unfold && <motion.div
+                        variants={conatainer}
+                        initial={conatainer.initial}
+                        animate={unfold ? conatainer.animate : conatainer.exit}
+                        className="MenuItems">
+                        {kategorie.map((kat, index) => (
                             <motion.button
-                                initial={variants.initial}
-                                animate={variants.animate}
-                                exit={variants.exit}
-                                className="MenuItem"
+                                initial={menuItems.initial}
+                                animate={menuItems.animate(index)}
+                                exit={menuItems.exit(index)}
+                                className="MenuItem bg-transparent text-2xl p-4"
                                 onClick={onCategorie}
-                                value={kategorie[0].kategorieName}
-                                key={kategorie[0].kategorieName}>
-                                {kategorie[0].kategorieName}</motion.button>
-                            <motion.button
-                                initial={variants.initial}
-                                animate={variants.animate}
-                                exit={variants.exit}
-                                className="MenuItem"
-                                onClick={onCategorie}
-                                value={kategorie[1].kategorieName}
-                                key={kategorie[1].kategorieName}>
-                                {kategorie[1].kategorieName}</motion.button>
-                            <motion.button
-                                initial={variants.initial}
-                                animate={variants.animate}
-                                exit={variants.exit}
-                                className="MenuItem"
-                                onClick={onCategorie}
-                                value={kategorie[2].kategorieName}
-                                key={kategorie[2].kategorieName}>
-                                {kategorie[2].kategorieName}</motion.button>
-                            <motion.button
-                                initial={variants.initial}
-                                animate={variants.animate}
-                                exit={variants.exit}
-                                className="MenuItem"
-                                onClick={onCategorie}
-                                value={kategorie[3].kategorieName}
-                                key={kategorie[3].kategorieName}>
-                                {kategorie[3].kategorieName}</motion.button>
-                            <motion.button
-                                initial={variants.initial}
-                                animate={variants.animate}
-                                exit={variants.exit}
-                                className="MenuItem"
-                                onClick={onCategorie}
-                                value={kategorie[4].kategorieName}
-                                key={kategorie[4].kategorieName}>
-                                {kategorie[4].kategorieName}</motion.button>
-                        </motion.div>
-                    )}
+                                value={kat.kategorieName}
+                                key={kat.kategorieName}>
+                                {kat.kategorieName}
+                            </motion.button>
+                        ))}
+                    </motion.div>}
                 </AnimatePresence>
             </div>
 

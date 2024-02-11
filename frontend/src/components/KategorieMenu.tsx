@@ -8,33 +8,28 @@ const menuItems = {
     animate: (index: number) => ({
         opacity: 1,
         y: 0,
-        paddibg: `${5 * index}px 0px`,
         transition: {delay: index * 0.2, when: "beforeChildren"}
     }),
     exit: (index: number) => ({
         opacity: 0,
         y: -50,
-        padding: `${5 * index}px 0px`,
         transition: {delay: index * 0.2, when: "afterChildren"}
     }),
 };
+
 const conatainer = {
-    initial: {opacity: 0, y: -50, marginBottom: 0, padding: 0.5},
+    initial: {opacity: 0, marginBottom: 0, padding: 0.5},
     animate: {
-        y: 0,
         opacity: 1,
-        maxHeight: 500,
         transition: {
 
-            type: "spring",
+            type: "tween",
             staggerChildren: 0.2,
             duration: 0.5,
         }
     },
     exit: {
-        y: -50,
         opacity: 0,
-        maxHeight: 0,
         transition: {
             type: "tween",
             staggerChildren: 0.2,
@@ -96,35 +91,38 @@ export default function KategorieMenu({onCategoryClick}: KategorieMenuProps) {
     }
 
     return (
-        <div className="Menu">
-            <div>
-                <button className="flex flex-row bg-transparent text-2xl text-current" onClick={menuTrigger}>
+        <div className={`Menu flex flex-col pb-33 self-center items-center justify-center align-middle
+        text-3xl text-textHeader transition-all duration-1000 ease-in-out 
+        focus:text-blue-400  focus:border-transparent mt-36 `}>
+
+            <button className="flex bg-transparent text-4xl text-current p-4" onClick={menuTrigger}>
                     <h1>{currentCategorie}</h1>
                 </button>
+
+            {unfold && (
                 <AnimatePresence>
-                    {unfold && <motion.div
+                    <motion.div
+                        layout
                         variants={conatainer}
                         initial={conatainer.initial}
                         animate={unfold ? conatainer.animate : conatainer.exit}
-                        className="MenuItems">
+                        className="MenuItems flex flex-col items-center text-center justify-items-center">
                         {kategorie.map((kat, index) => (
                             <motion.button
                                 initial={menuItems.initial}
                                 animate={menuItems.animate(index)}
                                 exit={menuItems.exit(index)}
-                                className="MenuItem bg-transparent text-2xl p-4"
+                                className="MenuItem flex flex-col bg-transparent text-center text-textPrime text-2xl p-4"
                                 onClick={onCategorie}
                                 value={kat.kategorieName}
                                 key={kat.kategorieName}>
                                 {kat.kategorieName}
                             </motion.button>
                         ))}
-                    </motion.div>}
-                </AnimatePresence>
-            </div>
+                    </motion.div>
+                </AnimatePresence>)}
 
-
-            <h4>
+            <h4 className="flex flex-wrap text-center text-xl p-5 w-1/3 shadow-kategorieIn mt-14 rounded-2xl">
                 {kategorieList.find(kategorie => kategorie.kategorieName === currentCategorie)?.kategorieBeschreibung}
             </h4>
 

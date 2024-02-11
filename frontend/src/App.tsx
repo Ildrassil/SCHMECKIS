@@ -46,14 +46,16 @@ function App() {
     return (
         <>
             <div className="Header">
-                <Link to={"/"}><h1 className="HeadLine justify-center sticky align-middle text-3xl text-center
-                pt-2 m-2">#SCHMECKIS</h1></Link>
+                <Link to={"/"}><h1 className="HeadLine justify-center sticky align-middle text-4xl text-center font-semibold
+                fontfamily-roboto font-sans
+                text-textHeader
+                pt-32 m-2">#SCHMECKIS</h1></Link>
             </div>
             <KategorieMenu onCategoryClick={onCategoryClick}/>
             <Routes>
                 <Route path={"/"}
                        element={<RezeptGallery rezeptList={rezeptList}/>}/>
-                <Route path={`/:rezeptId`} element={<DetailPage/>}/>
+                <Route path={`/rezept/:rezeptId`} element={<DetailPage/>}/>
             </Routes>
 
         </>

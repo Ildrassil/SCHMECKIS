@@ -30,7 +30,10 @@ export default function DetailPage() {
 
 
     function saveEdit() {
-        axios.put("/api/rezepte/" + rezeptId, currentRezept).then(response => {
+        axios.put("/api/rezepte/" + rezeptId, {
+            currentRezept
+        })
+            .then(response => {
             console.log(response);
             if (response.status === 200) {
                 setOpenEdit(false);

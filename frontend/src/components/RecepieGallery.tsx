@@ -28,7 +28,7 @@ export default function RezeptGallery({rezeptList}: RecepieGalleryProps) {
 
             {rezeptList && rezeptList.map(rezept => {
                 return (
-                    <motion.div className="Rezept Card basis-1/4 hover:basis-1/3 m-2 p-4
+                    <motion.div className="Rezept Card basis-1/3 m-2 p-4
                     rounded-2xl border-2 border-transparent color-textPrime" key={rezept.id}
                                 initial={variants.initial}
                                 animate={variants.animate}>

@@ -15,15 +15,16 @@ type OptionType = {
     value: Kategorie,
     label: string
 };
-export default function Edit({state, rezept, saveEdit, setCurrentRezept}: EditProps) {
+
+export function Edit({state, rezept, saveEdit, setCurrentRezept, setOpenEdit}: EditProps) {
     const [showEdit, setShowEdit] = useState<boolean>(state);
     const [newKategorie, setNewKategorie] = useState<Kategorie>({
         kategorieName: "",
         kategorieBeschreibung: "",
     });
-    const [actualRezept, setActualRezept] = useState<Rezept>(rezept);
+    const [actualRezept, setActualRezept] = useState<Rezept>(rezept)
 
-    const options = actualRezept.kategorieList.map(kategorie => ({value: kategorie, label: kategorie.kategorieName}));
+    const options = actualRezept.kategorieList.map(kategorie => ({value: kategorie, label: kategorie.kategorieName}))
 
     function handleSelectChange(selectedOptions: OptionType[]) {
         setActualRezept({
@@ -50,10 +51,15 @@ export default function Edit({state, rezept, saveEdit, setCurrentRezept}: EditPr
 
     }
 
+    function closeFunction() {
+        setShowEdit(false);
+        setOpenEdit(false);
+    }
+
     return (
         <ReactModal
             isOpen={showEdit}
-            onRequestClose={() => setShowEdit(false)}
+            onRequestClose={closeFunction}
             style={{
                 overlay: {
                     backgroundColor: 'rgba(0, 0, 0, 0.05)'
@@ -100,7 +106,7 @@ export default function Edit({state, rezept, saveEdit, setCurrentRezept}: EditPr
                             />
                         </div>
                         <div className="flex flex-row space-x-1">
-                            <button onClick={closeEdit}
+                            <button onClick={closeFunction()}
                                     className="flex-row justify-self-start bg-offWhite text-textPrime shadow-buttonOut hover:shadow-buttonIn rounded-2xl p-2 m-2">Close
                             </button>
                             <button type="submit"

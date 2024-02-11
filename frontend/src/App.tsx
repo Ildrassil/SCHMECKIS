@@ -6,6 +6,7 @@ import {Kategorie} from "./models/Kategorie.tsx";
 import KategorieMenu from "./components/KategorieMenu.tsx";
 import RezeptGallery from "./components/RecepieGallery.tsx";
 import './App.css';
+import DetailPage from "./components/EditPage.tsx";
 
 function App() {
     const [kategorieList, setKategorieList] = useState<Kategorie[]>([]);
@@ -52,6 +53,7 @@ function App() {
             <Routes>
                 <Route path={"/"}
                        element={<RezeptGallery rezeptList={rezeptList}/>}/>
+                <Route path={`/:rezeptId`} element={<DetailPage/>}/>
             </Routes>
 
         </>

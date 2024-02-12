@@ -1,81 +1,129 @@
-import {motion} from "framer-motion";
+import {AnimatePresence, motion} from "framer-motion";
 import {Kategorie} from "../models/Kategorie.tsx";
 import * as React from 'react';
-import {useEffect} from 'react';
 
 
-type KategorieList = {
-    overallKategories: Kategorie[],
+const menuItems = {
+    initial: {opacity: 0, y: -50, margin: 0},
+    animate: (index: number) => ({
+        opacity: 1,
+        y: 0,
+        transition: {delay: index * 0.2, when: "beforeChildren"}
+    }),
+    exit: (index: number) => ({
+        opacity: 0,
+        y: -50,
+        transition: {delay: index * 0.2, when: "afterChildren"}
+    }),
+};
+
+const conatainer = {
+    initial: {opacity: 0, marginBottom: 0, padding: 0.5},
+    animate: {
+        opacity: 1,
+        transition: {
+
+            type: "tween",
+            staggerChildren: 0.2,
+            duration: 0.5,
+        }
+    },
+    exit: {
+        opacity: 0,
+        transition: {
+            type: "tween",
+            staggerChildren: 0.2,
+            duration: 0.5,
+        }
+        }
+};
+
+
+
+type KategorieMenuProps = {
     onCategoryClick: (kategorie: string) => void
 }
 
-export default function KategorieMenu({overallKategories, onCategoryClick}: KategorieList) {
-    const [currentCategorie, setCurrentCategorie] = React.useState<string>("KATEGORIEN");
-    const kategorieList: Kategorie[] = overallKategories;
-    const Home = "Philipp and Jakobs list of Recipes from Websites, TikTok, Instagram and also own creations.";
-    const [unfold, setUnfold] = React.useState<boolean>(false);
-    function onCategorie(event: React.MouseEvent<HTMLButtonElement>) {
-        setCurrentCategorie(event.currentTarget.value);
-        setUnfold(false);
-        kategorieList.map(kategorie => {
-                if (kategorie.kategorieName === event.currentTarget.value) {
-                    onCategoryClick(kategorie.kategorieName);
-                }
-            }
-        )
-        if (kategorieList.find(kategorie => kategorie.kategorieName === "KATEGORIEN") === undefined) {
-            kategorieList.push({
-                kategorieName: "KATEGORIEN",
-                kategorieBeschreibung: Home
-            });
+export default function KategorieMenu({onCategoryClick}: KategorieMenuProps) {
+    const kategorieList: Kategorie[] = [
+        {
+            kategorieName: "LAND",
+            kategorieBeschreibung: "Alles was das Herz eines Fleischfressers begehrt ob Wild oder weniger ausgefallene Fleischsorten"
+        },
+        {
+            kategorieName: "SEE",
+            kategorieBeschreibung: "Ariel udn Sebastian sind halt zu schmackhaft um sie bei Disney zu versuern zu lassen!"
+        },
+        {
+            kategorieName: "VEGETARISCH",
+            kategorieBeschreibung: "Vegetarier wissen um die Versuchung von Tierischenprodukten sind aber stark genug um der Fleischeslust zu wieder stehen"
+        },
+        {
+            kategorieName: "VEGAN",
+            kategorieBeschreibung: "Tiere sind Freunde und keine Nahrung! Auch nicht ihre Produkte!"
+        },
+        {
+            kategorieName: "SÜSS",
+            kategorieBeschreibung: "Süße Robenbabys im SoßerZoo( wer kein switch reloaded kenntist vlt zu Jung)"
+        },
+        {
+            kategorieName: "KATEGORIEN",
+            kategorieBeschreibung: "Philipp and Jakobs list of Recipes from Websites, TikTok, Instagram and also own creations."
         }
-        const kategorie: Kategorie = kategorieList.find(kategorie => kategorie.kategorieName === event.currentTarget.value);
-        setKategorieList(kategorieList.filter(kategorie => kategorie.kategorieName !== event.currentTarget.value));
-        setKategorieList([...kategorieList, kategorie]);
+    ];
+    const [kategorie, setKategorie] = React.useState<Kategorie[]>(kategorieList);
+    const [currentCategorie, setCurrentCategorie] = React.useState<string>(kategorieList[5].kategorieName);
+    const [unfold, setUnfold] = React.useState<boolean>(false);
+
+    function onCategorie(event: React.MouseEvent<HTMLButtonElement>) {
+        setKategorie(kategorieList.filter(kategorie => kategorie.kategorieName !== event.currentTarget.value));
+        const onkategorie: Kategorie = kategorieList.find(kategorie => kategorie.kategorieName === event.currentTarget.value);
+        setCurrentCategorie(onkategorie.kategorieName);
+        onCategoryClick(event.currentTarget.value);
+        setUnfold(false);
+
 
     }
 
-    useEffect(() => {
-
-    }, []);
 
     function menuTrigger() {
         setUnfold(!unfold);
     }
 
     return (
-        <div className="Menu">
-            <div>
-                <button onClick={menuTrigger}><h1>{currentCategorie}</h1>
-                    <motion.svg animate={{rotate: unfold ? 90 : 0}} transition={{delay: 0.2, type: "tween"}}
-                                xmlns="http://www.w3.org/2000/svg" width="30" height="50" viewBox="0 0 20 30">
-                        <path id="Polygon_1" data-name="Polygon 1" d="M15,0,30,20H0Z"
-                              transform="translate(20) rotate(90)" fill="#393939"/>
-                    </motion.svg>
+        <div className={`Menu flex flex-col pb-33 self-center items-center justify-center align-middle
+        text-3xl text-textHeader transition-all duration-1000 ease-in-out 
+        focus:text-blue-400  focus:border-transparent mt-36 `}>
+
+            <button className="flex bg-transparent text-4xl text-current p-4" onClick={menuTrigger}>
+                    <h1>{currentCategorie}</h1>
                 </button>
-                <motion.div animate={{
-                    y: unfold ? 50 : 0, scale: unfold ? 1 : 0, opacity: unfold ? 1 : 0,
-                    originY: 0
-                }}
-                            transition={{staggerChildren: 0.5, type: "tween"}}
-                            className={unfold ? "MenuItems" : "MenuItemsHidden"}
 
-                >
-                    {kategorieList.map(kategorie => {
-                        return <button className="MenuItem" onClick={onCategorie} value={kategorie.kategorieName}
-                                       key={kategorie.kategorieName}>{kategorie.kategorieName}</button>
-                    })}
-                </motion.div>
+            {unfold && (
+                <AnimatePresence>
+                    <motion.div
+                        layout
+                        variants={conatainer}
+                        initial={conatainer.initial}
+                        animate={unfold ? conatainer.animate : conatainer.exit}
+                        className="MenuItems flex flex-col items-center text-center justify-items-center">
+                        {kategorie.map((kat, index) => (
+                            <motion.button
+                                initial={menuItems.initial}
+                                animate={menuItems.animate(index)}
+                                exit={menuItems.exit(index)}
+                                className="MenuItem flex flex-col bg-transparent text-center text-textPrime text-2xl p-4"
+                                onClick={onCategorie}
+                                value={kat.kategorieName}
+                                key={kat.kategorieName}>
+                                {kat.kategorieName}
+                            </motion.button>
+                        ))}
+                    </motion.div>
+                </AnimatePresence>)}
 
-            </div>
-
-            <h4>
-                {currentCategorie !== "KATEGORIEN" && kategorieList
-                    .filter(kategorie => kategorie.kategorieName === currentCategorie)
-                    .map(kategorie => {
-                        return kategorie.kategorieBeschreibung
-                    })}
-                {currentCategorie === "KATEGORIEN" && Home}
+            <h4 className="flex flex-wrap text-center text-xl p-5 w-1/3 shadow-kategorieIn mt-14 rounded-2xl">
+                {kategorieList.find(kategorie => kategorie.kategorieName === currentCategorie)?.kategorieBeschreibung}
             </h4>
 
         </div>

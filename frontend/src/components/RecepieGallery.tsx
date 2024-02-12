@@ -1,30 +1,42 @@
+import {AnimatePresence, motion} from "framer-motion";
 import {Rezept} from "../models/Rezept.tsx";
 import RezeptCard from "./RezeptCard.tsx";
-import Grid from '@mui/material/Unstable_Grid2';
-import {styled} from "@mui/material/styles";
-import {Paper} from "@mui/material";
 
 type RecepieGalleryProps = {
     rezeptList: Rezept[]
 }
-const Item = styled(Paper)(({theme}) => ({
-    backgroundColor: theme.palette.mode === 'dark' ? theme.palette.grey[800] : theme.palette.grey[50],
-    ...theme.typography.body2,
-    padding: theme.spacing(2),
-    textAlign: 'center',
-    color: theme.palette.text.secondary,
-}));
+const variants = {
+    type: "slide",
+    initial: {opacity: 0, y: -50},
+    animate: {opacity: 1, y: 0},
+    container: {
+        animate: {
+            type: "slide",
+            transition: {
+                staggerChildren: 0.5,
+                delayChildren: 0.2,
+                ease: "easeIn"
+            }
+        }
+    }
+};
 
 export default function RezeptGallery({rezeptList}: RecepieGalleryProps) {
     return (
-        <Grid container spacing={5} columns={2}>
+        <AnimatePresence>
+            <motion.div className="RezeptGallery flex flex-wrap flex-row m-2 p-1" variants={variants.container}>
+
             {rezeptList && rezeptList.map(rezept => {
-                return (<Grid key={rezept.id}>
-                    <Item>
+                return (
+                    <motion.div className="Rezept Card basis-1/3 m-2 p-4
+                    rounded-2xl border-2 border-transparent color-textPrime" key={rezept.id}
+                                initial={variants.initial}
+                                animate={variants.animate}>
                         <RezeptCard rezept={rezept}/>
-                    </Item>
-                </Grid>)
+                    </motion.div>)
+
             })}
-        </Grid>)
+            </motion.div>
+        </AnimatePresence>)
 
 }

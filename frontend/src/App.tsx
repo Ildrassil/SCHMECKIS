@@ -5,8 +5,8 @@ import axios from "axios";
 import {Kategorie} from "./models/Kategorie.tsx";
 import KategorieMenu from "./components/KategorieMenu.tsx";
 import RezeptGallery from "./components/RecepieGallery.tsx";
-import './App.css'
-
+import './App.css';
+import DetailPage from "./components/EditPage.tsx";
 
 function App() {
     const [kategorieList, setKategorieList] = useState<Kategorie[]>([]);
@@ -45,11 +45,17 @@ function App() {
 
     return (
         <>
-            <Link className="HeadLine" to={"/"}><h1>#SCHMECKIS</h1></Link>
-            <KategorieMenu overallKategories={kategorieList} onCategoryClick={onCategoryClick}/>
+            <div className="Header">
+                <Link to={"/"}><h1 className="HeadLine justify-center sticky align-middle text-4xl text-center font-semibold
+                fontfamily-roboto font-sans
+                text-textHeader
+                pt-32 m-2">#SCHMECKIS</h1></Link>
+            </div>
+            <KategorieMenu onCategoryClick={onCategoryClick}/>
             <Routes>
                 <Route path={"/"}
                        element={<RezeptGallery rezeptList={rezeptList}/>}/>
+                <Route path={`/rezept/:rezeptId`} element={<DetailPage/>}/>
             </Routes>
 
         </>

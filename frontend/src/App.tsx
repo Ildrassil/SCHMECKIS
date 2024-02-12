@@ -12,10 +12,8 @@ import {motion} from "framer-motion";
 import {SearchBar} from "./components/SearchBarAutoComplete.tsx";
 
 const searchBarAnimation = {
-    initial: {position: center, opacity: 1, width: 50},
-    animate: {position: center, opacity: 1, width: 200},
-    transition: {duration: 0.8, type: "tween", ease: "easeInOut"},
-    exit: {opacity: 0, width: 50, height: auto},
+    initial: {x: 0, opacity: 1, width: 50},
+    animate: {x: 0, opacity: 1, width: 200},
 }
 
 function App() {
@@ -69,7 +67,7 @@ function App() {
             </div>
             <KategorieMenu onCategoryClick={onCategoryClick}/>
             <motion.div onClick={clickEvent} initial={searchBarAnimation.initial} animate={searchBarAnimation.animate}
-                        className={"flex flex-col bg-offWhite justify-center align-middle self-center"}>
+                        className={"flex flex-col bg-offWhite justify-center align-middle self-center border-none"}>
                 <SearchBar kategorieList={kategorieList} rezeptList={rezeptList} setFilteredRezepte={setRezeptList}/>
             </motion.div>
             <Routes>

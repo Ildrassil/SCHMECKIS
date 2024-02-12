@@ -39,7 +39,7 @@ export function SearchBar({rezeptList, kategorieList, setFilteredRezepte}: Searc
         <div
             className="SearchBar bg-offWhite border-none align-middle self-center justify-center items-center flex active:border-none active:shadow-buttonIn font-semibold ">
             <input type="text"
-                   className="flex-row active:border-none active:shadow-buttonIn font-semibold text-textHeader bg-offWhite"
+                   className="flex-row border-none focus:border-none focus:shadow-buttonIn active:border-none font-semibold text-textHeader bg-offWhite"
                    placeholder="Search..." onChange={queryHandler}/>
             {selected && selected.map((selected) => (
                 <button key={selected} value={selected} onClick={deSelectFilter}

@@ -7,6 +7,7 @@ import KategorieMenu from "./components/KategorieMenu.tsx";
 import RezeptGallery from "./components/RecepieGallery.tsx";
 import './App.css';
 import DetailPage from "./components/EditPage.tsx";
+import {AddRezept} from "./components/AddRezept.tsx";
 
 function App() {
     const [kategorieList, setKategorieList] = useState<Kategorie[]>([]);
@@ -50,12 +51,14 @@ function App() {
                 fontfamily-roboto font-sans
                 text-textHeader
                 pt-32 m-2">#SCHMECKIS</h1></Link>
+                <Link to={"/addRezept"}>+</Link>
             </div>
             <KategorieMenu onCategoryClick={onCategoryClick}/>
             <Routes>
                 <Route path={"/"}
                        element={<RezeptGallery rezeptList={rezeptList}/>}/>
                 <Route path={`/rezept/:rezeptId`} element={<DetailPage/>}/>
+                <Route path={"/addRezept"} element={<AddRezept/>}/>
             </Routes>
 
         </>

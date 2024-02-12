@@ -8,10 +8,24 @@ import RezeptGallery from "./components/RecepieGallery.tsx";
 import './App.css';
 import DetailPage from "./components/EditPage.tsx";
 import {AddRezept} from "./components/AddRezept.tsx";
+import {motion} from "framer-motion";
+import {SearchBar} from "./components/SearchBarAutoComplete.tsx";
+
+const searchBarAnimation = {
+    initial: {position: center, opacity: 1, width: 50},
+    animate: {position: center, opacity: 1, width: 200},
+    transition: {duration: 0.8, type: "tween", ease: "easeInOut"},
+    exit: {opacity: 0, width: 50, height: auto},
+}
 
 function App() {
     const [kategorieList, setKategorieList] = useState<Kategorie[]>([]);
     const [rezeptList, setRezeptList] = useState<Rezept[]>([]);
+    const [unfoldSearch, setUnfoldSearch] = useState<boolean>(false);
+
+    function clickEvent() {
+        setUnfoldSearch(!unfoldSearch);
+    }
 
     function fetchRecipes() {
         axios.get("/api/rezepte").then(response => {
@@ -54,6 +68,10 @@ function App() {
                 <Link to={"/addRezept"}>+</Link>
             </div>
             <KategorieMenu onCategoryClick={onCategoryClick}/>
+            <motion.div onClick={clickEvent} initial={searchBarAnimation.initial} animate={searchBarAnimation.animate}
+                        className={"flex flex-col bg-offWhite justify-center align-middle self-center"}>
+                <SearchBar kategorieList={kategorieList} rezeptList={rezeptList} setFilteredRezepte={setRezeptList}/>
+            </motion.div>
             <Routes>
                 <Route path={"/"}
                        element={<RezeptGallery rezeptList={rezeptList}/>}/>

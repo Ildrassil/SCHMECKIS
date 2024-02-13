@@ -52,6 +52,10 @@ function App() {
         setRezeptList(rezeptList.filter(rezept => rezept.kategorieList.map(kategorie => kategorie.kategorieName).includes(kategorie)));
     }
 
+    function onHoverStart() {
+        setUnfoldSearch(true);
+    }
+
     useEffect(() => {
         fetchRecipes();
     }, []);
@@ -66,7 +70,8 @@ function App() {
                 <Link to={"/addRezept"}>+</Link>
             </div>
             <KategorieMenu onCategoryClick={onCategoryClick}/>
-            <motion.div onClick={clickEvent} initial={searchBarAnimation.initial} animate={searchBarAnimation.animate}
+            <motion.div onHoverStart={onHoverStart} onClick={clickEvent} initial={searchBarAnimation.initial}
+                        animate={searchBarAnimation.animate}
                         className={"flex flex-col bg-offWhite justify-center align-middle self-center border-none"}>
                 <SearchBar kategorieList={kategorieList} rezeptList={rezeptList} setFilteredRezepte={setRezeptList}/>
             </motion.div>

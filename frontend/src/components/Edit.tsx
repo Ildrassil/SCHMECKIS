@@ -9,7 +9,7 @@ type EditProps = {
     rezept: Rezept,
     saveEdit: () => void
     setCurrentRezept: (rezept: Rezept) => void,
-    setOpenEdit: (state: boolean) => void,
+    setOpenEdit: (state: boolean) => void
 };
 type OptionType = {
     value: Kategorie,
@@ -77,8 +77,7 @@ export function Edit({state, rezept, saveEdit, setCurrentRezept, setOpenEdit}: E
                     borderRadius: '10px',
                     padding: '5rem'
                 }
-            }}
-        >
+            }}>
             <div className="flex align-middle justify-center m-10 p-5 bg-black bg-opacity-5 shadow-buttonOut z-50">
                 <form onSubmit={submitEdit} className="flex flex-col justify-center items-center h-full">
                     <div className="flex flex-col justify-center items-center bg-offWhite p-4 rounded-2xl">
@@ -96,30 +95,25 @@ export function Edit({state, rezept, saveEdit, setCurrentRezept, setOpenEdit}: E
                             <textarea name="rezeptBeschreibung" value={actualRezept.rezeptBeschreibung}
                                       onChange={onEditChange}
                                       className="border-2 border-transparent rounded-2xl p-2 m-2"/>
-                            <label className="flex-col text-textPrime text-xl text-center">Kategorien</label>
-                            <select
-                                isMulti
-                                name="kategorieList"
-                                className="basic-multi-select flex-col border-2 border-transparent rounded-2xl p-2 m-2"
-                                classNamePrefix="select"
-                                onSelect={handleSelectChange}
-                            >{options.map(option => <option selected={true}
-                                                            value={option.value.kategorieName}>{option.value.kategorieName}</option>)}</select>
+                            <label className="flex-col text-textPrime text-xl text-center">"Kategorien"</label>
                             {newKategorie.map((kategorie, index) => {
                                 return (
-                                    <div key={index} className="flex-col">{index}.<input type="text"
-                                                                                         name="kategorieName"
-                                                                                         value={kategorie.kategorieName}
-                                                                                         onChange={(e) => onChangeKategorie(e, index)}
-                                                                                         className=" flex-row border-2 border-transparent rounded-2xl p-2 m-2"/>
+                                    <div key={index} className="flex-col">{index + "."}
+                                        <input type="text"
+                                               name="kategorieName"
+                                               value={kategorie.kategorieName}
+                                               onChange={(e) => onChangeKategorie(e, index)}
+                                               className=" flex-row border-2 border-transparent rounded-2xl p-2 m-2"/>
                                         <label>Kategorie Beschreibung</label>
                                         <textarea name="kategorieBeschreibung" value={kategorie.kategorieBeschreibung}
                                                   onChange={(e) => onChangeKategorie(e, index)}
-                                                  className="flex-row border-2 border-transparent rounded-2xl p-2 m-2"/>
-                                    </div>)
+                                                  className="flex-row border-2 border-transparent rounded-2xl p-2 m-2"
+                                        />
+                                    </div>);
                             })}
                             <button type="button" onClick={addKategorie}
-                                    className="flex-col border-2 border-transparent rounded-2xl p-2 m-2">Add Kategorie
+                                    className="flex-col border-2 border-transparent rounded-2xl p-2 m-2">
+                                Add Kategorie
                             </button>
                         </div>
                         <div className="flex flex-row space-x-1">
@@ -138,3 +132,14 @@ export function Edit({state, rezept, saveEdit, setCurrentRezept, setOpenEdit}: E
         </ReactModal>
     );
 }
+
+
+//<div>
+//                                     <label >{option.value.kategorieName}</label><input
+//                                         key={option.value.kategorieName}
+//                                         type="checkbox"
+//                                         /*selected={true}*/
+//                                         name={option.value.kategorieName}
+//                                         className="basic-multi-select flex-col border-2 border-transparent rounded-2xl p-2 m-2"
+//                                         value={option.value.kategorieName}/>
+//                                 </div>

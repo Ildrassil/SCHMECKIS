@@ -16,7 +16,6 @@ export function AddRezept() {
         rezeptBeschreibung: "",
         kategorieList: []
     });
-    const [numberOfKategorien, setNumberOfKategorien] = useState(1);
 
     function onEditChange(event: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>) {
         setActualRezept({...actualRezept, [event.target.name]: event.target.value})

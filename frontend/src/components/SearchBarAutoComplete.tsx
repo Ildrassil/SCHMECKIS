@@ -37,7 +37,7 @@ export function SearchBar({rezeptList, kategorieList, setFilteredRezepte}: Searc
 
     return (
         <div
-            className="SearchBar bg-offWhite border-none align-middle self-center justify-center items-center flex active:border-none active:shadow-buttonIn font-semibold ">
+            className="SearchBar flex bg-offWhite border-none flex-row justify-center w-0 active:w-fit active:border-none active:shadow-buttonIn font-semibold ">
             <input type="text"
                    className="flex-row border-none focus:border-none focus:shadow-buttonIn active:border-none font-semibold text-textHeader bg-offWhite"
                    placeholder="Search..." onChange={queryHandler}/>

@@ -1,6 +1,9 @@
 import React, {useState} from "react";
 import {Kategorie} from "../models/Kategorie.tsx";
 import axios from "axios";
+import {useNavigate} from "react-router-dom";
+import {Rezept} from "../models/Rezept.tsx";
+import RezeptPhotoUpload from "./UploadPhoto.tsx";
 
 
 export function AddRezept() {
@@ -16,6 +19,8 @@ export function AddRezept() {
         rezeptBeschreibung: "",
         kategorieList: []
     });
+
+    const [rezept, setRezept] = useState<Rezept>()
 
     function onEditChange(event: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>) {
         setActualRezept({...actualRezept, [event.target.name]: event.target.value})
@@ -35,21 +40,43 @@ export function AddRezept() {
 
     function postRezept() {
         axios.post('/api/rezept', actualRezept).then(response => {
-            console.log(response);
+            setRezept(response.data);
 
         })
+
+    }
+
+    const savePhoto = async (file: File) => {
+        const formData = new FormData();
+        formData.append("file", file);
+
+        try {
+            const response = await axios.post<string>('/api/upload/image/' + rezept?.id, formData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data'
+                }
+            }).then(response => {
+                setActualRezept({...actualRezept, rezeptImageUrl: `${response.data.value || ""}`})
+            });
+        } catch (error) {
+            console.error('Error uploading image', error);
+        }
     }
 
     function closeFunction() {
-        console.log("close");
+        if (rezept !== undefined) {
+            useNavigate().navigate(`/rezept/${rezept.id}`);
+        } else {
+            useNavigate().navigate('/');
+        }
     }
 
     console.log(newKategorie)
     return (
         <div
-            className="flex align-middle justify-center m-10 p-5 bg-offWhite shadow-doubleOut rounded-2xl w-screen h-fit">
+            className="flex align-middle justify-center m-10 p-5 rounded-2xl w-screen h-fit">
             <form onSubmit={postRezept} className="flex flex-col justify-center items-center h-full">
-                <div className="flex flex-col justify-center items-center bg-offWhite rounded-2xl">
+                <div className="flex flex-col w-fit justify-center items-center bg-offWhite rounded-2xl">
                     <div className="flex flex-col">
                         <h2 className="flex-coltext-textHeader text-3xl text-center my-2">ERSTELLE REZEPT</h2>
                         <label className="flex-col text-textPrime text-xl text-center mt-4">Rezept Name</label>
@@ -57,9 +84,7 @@ export function AddRezept() {
                                onChange={onEditChange}
                                className="flex-col border-2 border-transparent rounded-2xl p-2 m-2"/>
                         <label className="flex-col text-textPrime text-xl text-center">IMAGE</label>
-                        <input type="text" name="rezeptImageUrl" value={actualRezept.rezeptImageUrl}
-                               onChange={onEditChange}
-                               className="flex-col border-2 border-transparent rounded-2xl p-2 m-2"/>
+                        <RezeptPhotoUpload savePhoto={savePhoto}/>
                         <label className="flex-col text-textPrime text-xl text-center mt-4">Beschreibung</label>
                         <textarea name="rezeptBeschreibung" value={actualRezept.rezeptBeschreibung}
                                   onChange={onEditChange}
@@ -74,22 +99,34 @@ export function AddRezept() {
                                                                                          className="flex-row border-2 border-transparent rounded-2xl p-2 m-2"/>
                                     <textarea name="kategorieBeschreibung" value={kategorie.kategorieBeschreibung}
                                               onChange={(e) => onChangeKategorie(e, index)}
-                                              className="flex flex-row border-2 border-transparent rounded-2xl p-2 m-2 self-baseline"/>
+                                              className="flex flex-row border-2 border-transparent rounded-2xl p-2 ml-6 mt-3 self-baseline"/>
                                 </div>)
                         })}
                         <button type="button" onClick={addKategorie}
-                                className="border-2 border-transparent rounded-2xl p-2 m-2">Add Kategorie
+                                className="border-2 border-transparent
+                                bg-offWhite text-textPrime
+                                self-center
+                                shadow-hashtagbuttonOut active:shadow-buttonIn
+                                w-32 h-fit hover:shadow-buttonIn
+                                rounded-2xl p-2 my-6">Add
+
                         </button>
 
 
                     </div>
                     <div className="flex flex-row space-x-1">
                         <button onClick={closeFunction}
-                                className="flex-row justify-self-start bg-offWhite text-textPrime shadow-buttonOut hover:shadow-buttonIn rounded-2xl p-2 m-2">Close
+                                className="flex-row justify-self-start
+                                w-28 h-fit
+                                bg-offWhite text-textPrime shadow-buttonOut hover:shadow-buttonIn
+                                rounded-2xl p-2 m-2">Close
                         </button>
                         <button type="submit"
                                 onSubmit={postRezept}
-                                className="flex-row justify-end bg-offWhite text-green-200 shadow-buttonOut hover:shadow-buttonIn rounded-2xl p-2 m-2">Save
+                                className="flex-row justify-end h-fit w-32 bg-offWhite
+                                 font-semibold
+                                 text-textHeader shadow-buttonOut hover:shadow-buttonIn
+                                 rounded-2xl p-2 m-2">Save
                         </button>
 
                     </div>

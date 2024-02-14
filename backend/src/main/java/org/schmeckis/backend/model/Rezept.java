@@ -1,5 +1,6 @@
 package org.schmeckis.backend.model;
 
+import lombok.With;
 import org.schmeckis.backend.model.submodel.Kategorie;
 import org.springframework.data.annotation.Id;
 
@@ -11,7 +12,7 @@ public record Rezept(
         String id,
 
         String rezeptName,
-
+        @With
         String rezeptImageUrl,
 
         String rezeptKurzbeschreibung,

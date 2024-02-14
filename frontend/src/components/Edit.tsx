@@ -2,6 +2,7 @@ import {Kategorie} from "../models/Kategorie.tsx";
 import React, {useEffect, useState} from "react";
 import {Rezept} from "../models/Rezept.tsx";
 import ReactModal from "react-modal";
+import {CheckBox} from "./CheckBox.tsx";
 
 
 type EditProps = {
@@ -96,6 +97,10 @@ export function Edit({state, rezept, saveEdit, setCurrentRezept, setOpenEdit}: E
                                       onChange={onEditChange}
                                       className="border-2 border-transparent rounded-2xl p-2 m-2"/>
                             <label className="flex-col text-textPrime text-xl text-center">"Kategorien"</label>
+                            {options.map(option => {
+                                return <CheckBox label={option.value.kategorieName} isSelected={true}
+                                                 onCheckboxChange={handleSelectChange}/>
+                            })}
                             {newKategorie.map((kategorie, index) => {
                                 return (
                                     <div key={index} className="flex-col">{index + "."}
@@ -111,8 +116,9 @@ export function Edit({state, rezept, saveEdit, setCurrentRezept, setOpenEdit}: E
                                         />
                                     </div>);
                             })}
-                            <button type="button" onClick={addKategorie}
-                                    className="flex-col border-2 border-transparent rounded-2xl p-2 m-2">
+                            <button
+                                type="button" onClick={addKategorie}
+                                className="flex-col border-2 border-transparent rounded-2xl p-2 m-2">
                                 Add Kategorie
                             </button>
                         </div>
@@ -132,14 +138,3 @@ export function Edit({state, rezept, saveEdit, setCurrentRezept, setOpenEdit}: E
         </ReactModal>
     );
 }
-
-
-//<div>
-//                                     <label >{option.value.kategorieName}</label><input
-//                                         key={option.value.kategorieName}
-//                                         type="checkbox"
-//                                         /*selected={true}*/
-//                                         name={option.value.kategorieName}
-//                                         className="basic-multi-select flex-col border-2 border-transparent rounded-2xl p-2 m-2"
-//                                         value={option.value.kategorieName}/>
-//                                 </div>

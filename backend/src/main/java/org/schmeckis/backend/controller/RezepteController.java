@@ -1,4 +1,4 @@
-package org.schmeckis.backend;
+package org.schmeckis.backend.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.schmeckis.backend.model.Rezept;

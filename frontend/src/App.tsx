@@ -8,12 +8,11 @@ import RezeptGallery from "./components/RecepieGallery.tsx";
 import './App.css';
 import DetailPage from "./components/EditPage.tsx";
 import {AddRezept} from "./components/AddRezept.tsx";
-import {motion} from "framer-motion";
 import {SearchBar} from "./components/SearchBarAutoComplete.tsx";
 
 const searchBarAnimation = {
-    initial: {x: 0, opacity: 1, width: 50},
-    animate: {x: 0, opacity: 1, width: 200},
+    initial: {opacity: 1, width: 50},
+    animate: {opacity: 1, width: 200},
 }
 
 function App() {
@@ -70,11 +69,9 @@ function App() {
                 <Link to={"/addRezept"}>+</Link>
             </div>
             <KategorieMenu onCategoryClick={onCategoryClick}/>
-            <motion.div onHoverStart={onHoverStart} onClick={clickEvent} initial={searchBarAnimation.initial}
-                        animate={searchBarAnimation.animate}
-                        className={"flex flex-col bg-offWhite justify-center align-middle self-center border-none"}>
+            <div className={"flex flex-col bg-offWhite align-middle self-center justify-center border-none"}>
                 <SearchBar kategorieList={kategorieList} rezeptList={rezeptList} setFilteredRezepte={setRezeptList}/>
-            </motion.div>
+            </div>
             <Routes>
                 <Route path={"/"}
                        element={<RezeptGallery rezeptList={rezeptList}/>}/>

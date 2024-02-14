@@ -1,12 +1,16 @@
-import React, {useState} from "react";
+import React, {FormEvent, useState} from "react";
 import {Kategorie} from "../models/Kategorie.tsx";
 import axios from "axios";
 import {useNavigate} from "react-router-dom";
 import {Rezept} from "../models/Rezept.tsx";
 import RezeptPhotoUpload from "./UploadPhoto.tsx";
+import RichTextEditor from "./RichTextEditor.tsx";
+import RezeptCard from "./RezeptCard.tsx";
 
 
 export function AddRezept() {
+    const navigate = useNavigate();
+
     const [newKategorie, setNewKategorie] = useState<Kategorie[]>([{
         kategorieName: "",
         kategorieBeschreibung: "",
@@ -33,14 +37,25 @@ export function AddRezept() {
         setNewKategorie(kategorie);
     }
 
+    function onChangeEditor(event: string) {
+        setActualRezept({...actualRezept, rezeptBeschreibung: event})
+
+    }
+
+    function onChangeKurzbeschreibung(event: string) {
+        setActualRezept({...actualRezept, rezeptKurzbeschreibung: event})
+
+    }
 
     function addKategorie() {
         setNewKategorie([...newKategorie, {kategorieName: "", kategorieBeschreibung: ""}]);
     }
 
-    function postRezept() {
+    function postRezept(event: FormEvent<HTMLFormElement>) {
+        event.preventDefault();
         axios.post('/api/rezept', actualRezept).then(response => {
             setRezept(response.data);
+
 
         })
 
@@ -65,19 +80,19 @@ export function AddRezept() {
 
     function closeFunction() {
         if (rezept !== undefined) {
-            useNavigate().navigate(`/rezept/${rezept.id}`);
+            navigate(`/rezept/${rezept.id}`);
         } else {
-            useNavigate().navigate('/');
+            navigate('/');
         }
     }
 
-    console.log(newKategorie)
+
     return (
         <div
             className="flex align-middle justify-center m-10 p-5 rounded-2xl w-screen h-fit">
-            <form onSubmit={postRezept} className="flex flex-col justify-center items-center h-full">
-                <div className="flex flex-col w-fit justify-center items-center bg-offWhite rounded-2xl">
-                    <div className="flex flex-col">
+            <form onSubmit={postRezept} className="flex flex-col w-1/3 justify-center items-center h-full">
+                <div className="flex flex-col w-full justify-center items-center bg-offWhite rounded-2xl">
+                    <div className="flex flex-col w-full">
                         <h2 className="flex-coltext-textHeader text-3xl text-center my-2">ERSTELLE REZEPT</h2>
                         <label className="flex-col text-textPrime text-xl text-center mt-4">Rezept Name</label>
                         <input type="text" name="rezeptName" value={actualRezept.rezeptName}
@@ -85,10 +100,10 @@ export function AddRezept() {
                                className="flex-col border-2 border-transparent rounded-2xl p-2 m-2"/>
                         <label className="flex-col text-textPrime text-xl text-center">IMAGE</label>
                         <RezeptPhotoUpload savePhoto={savePhoto}/>
+                        <label className="flex-col text-textPrime text-xl text-center">Kurzbeschreibung</label>
+                        <RichTextEditor rezeptBeschreibung={} onChange={}/>
                         <label className="flex-col text-textPrime text-xl text-center mt-4">Beschreibung</label>
-                        <textarea name="rezeptBeschreibung" value={actualRezept.rezeptBeschreibung}
-                                  onChange={onEditChange}
-                                  className="flex-col border-2 border-transparent rounded-2xl p-2 m-2"/>
+                        <RichTextEditor onChange={onChangeEditor} rezeptBeschreibung={actualRezept.rezeptBeschreibung}/>
                         <label className="flex-col text-textPrime text-xl text-center">Kategorien</label>
                         {newKategorie.map((kategorie, index) => {
                             return (
@@ -132,7 +147,9 @@ export function AddRezept() {
                     </div>
                 </div>
             </form>
+            {rezept && <RezeptCard rezept={rezept}/>}
         </div>
+
 
     )
 

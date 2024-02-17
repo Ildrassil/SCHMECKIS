@@ -22,4 +22,10 @@ public record Rezept(
         List<Kategorie> kategorieList
 ) {
 
+        public Rezept {
+                if (rezeptImageUrl == null) {
+                        rezeptImageUrl = "";
+                }
+        }
+
 }

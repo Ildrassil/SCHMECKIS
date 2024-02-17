@@ -21,7 +21,7 @@ export default function RichTextEditor({
 
         },
         onUpdate({editor}) {
-            onChange(editor.getText());
+            onChange(editor.getHTML().toString());
         },
     });
     return (

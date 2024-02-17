@@ -84,7 +84,8 @@ public class RezeptService {
             presentRezept = presentRezept.withRezeptImageUrl(imageUrl);
 
             rezeptRepo.save(presentRezept);
-            throw new IllegalArgumentException("Rezept not found");
+        } else {
+            throw new IllegalArgumentException("Rezept not found" + id);
         }
     }
 }

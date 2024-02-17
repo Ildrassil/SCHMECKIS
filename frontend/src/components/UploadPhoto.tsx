@@ -2,7 +2,7 @@ import {ChangeEvent, useRef} from "react";
 import {SlCloudUpload} from "react-icons/sl";
 
 type RezeptPhotoProps = {
-    savePhoto: (file: File) => void
+    onChangePhoto: (file: File) => void
 }
 
 export default function RezeptPhotoUpload(props: RezeptPhotoProps) {
@@ -10,14 +10,14 @@ export default function RezeptPhotoUpload(props: RezeptPhotoProps) {
     function savePhoto(event: ChangeEvent<HTMLInputElement>) {
         if (event.target.files && event.target.files.length > 0) {
             const file = event.target.files[0];
-            props.savePhoto(file);
+            props.onChangePhoto(file);
         }
     }
 
-    const handleClick = (event) => {
-        hiddenFileInput.current.click();
+    const handleClick = () => {
+        hiddenFileInput.current!.click();
     };
-    const hiddenFileInput = useRef(null);
+    const hiddenFileInput = useRef<HTMLInputElement>(null);
     return (
         <>
             <button

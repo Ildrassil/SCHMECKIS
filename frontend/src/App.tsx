@@ -7,10 +7,22 @@ import KategorieMenu from "./components/KategorieMenu.tsx";
 import RezeptGallery from "./components/RecepieGallery.tsx";
 import './App.css';
 import DetailPage from "./components/EditPage.tsx";
+import {AddRezept} from "./components/AddRezept.tsx";
+import {SearchBar} from "./components/SearchBarAutoComplete.tsx";
+
+const searchBarAnimation = {
+    initial: {opacity: 1, width: 50},
+    animate: {opacity: 1, width: 200},
+}
 
 function App() {
     const [kategorieList, setKategorieList] = useState<Kategorie[]>([]);
     const [rezeptList, setRezeptList] = useState<Rezept[]>([]);
+    const [unfoldSearch, setUnfoldSearch] = useState<boolean>(false);
+
+    function clickEvent() {
+        setUnfoldSearch(!unfoldSearch);
+    }
 
     function fetchRecipes() {
         axios.get("/api/rezepte").then(response => {
@@ -39,6 +51,10 @@ function App() {
         setRezeptList(rezeptList.filter(rezept => rezept.kategorieList.map(kategorie => kategorie.kategorieName).includes(kategorie)));
     }
 
+    function onHoverStart() {
+        setUnfoldSearch(true);
+    }
+
     useEffect(() => {
         fetchRecipes();
     }, []);
@@ -50,12 +66,17 @@ function App() {
                 fontfamily-roboto font-sans
                 text-textHeader
                 pt-32 m-2">#SCHMECKIS</h1></Link>
+                <Link to={"/addRezept"}>+</Link>
             </div>
             <KategorieMenu onCategoryClick={onCategoryClick}/>
+            <div className={"flex flex-col bg-offWhite align-middle self-center justify-center border-none"}>
+                <SearchBar kategorieList={kategorieList} rezeptList={rezeptList} setFilteredRezepte={setRezeptList}/>
+            </div>
             <Routes>
                 <Route path={"/"}
                        element={<RezeptGallery rezeptList={rezeptList}/>}/>
                 <Route path={`/rezept/:rezeptId`} element={<DetailPage/>}/>
+                <Route path={"/addRezept"} element={<AddRezept/>}/>
             </Routes>
 
         </>

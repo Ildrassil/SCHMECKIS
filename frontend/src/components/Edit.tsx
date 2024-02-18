@@ -2,6 +2,7 @@ import {Kategorie} from "../models/Kategorie.tsx";
 import React, {useEffect, useState} from "react";
 import {Rezept} from "../models/Rezept.tsx";
 import ReactModal from "react-modal";
+import {CheckBox} from "./CheckBox.tsx";
 
 
 type EditProps = {
@@ -9,7 +10,7 @@ type EditProps = {
     rezept: Rezept,
     saveEdit: () => void
     setCurrentRezept: (rezept: Rezept) => void,
-    setOpenEdit: (state: boolean) => void,
+    setOpenEdit: (state: boolean) => void
 };
 type OptionType = {
     value: Kategorie,
@@ -18,10 +19,10 @@ type OptionType = {
 
 export function Edit({state, rezept, saveEdit, setCurrentRezept, setOpenEdit}: EditProps) {
     const [showEdit, setShowEdit] = useState<boolean>(state);
-    const [newKategorie, setNewKategorie] = useState<Kategorie>({
+    const [newKategorie, setNewKategorie] = useState<Kategorie[]>([{
         kategorieName: "",
         kategorieBeschreibung: "",
-    });
+    }]);
     const [actualRezept, setActualRezept] = useState<Rezept>(rezept)
 
     const options = actualRezept.kategorieList.map(kategorie => ({value: kategorie, label: kategorie.kategorieName}))
@@ -33,9 +34,16 @@ export function Edit({state, rezept, saveEdit, setCurrentRezept, setOpenEdit}: E
         });
     }
 
+    function onChangeKategorie(event: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>, index: number) {
+        const foundKategorie = newKategorie.find((kategorie, i) => i === index);
+        const updatedKategorie = {...foundKategorie, [event.currentTarget.name]: event.currentTarget.value};
+        const kategorie = newKategorie.map((kategorie, i) => i === index ? updatedKategorie : kategorie);
+        setNewKategorie(kategorie);
+    }
+
+
     function addKategorie() {
-        setActualRezept({...actualRezept, kategorieList: [...actualRezept.kategorieList, newKategorie]});
-        setNewKategorie({kategorieName: '', kategorieBeschreibung: ''});
+        setNewKategorie([...newKategorie, {kategorieName: "", kategorieBeschreibung: ""}]);
     }
 
     function onEditChange(event: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>) {
@@ -44,7 +52,7 @@ export function Edit({state, rezept, saveEdit, setCurrentRezept, setOpenEdit}: E
 
     useEffect(() => {
         setCurrentRezept(actualRezept);
-    }, [actualRezept]);
+    }, []);
 
     function submitEdit() {
         saveEdit();
@@ -70,47 +78,56 @@ export function Edit({state, rezept, saveEdit, setCurrentRezept, setOpenEdit}: E
                     borderRadius: '10px',
                     padding: '5rem'
                 }
-            }}
-        >
+            }}>
             <div className="flex align-middle justify-center m-10 p-5 bg-black bg-opacity-5 shadow-buttonOut z-50">
-                <form onSubmit={saveEdit} className="flex flex-col justify-center items-center h-full">
+                <form onSubmit={submitEdit} className="flex flex-col justify-center items-center h-full">
                     <div className="flex flex-col justify-center items-center bg-offWhite p-4 rounded-2xl">
                         <div>
-                            <h2 className="text-textHeader text-3xl shadow-doubleOut">EDIT</h2>
+                            <h2 className="flex-col text-textHeader text-3xl shadow-doubleOut">EDIT</h2>
+                            <label className="flex-col text-textPrime text-xl text-center">Rezept Name</label>
                             <input type="text" name="rezeptName" value={actualRezept.rezeptName}
                                    onChange={onEditChange}
-                                   className="border-2 border-transparent rounded-2xl p-2 m-2"/>
+                                   className="flex-col border-2 border-transparent rounded-2xl p-2 m-2"/>
+                            <label className="flex-col text-textPrime text-xl text-center">Rezept Image URL</label>
                             <input type="text" name="rezeptImageUrl" value={actualRezept.rezeptImageUrl}
-                                   onChange={onEditChange} className="border-2 border-transparent rounded-2xl p-2 m-2"/>
+                                   onChange={onEditChange}
+                                   className="flex-col border-2 border-transparent rounded-2xl p-2 m-2"/>
+                            <label className="flex-col text-textPrime text-xl text-center">Rezept Beschreibung</label>
                             <textarea name="rezeptBeschreibung" value={actualRezept.rezeptBeschreibung}
                                       onChange={onEditChange}
                                       className="border-2 border-transparent rounded-2xl p-2 m-2"/>
-                            <input type="text" name="kategorieName" value={newKategorie.kategorieName}
-                                   onChange={(e) => setNewKategorie({...newKategorie, kategorieName: e.target.value})}
-                                   className="border-2 border-transparent rounded-2xl p-2 m-2"/>
-                            <textarea name="kategorieBeschreibung" value={newKategorie.kategorieBeschreibung}
-                                      onChange={(e) => setNewKategorie({
-                                          ...newKategorie,
-                                          kategorieBeschreibung: e.target.value
-                                      })} className="border-2 border-transparent rounded-2xl p-2 m-2"/>
-                            <button onClick={addKategorie}
-                                    className="border-2 border-transparent rounded-2xl p-2 m-2">Add Kategorie
+                            <label className="flex-col text-textPrime text-xl text-center">"Kategorien"</label>
+                            {options.map(option => {
+                                return <CheckBox label={option.value.kategorieName} isSelected={true}
+                                                 onCheckboxChange={handleSelectChange}/>
+                            })}
+                            {newKategorie.map((kategorie, index) => {
+                                return (
+                                    <div key={index} className="flex-col">{index + "."}
+                                        <input type="text"
+                                               name="kategorieName"
+                                               value={kategorie.kategorieName}
+                                               onChange={(e) => onChangeKategorie(e, index)}
+                                               className=" flex-row border-2 border-transparent rounded-2xl p-2 m-2"/>
+                                        <label>Kategorie Beschreibung</label>
+                                        <textarea name="kategorieBeschreibung" value={kategorie.kategorieBeschreibung}
+                                                  onChange={(e) => onChangeKategorie(e, index)}
+                                                  className="flex-row border-2 border-transparent rounded-2xl p-2 m-2"
+                                        />
+                                    </div>);
+                            })}
+                            <button
+                                type="button" onClick={addKategorie}
+                                className="flex-col border-2 border-transparent rounded-2xl p-2 m-2">
+                                Add Kategorie
                             </button>
-                            <Select
-                                isMulti
-                                name="kategorieList"
-                                options={options}
-                                className="basic-multi-select"
-                                classNamePrefix="select"
-                                onChange={handleSelectChange}
-                            />
                         </div>
                         <div className="flex flex-row space-x-1">
-                            <button onClick={closeFunction()}
+                            <button onClick={closeFunction}
                                     className="flex-row justify-self-start bg-offWhite text-textPrime shadow-buttonOut hover:shadow-buttonIn rounded-2xl p-2 m-2">Close
                             </button>
                             <button type="submit"
-                                    onClick={submitEdit}
+
                                     className="flex-row justify-end bg-offWhite text-green-200 shadow-buttonOut hover:shadow-buttonIn rounded-2xl p-2 m-2">Save
                             </button>
 

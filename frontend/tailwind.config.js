@@ -19,7 +19,7 @@ export default {
       boxShadow: {
         "doubleOut": "rgba(255, 255, 255, 1) -10px -10px 40px, #d1d9e6 10px 10px 40px",
         "doubleIn": "inset rgba(255, 255, 255, 1) -14px -14px 30px, inset #d1d9e6 14px 14px 30px",
-        "buttonIn": "inset rgba(255, 255, 255, 1) -11px -11px 20px, inset #d1d9e6 11px 11px 20px",
+        "buttonIn": "inset rgba(255, 255, 255, 1) -5px -5px 8px, inset #d1d9e6 5px 5px 8px",
         "buttonOut": "rgba(255, 255, 255, 1) -11px -11px 20px, #d1d9e6 11px 11px 20px",
         "hashtagbutton": "inset rgba(255, 255, 255, 1) -5px -5px 8px, inset #d1d9e6 5px 5px 8px",
         "hashtagbuttonOut": "rgba(255, 255, 255, 1) -5px -5px 8px,  #d1d9e6 5px 5px 8px",

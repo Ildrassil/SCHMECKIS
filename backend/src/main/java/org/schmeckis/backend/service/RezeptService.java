@@ -77,6 +77,14 @@ public class RezeptService {
     }
 
 
+    public void attachPhoto(String id, String imageUrl) {
+        Optional<Rezept> rezept = rezeptRepo.findById(id);
+        if (rezept.isPresent()) {
+            Rezept presentRezept = rezept.get();
+            presentRezept = presentRezept.withRezeptImageUrl(imageUrl);
 
-
+            rezeptRepo.save(presentRezept);
+            throw new IllegalArgumentException("Rezept not found");
+        }
+    }
 }

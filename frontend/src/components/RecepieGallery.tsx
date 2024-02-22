@@ -24,7 +24,8 @@ const variants = {
 export default function RezeptGallery({rezeptList}: RecepieGalleryProps) {
     return (
         <AnimatePresence>
-            <motion.div className="RezeptGallery flex flex-wrap flex-row m-2 p-1" variants={variants.container}>
+            <motion.div className="RezeptGallery flex flex-wrap flex-row justify-center m-2 p-1"
+                        variants={variants.container}>
 
             {rezeptList && rezeptList.map(rezept => {
                 return (

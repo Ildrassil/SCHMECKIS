@@ -1,4 +1,4 @@
-import {Link, Route, Routes} from "react-router-dom";
+import {Link, Route, Routes, useNavigate} from "react-router-dom";
 import React, {useEffect, useState} from "react";
 import {Rezept} from "./models/Rezept.tsx";
 import axios from "axios";
@@ -9,19 +9,25 @@ import './App.css';
 import DetailPage from "./components/EditPage.tsx";
 import {AddRezept} from "./components/AddRezept.tsx";
 import {SearchBar} from "./components/SearchBarAutoComplete.tsx";
+import Login from "./components/LoginAdmin.tsx";
+import {ContextMenu} from "./components/ContextMenu.tsx";
 
-const searchBarAnimation = {
-    initial: {opacity: 1, width: 50},
-    animate: {opacity: 1, width: 200},
-}
 
 function App() {
     const [kategorieList, setKategorieList] = useState<Kategorie[]>([]);
     const [rezeptList, setRezeptList] = useState<Rezept[]>([]);
-    const [unfoldSearch, setUnfoldSearch] = useState<boolean>(false);
+    const [filteredRezepte, setFilteredRezepte] = useState<Rezept[]>([]);
+    const [searchTerm, setSearchTerm] = useState<string>("");
+    const [loggedIn, setLoggedIn] = useState<boolean>(false);
+    const items = ['AdminLogin'];
+    const nav = useNavigate();
 
-    function clickEvent() {
-        setUnfoldSearch(!unfoldSearch);
+    const onClick = (item: string) => {
+        if (item === "AdminLogin") {
+            nav("/admin/login");
+        } else {
+            console.log("Error");
+        }
     }
 
     function fetchRecipes() {
@@ -45,15 +51,13 @@ function App() {
     }
 
     function onCategoryClick(kategorie: string) {
-        if (kategorie === "KATEGORIEN") {
+        if (kategorie === "kategorien") {
             fetchRecipes();
         }
-        setRezeptList(rezeptList.filter(rezept => rezept.kategorieList.map(kategorie => kategorie.kategorieName).includes(kategorie)));
+        setRezeptList(rezeptList.filter(rezept => rezept.kategorieList.map(kategorie => kategorie.kategorieName.toLowerCase()).includes(kategorie)));
     }
 
-    function onHoverStart() {
-        setUnfoldSearch(true);
-    }
+
 
     useEffect(() => {
         fetchRecipes();
@@ -66,16 +70,18 @@ function App() {
                 fontfamily-roboto font-sans
                 text-textHeader
                 pt-32 m-2">#SCHMECKIS</h1></Link>
-                <Link to={"/addRezept"}>+</Link>
+                {loggedIn && <Link to={"/addRezept"}>+</Link>}
+                <ContextMenu items={items}/>
             </div>
             <KategorieMenu onCategoryClick={onCategoryClick}/>
-            <div className={"flex flex-col bg-offWhite align-middle self-center justify-center border-none"}>
+            <div className={"flex flex-col bg-offWhite align-middle self-center justify-center border-none ml-35"}>
                 <SearchBar kategorieList={kategorieList} rezeptList={rezeptList} setFilteredRezepte={setRezeptList}/>
             </div>
             <Routes>
+                <Route path={"/admin/login"} element={<Login setLoggedIn={setLoggedIn}/>}/>
                 <Route path={"/"}
                        element={<RezeptGallery rezeptList={rezeptList}/>}/>
-                <Route path={`/rezept/:rezeptId`} element={<DetailPage/>}/>
+                <Route path={`/rezept/:rezeptId`} element={<DetailPage setKategorie={onCategoryClick}/>}/>
                 <Route path={"/addRezept"} element={<AddRezept/>}/>
             </Routes>
 

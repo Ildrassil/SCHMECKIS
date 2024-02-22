@@ -79,7 +79,7 @@ export default function KategorieMenu({onCategoryClick}: KategorieMenuProps) {
         setKategorie(kategorieList.filter(kategorie => kategorie.kategorieName !== event.currentTarget.value));
         const onkategorie: Kategorie = kategorieList.find(kategorie => kategorie.kategorieName === event.currentTarget.value);
         setCurrentCategorie(onkategorie.kategorieName);
-        onCategoryClick(event.currentTarget.value);
+        onCategoryClick(onkategorie.kategorieName.toLowerCase());
         setUnfold(false);
 
 

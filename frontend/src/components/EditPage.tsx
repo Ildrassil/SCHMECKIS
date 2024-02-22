@@ -1,6 +1,6 @@
 import {Rezept} from "../models/Rezept.tsx";
 import {AnimatePresence, motion} from "framer-motion";
-import {useParams} from "react-router-dom";
+import {useNavigate, useParams} from "react-router-dom";
 import React, {useEffect, useState} from "react";
 import axios from "axios";
 import {Edit} from "./Edit.tsx";
@@ -12,11 +12,17 @@ const animateDetails = {
     transition: {duration: 2.5, type: "spring", damping: 11, stiffness: 35}
 }
 
-export default function DetailPage() {
+type RezeptProps = {
+    setKategorie: (kategorie: string) => void
+}
+
+export default function DetailPage({setKategorie}: RezeptProps) {
 
     const {rezeptId} = useParams<{ rezeptId: string }>();
     const [openEdit, setOpenEdit] = useState(false);
     const [currentRezept, setCurrentRezept] = useState<Rezept>();
+
+    const navigate = useNavigate();
 
 
     function fetchRezept() {
@@ -43,6 +49,16 @@ export default function DetailPage() {
     }
 
 
+    function onCategoryClick(event: React.MouseEvent<HTMLButtonElement>) {
+        const kategorie = currentRezept?.kategorieList.map(kategorie => kategorie.kategorieName).includes(event.currentTarget.value);
+        if (kategorie === undefined) {
+            return;
+        }
+        setKategorie(event.currentTarget.value);
+        navigate("/");
+    }
+
+
     return (<div className="flex justify-center w-screen">
         <AnimatePresence>
             <motion.div
@@ -66,8 +82,11 @@ export default function DetailPage() {
             <div>
                 {currentRezept?.kategorieList.map(kategorie => (
                     <button
-                        className="flex-row shadow-hashtagbutton overflow-clip bg-offWhite rounded-full px-3 text-sm font-semibold text-textPrime mr-2 mb-2 p-1"
-                        key={kategorie.kategorieName}>{kategorie.kategorieName}</button>
+                        type={"button"}
+                        onClick={onCategoryClick}
+                        value={kategorie.kategorieName}
+                        className="flex-row hover:shadow-hashtagbuttonOut active:shadow-hashtagbuttonOut shadow-hashtagbutton overflow-clip bg-offWhite w-fit rounded-full px-5 text-sm font-semibold text-textPrime mr-2 mb-2 p-1"
+                        key={kategorie.kategorieName}>#{kategorie.kategorieName}</button>
                 ))}
             </div>
             </motion.div>

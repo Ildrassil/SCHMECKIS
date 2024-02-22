@@ -28,7 +28,8 @@ export default function RezeptCard({rezept}: RezeptProps) {
             <div className="flex mt-4">
                 {rezept.kategorieList.map(kategorie => (
                     <button key={kategorie.kategorieName}
-                            className="flex-row shadow-hashtagbutton hover:shadow-hashtagbuttonOut bg-offWhite rounded-full px-6 py-1.5 text-m font-semibold text-textPrime mr-2 mb-2 ">#{kategorie.kategorieName}</button>
+                            onClick={() => navigate("/kategorie/" + kategorie.kategorieName)}
+                            className="flex-row shadow-hashtagbutton active:shadow-hashtagbutton hover:shadow-hashtagbuttonOut bg-offWhite rounded-full px-6 py-1.5 text-m font-semibold text-textPrime mr-2 mb-2 ">#{kategorie.kategorieName}</button>
                 ))}
             </div>
         </div>

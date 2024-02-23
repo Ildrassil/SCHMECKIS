@@ -62,7 +62,7 @@ export default function Login({setLoggedIn}: LoginProps) {
                         <input
                             className=" flex-row text-center border-none active:border-none hover:border-none border-transparent text-lg font-semibold text-textHeader bg-offWhite hover:shadow-hashtagbutton active:shadow-hashtagbutton"
                             type="text" id="username" name="username"
-                            onChange={onUsernameChange} value={password} required/>
+                            onChange={onUsernameChange} value={username} required/>
                     </div>
                     <div className="flex-row justify-center mx-5 mt-5">
                         <label className=" flex-row text-center text-lg font-semibold text-textHeader"

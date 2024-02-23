@@ -6,6 +6,7 @@ import {Rezept} from "../models/Rezept.tsx";
 import RezeptPhotoUpload from "./UploadPhoto.tsx";
 import RichTextEditor from "./RichTextEditor.tsx";
 import PreRezeptCard from "./PreRezeptCard.tsx";
+import {JSONContent} from "@tiptap/react";
 
 
 export function AddRezept() {
@@ -19,8 +20,8 @@ export function AddRezept() {
     const [actualRezept, setActualRezept] = useState({
         rezeptName: "",
         rezeptImageUrl: "",
-        rezeptKurzbeschreibung: "",
-        rezeptBeschreibung: "",
+        rezeptKurzbeschreibung: "{\"type\":\"doc\",\"content\":[{\"type\":\"paragraph\"}]}",
+        rezeptBeschreibung: "{\"type\":\"doc\",\"content\":[{\"type\":\"paragraph\"}]}",
         kategorieList: [{
             kategorieName: "",
             kategorieBeschreibung: "",
@@ -45,13 +46,15 @@ export function AddRezept() {
         setActualRezept({...actualRezept, kategorieList: kategorie});
     }
 
-    function onChangeEditor(event: string) {
-        setActualRezept({...actualRezept, rezeptBeschreibung: event})
+    function onChangeEditor(event: JSONContent) {
+        const JsonString = JSON.stringify(event);
+        setActualRezept({...actualRezept, rezeptBeschreibung: JsonString})
 
     }
 
-    function onChangeKurzbeschreibung(event: string) {
-        setActualRezept({...actualRezept, rezeptKurzbeschreibung: event})
+    function onChangeKurzbeschreibung(event: JSONContent) {
+        const JsonString = JSON.stringify(event);
+        setActualRezept({...actualRezept, rezeptKurzbeschreibung: JsonString})
 
     }
 
@@ -109,7 +112,7 @@ export function AddRezept() {
         <div className="flex flex-row justify-center w-screen">
             <div
                 className="flex align-middle justify-center m-10 p-5 rounded-2xl w-screen h-fit">
-                <form onSubmit={postRezept} className="flex flex-col w-1/3 justify-center items-center h-full">
+                <form onSubmit={postRezept} className="flex flex-col w-1/2 justify-center items-center h-full">
                     <div className="flex flex-col w-full justify-center items-center bg-offWhite rounded-2xl">
                         <div className="flex flex-col w-full">
                             <h2 className="flex-coltext-textHeader text-3xl text-center my-2">ERSTELLE REZEPT</h2>

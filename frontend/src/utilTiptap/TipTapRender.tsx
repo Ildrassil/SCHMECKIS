@@ -1,19 +1,19 @@
-import {EditorContent, JSONContent, useEditor} from "@tiptap/react";
+import {EditorContent, useEditor} from '@tiptap/react'
 import StarterKit from "@tiptap/starter-kit";
-import {Toolbar} from "./ToolBar.tsx";
-import {Color} from '@tiptap/extension-color'
-import ListItem from '@tiptap/extension-list-item'
-import TextStyle from '@tiptap/extension-text-style'
+import {useEffect} from "react";
+import {Color} from "@tiptap/extension-color";
+import TextStyle from "@tiptap/extension-text-style";
+import ListItem from "@tiptap/extension-list-item";
 
 
-export default function RichTextEditor({
-                                           rezeptBeschreibung,
-                                           onChange,
-                                       }: {
-    rezeptBeschreibung: string;
-    onChange: (rezeptBeschreibung: JSONContent) => void;
+type props = {
+    content: string
+}
 
-}) {
+
+export default function TipTapRender({content}: props) {
+
+
     const editor = useEditor({
         extensions: [
             Color.configure({types: [TextStyle.name, ListItem.name]}),
@@ -29,22 +29,30 @@ export default function RichTextEditor({
                 },
             }),
         ],
-        content: "",
+        editable: false,
+        content: content,
         editorProps: {
             attributes: {
                 class: "rounded border-none p-4 m-4 min-h-[300px] shadow-doubleOut active:shadow-doubleIn",
             }
 
-        },
-        onUpdate({editor}) {
-            onChange(editor.getJSON());
-            console.log(editor.getJSON());
-        },
+        }
     });
+
+    useEffect(() => {
+        if (editor) {
+            editor.commands.setContent(content)
+        }
+    }, [content])
+
+
+    if (!editor) {
+        return null
+    }
+
     return (
-        <div className="flex flex-col justify-stretch w-full min-h-[250px] min-w-[300px] overflow-y-scroll">
-            <Toolbar editor={editor}/>
+        <>
             <EditorContent editor={editor}/>
-        </div>
-    );
+        </>
+    )
 }

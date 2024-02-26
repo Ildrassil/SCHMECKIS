@@ -4,10 +4,11 @@ import {useState} from "react";
 
 type LoginProps = {
     setLoggedIn: (loggedIn: boolean) => void
+    setLogIn: (logIn: boolean) => void
 }
 
-export default function Login({setLoggedIn}: LoginProps) {
-
+export default function Login({setLoggedIn, setLogIn}: LoginProps) {
+    setLogIn(true);
     const Nav = useNavigate();
     const [displayError, setDisplayError] = useState<boolean>(false);
     const [username, setUsername] = useState<string>("");
@@ -32,6 +33,7 @@ export default function Login({setLoggedIn}: LoginProps) {
         }).then(response => {
             if (response.status === 202) {
                 setLoggedIn(true);
+                setLogIn(false);
                 setDisplayError(false);
                 Nav("/");
 
@@ -48,7 +50,7 @@ export default function Login({setLoggedIn}: LoginProps) {
     }
 
     return (
-        <div className="flex flex-wrap w-full h-full self-center flex justify-center bg-transparent">
+        <div className="flex flex-wrap mt-36 w-full h-full self-center flex justify-center bg-transparent">
             <div
                 className=" flex flex-wrap flex-col p-10 justify-items-center rounded-2xl content-center justify-center items-center  self-center align-middle w-1/3 h-fit shadow-doubleOut">
                 {displayError && <p className=" justify-center text-center text-red-600
@@ -60,7 +62,7 @@ export default function Login({setLoggedIn}: LoginProps) {
                         <label className="text-center text-lg font-semibold text-textHeader"
                                htmlFor="username">Username:</label>
                         <input
-                            className=" flex-row text-center border-none active:border-none hover:border-none border-transparent text-lg font-semibold text-textHeader bg-offWhite hover:shadow-hashtagbutton active:shadow-hashtagbutton"
+                            className=" flex-row mx-3 my-3 p-1 rounded-2xl text-center border-none active:border-none hover:border-none border-transparent text-lg font-semibold text-textHeader bg-offWhite hover:shadow-hashtagbutton active:shadow-hashtagbutton"
                             type="text" id="username" name="username"
                             onChange={onUsernameChange} value={username} required/>
                     </div>
@@ -68,18 +70,18 @@ export default function Login({setLoggedIn}: LoginProps) {
                         <label className=" flex-row text-center text-lg font-semibold text-textHeader"
                                htmlFor="password">Password:</label>
                         <input
-                            className="flex-row text-center  border-none active:border-none hover:border-none border-transparent text-lg font-semibold text-textHeader bg-offWhite hover:shadow-hashtagbutton active:shadow-hashtagbutton"
+                            className="flex-row text-center mx-3 my-3 p-1 rounded-2xl border-none active:border-none hover:border-none border-transparent text-lg font-semibold text-textHeader bg-offWhite hover:shadow-hashtagbutton active:shadow-hashtagbutton"
                             type="password" id="password" name="password"
                             value={password} onChange={onPasswordChange} required/>
                     </div>
-                    <div className="flex-row justify-items-center content-center">
-                        <button className="justify-items-center items-center content-center  hover:shadow-hashtagbutton active:shadow-hashtagbutton
-                shadow-hashtagbuttonOut bg-offWhite w-fit text-center mx-4 px-4  my-10 rounded text-xl
+                    <div className="flex flex-wrap flex-row justify-items-center content-center">
+                        <button className="flex flex-row justify-items-center items-center content-center  hover:shadow-hashtagbutton active:shadow-hashtagbutton
+                shadow-hashtagbuttonOut bg-offWhite w-fit text-center mx-4 px-6 py-2  mt-10  mb-5 rounded-xl text-xl
                 " type="button" onClick={cancel}>Cancel
                         </button>
-                        <button className="items-center justify-items-center content-center px-4 mx-4 rounded hover:shadow-hashtagbutton active:shadow-hashtagbutton
-                shadow-hashtagbuttonOut bg-offWhite w-fit text-center text-xl my-10
-                " type="button" onClick={authenticate}>Login
+                        <button className="flex flex-row content-center px-6 py-2 ml-20 rounded-xl hover:shadow-hashtagbutton active:shadow-hashtagbutton
+                shadow-hashtagbuttonOut bg-offWhite w-fit text-center text-xl mt-10 mb-5" type="button"
+                                onClick={authenticate}>Login
                         </button>
                     </div>
                 </form>

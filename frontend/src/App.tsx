@@ -16,6 +16,7 @@ import {ContextMenu} from "./components/ContextMenu.tsx";
 function App() {
     const [kategorieList, setKategorieList] = useState<Kategorie[]>([]);
     const [rezeptList, setRezeptList] = useState<Rezept[]>([]);
+    const [logIN, setLogIN] = useState<boolean>(false);
     const [filteredRezepte, setFilteredRezepte] = useState<Rezept[]>([]);
     const [searchTerm, setSearchTerm] = useState<string>("");
     const [loggedIn, setLoggedIn] = useState<boolean>(false);
@@ -65,20 +66,24 @@ function App() {
 
     return (
         <>
-            <div className="Header">
+            {!logIN && <ContextMenu items={items}/>}
+
+            {!logIN &&
+                <div>
+                    <div className="Header">
                 <Link to={"/"}><h1 className="HeadLine justify-center sticky align-middle text-4xl text-center font-semibold
                 fontfamily-roboto font-sans
                 text-textHeader
                 pt-32 m-2">#SCHMECKIS</h1></Link>
                 {loggedIn && <Link to={"/addRezept"}>+</Link>}
-                <ContextMenu items={items}/>
             </div>
             <KategorieMenu onCategoryClick={onCategoryClick}/>
             <div className={"flex flex-col bg-offWhite align-middle self-center justify-center border-none ml-35"}>
                 <SearchBar kategorieList={kategorieList} rezeptList={rezeptList} setFilteredRezepte={setRezeptList}/>
             </div>
+                </div>}
             <Routes>
-                <Route path={"/admin/login"} element={<Login setLoggedIn={setLoggedIn}/>}/>
+                <Route path={"/admin/login"} element={<Login setLoggedIn={setLoggedIn} setLogIn={setLogIN}/>}/>
                 <Route path={"/"}
                        element={<RezeptGallery rezeptList={rezeptList}/>}/>
                 <Route path={`/rezept/:rezeptId`} element={<DetailPage setKategorie={onCategoryClick}/>}/>

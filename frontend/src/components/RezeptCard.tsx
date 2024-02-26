@@ -11,6 +11,7 @@ type RezeptProps = {
 export default function RezeptCard({rezept}: RezeptProps) {
     const navigate = useNavigate();
 
+
     function openDetails() {
         navigate("/rezept/" + rezept.id);
     }

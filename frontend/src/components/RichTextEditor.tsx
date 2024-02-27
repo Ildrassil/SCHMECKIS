@@ -1,4 +1,4 @@
-import {EditorContent, JSONContent, useEditor} from "@tiptap/react";
+import {EditorContent, generateHTML, JSONContent, useEditor} from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import {Toolbar} from "./ToolBar.tsx";
 import {Color} from '@tiptap/extension-color'
@@ -14,22 +14,57 @@ export default function RichTextEditor({
     onChange: (rezeptBeschreibung: JSONContent) => void;
 
 }) {
+
+    const outputHTML = (() => {
+        if (rezeptBeschreibung) {
+
+            return generateHTML(JSON.parse(rezeptBeschreibung), [
+
+                    Color.configure({types: [TextStyle.name, ListItem.name]}),
+                    TextStyle.configure({types: [ListItem.name]}),
+                    StarterKit.configure({
+                        bulletList: {
+                            HTMLAttributes: {
+                                class: "list-disc"
+                            },
+                            keepMarks: true,
+                            keepAttributes: true, // TODO : Making this as `false` becase marks are not preserved when I try to preserve attrs, awaiting a bit of help
+                        },
+                        orderedList: {
+                            HTMLAttributes: {
+                                class: "list-decimal"
+                            },
+                            keepMarks: true,
+                            keepAttributes: true, // TODO : Making this as `false` becase marks are not preserved when I try to preserve attrs, awaiting a bit of help
+                        },
+                    }),
+                ],
+            );
+        }
+        return "";
+    })();
     const editor = useEditor({
         extensions: [
             Color.configure({types: [TextStyle.name, ListItem.name]}),
             TextStyle.configure({types: [ListItem.name]}),
             StarterKit.configure({
                 bulletList: {
+                    HTMLAttributes: {
+                        class: "list-disc"
+                    },
                     keepMarks: true,
                     keepAttributes: false, // TODO : Making this as `false` becase marks are not preserved when I try to preserve attrs, awaiting a bit of help
                 },
                 orderedList: {
+                    HTMLAttributes: {
+                        class: "list-disc"
+                    },
                     keepMarks: true,
                     keepAttributes: false, // TODO : Making this as `false` becase marks are not preserved when I try to preserve attrs, awaiting a bit of help
                 },
             }),
         ],
-        content: "",
+        content: outputHTML,
         editorProps: {
             attributes: {
                 class: "rounded border-none p-4 m-5 min-h-[300px] shadow-doubleOut active:shadow-doubleIn",
@@ -43,7 +78,7 @@ export default function RichTextEditor({
     });
     return (
         <div
-            className="flex flex-col justify-stretch text-center m-5 w-full min-h-[250px] min-w-[300px] overflow-y-scroll">
+            className="flex flex-col justify-stretch m-5 w-full min-h-[250px] min-w-[300px] overflow-y-scroll">
             <Toolbar editor={editor}/>
             <EditorContent editor={editor}/>
         </div>

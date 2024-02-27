@@ -1,9 +1,15 @@
 import {Rezept} from "../models/Rezept.tsx";
 import {AnimatePresence, motion} from "framer-motion";
 import {useNavigate, useParams} from "react-router-dom";
-import React, {FormEvent, useEffect, useState} from "react";
+import React, {useEffect, useState} from "react";
 import axios from "axios";
 import {Edit} from "./Edit.tsx";
+import {generateHTML} from "@tiptap/react";
+import {Color} from "@tiptap/extension-color";
+import TextStyle from "@tiptap/extension-text-style";
+import ListItem from "@tiptap/extension-list-item";
+import StarterKit from "@tiptap/starter-kit";
+import TipTapRender from "../utilTiptap/TipTapRender.tsx";
 
 
 const animateDetails = {
@@ -22,13 +28,43 @@ export default function DetailPage({setKategorie, loggedIn}: RezeptProps) {
     const {rezeptId} = useParams<{ rezeptId: string }>();
     const [openEdit, setOpenEdit] = useState(false);
     const [currentRezept, setCurrentRezept] = useState<Rezept>();
-    const [photo, setPhoto] = useState<File>();
+    const [photo, setPhoto] = useState<File | undefined>(undefined);
 
     const navigate = useNavigate();
 
-    const saveEdit = async (event: FormEvent<HTMLFormElement | HTMLButtonElement>) => {
-        event.preventDefault();
-        const response = await axios.put('/api/rezepte/', rezeptId);
+    const outputHTML = (() => {
+        if (currentRezept) {
+
+            return generateHTML(JSON.parse(currentRezept.rezeptBeschreibung), [
+
+                    Color.configure({types: [TextStyle.name, ListItem.name]}),
+                    TextStyle.configure({types: [ListItem.name]}),
+                    StarterKit.configure({
+                        bulletList: {
+                            HTMLAttributes: {
+                                class: "list-disc"
+                            },
+                            keepMarks: true,
+                            keepAttributes: true, // TODO : Making this as `false` becase marks are not preserved when I try to preserve attrs, awaiting a bit of help
+                        },
+                        orderedList: {
+                            HTMLAttributes: {
+                                class: "list-decimal"
+                            },
+                            keepMarks: true,
+                            keepAttributes: true, // TODO : Making this as `false` becase marks are not preserved when I try to preserve attrs, awaiting a bit of help
+                        },
+                    }),
+                ],
+            );
+        }
+        return "";
+    })();
+
+
+    const saveEdit = async (rezept: Rezept) => {
+
+        const response = await axios.put('/api/rezepte/' + rezeptId, rezept);
         if (response.status === 200) {
             let rezeptUrl: string | undefined;
             if (photo !== undefined) {
@@ -54,10 +90,12 @@ export default function DetailPage({setKategorie, loggedIn}: RezeptProps) {
                     'Content-Type': 'multipart/form-data'
                 }
             });
+            setPhoto(undefined);
             return response.data;
         } catch (error) {
             console.error('Error uploading image', error);
         }
+
 
     }
 
@@ -105,7 +143,7 @@ export default function DetailPage({setKategorie, loggedIn}: RezeptProps) {
                 </svg>}
 
                 <img className="flex-col mt-4" src={currentRezept?.rezeptImageUrl} alt={currentRezept?.rezeptName}/>
-                <p className="flex-col py-5 break-after-auto">{currentRezept?.rezeptBeschreibung}</p>
+                <TipTapRender content={outputHTML}/>
             <div>
                 {currentRezept?.kategorieList.map(kategorie => (
                     <button

@@ -33,10 +33,12 @@ export function AddRezept() {
     const [rezept, setRezept] = useState<Rezept>()
 
     function onEditChange(event: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>) {
+        event.preventDefault();
         setActualRezept({...actualRezept, [event.target.name]: event.target.value})
     }
 
     function onChangeKategorie(event: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>, index: number) {
+        event.preventDefault();
         const foundKategorie: Kategorie | undefined = actualRezept.kategorieList.find((kategorie, i) => i === index);
         if (foundKategorie === undefined) {
             return;

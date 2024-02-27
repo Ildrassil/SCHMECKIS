@@ -1,5 +1,5 @@
 import {Kategorie} from "../models/Kategorie.tsx";
-import React, {useEffect, useState} from "react";
+import React, {useState} from "react";
 import {Rezept} from "../models/Rezept.tsx";
 import ReactModal from "react-modal";
 import RichTextEditor from "./RichTextEditor.tsx";
@@ -10,7 +10,7 @@ import RezeptPhotoUpload from "./UploadPhoto.tsx";
 type EditProps = {
     state: boolean,
     rezept: Rezept,
-    saveEdit: () => void,
+    saveEdit: (rezept: Rezept) => void,
     setCurrentRezept: (rezept: Rezept) => void,
     setOpenEdit: (state: boolean) => void,
     setPhoto: (file: File) => void,
@@ -22,21 +22,11 @@ type OptionType = {
 
 export function Edit({state, rezept, saveEdit, setCurrentRezept, setOpenEdit, setPhoto}: EditProps) {
     const [showEdit, setShowEdit] = useState<boolean>(state);
-    const [newKategorie, setNewKategorie] = useState<Kategorie[]>([{
-        kategorieName: "",
-        kategorieBeschreibung: "",
-    }]);
+    const [newKategorie, setNewKategorie] = useState<Kategorie[]>([...rezept.kategorieList]);
     const [actualRezept, setActualRezept] = useState<Rezept>(rezept)
 
 
-    function handleSelectChange(selectedOptions: OptionType[]) {
-        setActualRezept({
-            ...actualRezept,
-            kategorieList: selectedOptions ? selectedOptions.map((option: OptionType) => option.value) : []
-        });
-    }
-
-    function onChangeKategorie(event: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>, index: number) {
+    function onChangeKategorie(event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>, index: number) {
         const foundKategorie = newKategorie.find((kategorie, i) => i === index);
         const updatedKategorie = {...foundKategorie, [event.currentTarget.name]: event.currentTarget.value};
         const kategorie = newKategorie.map((kategorie, i) => i === index ? updatedKategorie : kategorie);
@@ -52,13 +42,11 @@ export function Edit({state, rezept, saveEdit, setCurrentRezept, setOpenEdit, se
         setActualRezept({...actualRezept, [event.target.name]: event.target.value})
     }
 
-    useEffect(() => {
-        setCurrentRezept(actualRezept);
-    }, []);
 
     function submitEdit() {
-        saveEdit();
-
+        const rezeptToUpdate: Rezept = {...actualRezept, kategorieList: newKategorie};
+        saveEdit(rezeptToUpdate);
+        closeFunction();
     }
 
     function onChangePhoto(file: File) {
@@ -103,7 +91,9 @@ export function Edit({state, rezept, saveEdit, setCurrentRezept, setOpenEdit, se
             }}>
             <div
                 className="flex align-middle justify-center m-10 p-5 rounded-2xl w-full h-fit ">
-                <form onSubmit={submitEdit} className="flex flex-col w-3/4 p-2 justify-center items-center h-full">
+                <form onSubmit={(event) => {
+                    event.preventDefault()
+                }} className="flex flex-col w-3/4 p-2 justify-center items-center h-full">
                     <div className="flex flex-col w-full justify-center items-center bg-offWhite rounded-2xl">
                         <div className="flex flex-col w-full">
                             <h2 className="flex-coltext-textHeader text-3xl text-center my-5">ERSTELLE REZEPT</h2>
@@ -120,22 +110,6 @@ export function Edit({state, rezept, saveEdit, setCurrentRezept, setOpenEdit, se
                             <RichTextEditor onChange={onChangeEditor}
                                             rezeptBeschreibung={actualRezept.rezeptBeschreibung}/>
                             <label className="flex-col text-textPrime text-xl my-5 text-center">Kategorien</label>
-                            {actualRezept.kategorieList.map((kategorie, index) => {
-                                return (
-                                    <div className="flex flex-col align-middle items-center content-center mt-5 "
-                                         key={index}>
-                                        {index + 1}.
-                                        <input type="text"
-                                               name="kategorieName"
-                                               value={kategorie.kategorieName}
-                                               onChange={(e) => onChangeKategorie(e, index)}
-                                               className="flex-row bg-offWhite shadow-buttonOut hover:shadow-buttonIn active:shadow-buttonIn border-2 w-fit justify-center self-center border-transparent rounded-2xl p-2 m-2"/>
-                                        <textarea name="kategorieBeschreibung"
-                                                  value={kategorie.kategorieBeschreibung}
-                                                  onChange={(e) => onChangeKategorie(e, index)}
-                                                  className="flex flex-wrap flex-row justify-stretch bg-offWhite  hover:shadow-buttonIn active:shadow-buttonIn shadow-buttonOut border-2 border-transparent active:shadow-hashtagbutton w-full h-64 rounded-2xl p-5 ml-6 m-3 self-baseline"/>
-                                    </div>)
-                            })}
                             {newKategorie.map((kategorie, index) => {
                                 return (
                                     <div key={index}
@@ -172,8 +146,8 @@ export function Edit({state, rezept, saveEdit, setCurrentRezept, setOpenEdit, se
                                 bg-offWhite text-textPrime shadow-buttonOut hover:shadow-buttonIn
                                 rounded-2xl p-2 m-2">Close
                             </button>
-                            <button type="submit"
-                                    onSubmit={submitEdit}
+                            <button type="button"
+                                    onClick={submitEdit}
                                     className="flex-row justify-end h-fit w-32 bg-offWhite
                                  font-semibold
                                  text-textHeader shadow-buttonOut hover:shadow-buttonIn

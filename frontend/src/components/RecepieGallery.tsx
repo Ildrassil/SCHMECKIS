@@ -4,6 +4,7 @@ import RezeptCard from "./RezeptCard.tsx";
 
 type RecepieGalleryProps = {
     rezeptList: Rezept[]
+    searchTerm: string
 }
 const variants = {
     type: "slide",
@@ -21,13 +22,15 @@ const variants = {
     }
 };
 
-export default function RezeptGallery({rezeptList}: RecepieGalleryProps) {
+export default function RezeptGallery({rezeptList, searchTerm}: RecepieGalleryProps) {
+
+
     return (
         <AnimatePresence>
             <motion.div className="RezeptGallery flex flex-wrap flex-row justify-center m-2 p-1"
                         variants={variants.container}>
 
-            {rezeptList && rezeptList.map(rezept => {
+                {rezeptList && rezeptList.filter(rezept => rezept.rezeptName.toLowerCase().includes(searchTerm) || searchTerm === "" || rezept.rezeptBeschreibung.toLowerCase().includes(searchTerm)).map(rezept => {
                 return (
                     <motion.div className="Rezept Card basis-1/3 m-2 p-4
                     rounded-2xl border-2 border-transparent color-textPrime" key={rezept.id}

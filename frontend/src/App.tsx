@@ -1,5 +1,5 @@
 import {Link, Route, Routes, useNavigate} from "react-router-dom";
-import React, {useEffect, useState} from "react";
+import React, {ChangeEvent, useEffect, useState} from "react";
 import {Rezept} from "./models/Rezept.tsx";
 import axios from "axios";
 import {Kategorie} from "./models/Kategorie.tsx";
@@ -11,6 +11,7 @@ import {AddRezept} from "./components/AddRezept.tsx";
 import {SearchBar} from "./components/SearchBarAutoComplete.tsx";
 import Login from "./components/LoginAdmin.tsx";
 import {ContextMenu} from "./components/ContextMenu.tsx";
+import KategorieGallery from "./components/KategorieGallery.tsx";
 
 
 function App() {
@@ -29,6 +30,10 @@ function App() {
         } else {
             console.log("Error");
         }
+    }
+
+    function handleOnChange(event: ChangeEvent<HTMLInputElement>) {
+        setSearchTerm(event.target.value.toLowerCase());
     }
 
     function fetchRecipes() {
@@ -79,15 +84,17 @@ function App() {
             </div>
             <KategorieMenu onCategoryClick={onCategoryClick}/>
             <div className={"flex flex-col bg-offWhite align-middle self-center justify-center border-none ml-35"}>
-                <SearchBar kategorieList={kategorieList} rezeptList={rezeptList} setFilteredRezepte={setRezeptList}/>
+                <SearchBar handleOnChange={handleOnChange}/>
             </div>
                 </div>}
             <Routes>
                 <Route path={"/admin/login"} element={<Login setLoggedIn={setLoggedIn} setLogIn={setLogIN}/>}/>
                 <Route path={"/"}
-                       element={<RezeptGallery rezeptList={rezeptList}/>}/>
-                <Route path={`/rezept/:rezeptId`} element={<DetailPage setKategorie={onCategoryClick}/>}/>
+                       element={<RezeptGallery searchTerm={searchTerm} rezeptList={rezeptList}/>}/>
+                <Route path={`/rezept/:rezeptId`}
+                       element={<DetailPage setKategorie={onCategoryClick} loggedIn={loggedIn}/>}/>
                 <Route path={"/addRezept"} element={<AddRezept/>}/>
+                <Route path={"/kategorie/:kategorieName"} element={<KategorieGallery rezeptList={rezeptList}/>}/>
             </Routes>
 
         </>

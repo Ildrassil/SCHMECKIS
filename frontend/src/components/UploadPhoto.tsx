@@ -22,7 +22,7 @@ export default function RezeptPhotoUpload(props: RezeptPhotoProps) {
         <>
             <button
                 type={"button"}
-                className="flex-row w-fit h-14 p-4 m-4 text-center font-semibold rounded-2xl shadow-buttonOut active:shadow-buttonIn hover:shadow-buttonIn"
+                className="flex-row justify-center align-middle w-fit h-14 p-4 m-4 text-center font-semibold rounded-2xl shadow-buttonOut active:shadow-buttonIn hover:shadow-buttonIn"
                 onClick={handleClick}>
                 UPLOAD PHOTO HERE
                 <SlCloudUpload className="inline mx-4" width={20} height={20}/>

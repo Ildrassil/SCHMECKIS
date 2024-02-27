@@ -32,7 +32,7 @@ export default function RichTextEditor({
         content: "",
         editorProps: {
             attributes: {
-                class: "rounded border-none p-4 m-4 min-h-[300px] shadow-doubleOut active:shadow-doubleIn",
+                class: "rounded border-none p-4 m-5 min-h-[300px] shadow-doubleOut active:shadow-doubleIn",
             }
 
         },
@@ -42,7 +42,8 @@ export default function RichTextEditor({
         },
     });
     return (
-        <div className="flex flex-col justify-stretch w-full min-h-[250px] min-w-[300px] overflow-y-scroll">
+        <div
+            className="flex flex-col justify-stretch text-center m-5 w-full min-h-[250px] min-w-[300px] overflow-y-scroll">
             <Toolbar editor={editor}/>
             <EditorContent editor={editor}/>
         </div>

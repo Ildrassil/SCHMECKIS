@@ -1,7 +1,7 @@
 import {Rezept} from "../models/Rezept.tsx";
 import {AnimatePresence, motion} from "framer-motion";
 import {useNavigate, useParams} from "react-router-dom";
-import React, {useEffect, useState} from "react";
+import React, {FormEvent, useEffect, useState} from "react";
 import axios from "axios";
 import {Edit} from "./Edit.tsx";
 
@@ -14,15 +14,52 @@ const animateDetails = {
 
 type RezeptProps = {
     setKategorie: (kategorie: string) => void
+    loggedIn: boolean
 }
 
-export default function DetailPage({setKategorie}: RezeptProps) {
+export default function DetailPage({setKategorie, loggedIn}: RezeptProps) {
 
     const {rezeptId} = useParams<{ rezeptId: string }>();
     const [openEdit, setOpenEdit] = useState(false);
     const [currentRezept, setCurrentRezept] = useState<Rezept>();
+    const [photo, setPhoto] = useState<File>();
 
     const navigate = useNavigate();
+
+    const saveEdit = async (event: FormEvent<HTMLFormElement | HTMLButtonElement>) => {
+        event.preventDefault();
+        const response = await axios.put('/api/rezepte/', rezeptId);
+        if (response.status === 200) {
+            let rezeptUrl: string | undefined;
+            if (photo !== undefined) {
+                rezeptUrl = await savePhoto(photo, response.data.id);
+
+            }
+            setCurrentRezept({...response.data, rezeptImageUrl: rezeptUrl});
+            setOpenEdit(false);
+        } else {
+            setOpenEdit(true);
+        }
+
+    }
+
+
+    const savePhoto = async (file: File, id: string) => {
+        const formData = new FormData();
+        formData.append("file", file);
+
+        try {
+            const response = await axios.post<string>('/api/upload/image/' + id, formData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data'
+                }
+            });
+            return response.data;
+        } catch (error) {
+            console.error('Error uploading image', error);
+        }
+
+    }
 
 
     function fetchRezept() {
@@ -36,17 +73,7 @@ export default function DetailPage({setKategorie}: RezeptProps) {
     }, []);
 
 
-    function saveEdit() {
-        axios.put("/api/rezepte/" + rezeptId, {
-            currentRezept
-        })
-            .then(response => {
-            console.log(response);
-            if (response.status === 200) {
-                setOpenEdit(false);
-            }
-        });
-    }
+
 
 
     function onCategoryClick(event: React.MouseEvent<HTMLButtonElement>) {
@@ -66,18 +93,18 @@ export default function DetailPage({setKategorie}: RezeptProps) {
                 initial={animateDetails.initial} animate={animateDetails.animate} transition={animateDetails.transition}
                 className={"flex flex-col self-center justify-center align-middle shadow-doubleOut mt-10-ml-56 content-center h-auto max-w-xl p-10 rounded-2xl object-center"}>
 
-                {openEdit && <Edit setOpenEdit={setOpenEdit} state={openEdit} rezept={currentRezept}
+                {openEdit && <Edit setOpenEdit={setOpenEdit} state={openEdit} setPhoto={setPhoto} rezept={currentRezept}
                                    setCurrentRezept={setCurrentRezept} saveEdit={saveEdit}/>}
                 <h2 className="flex-row font-bold self self-center text-textHeader text-3xl">{currentRezept?.rezeptName}</h2>
-                <svg xmlns="http://www.w3.org/2000/svg"
+                {loggedIn && <svg xmlns="http://www.w3.org/2000/svg"
                      className="h-5 w-5 m-4 flex-row shadow-none hover:shadow-buttonIn rounded-2xl" fill="none"
                      viewBox="0 0 24 24"
                      stroke="currentColor" onClick={() => setOpenEdit(true)}>
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
                               d="M12 14l9-5-9-5-9 5 9 5zm0 0v6m-4-4h8"/>
-                    </svg>
+                </svg>}
 
-                <img className="flex-col" src={currentRezept?.rezeptImageUrl} alt={currentRezept?.rezeptName}/>
+                <img className="flex-col mt-4" src={currentRezept?.rezeptImageUrl} alt={currentRezept?.rezeptName}/>
                 <p className="flex-col py-5 break-after-auto">{currentRezept?.rezeptBeschreibung}</p>
             <div>
                 {currentRezept?.kategorieList.map(kategorie => (

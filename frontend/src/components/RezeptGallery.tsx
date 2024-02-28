@@ -2,7 +2,7 @@ import {AnimatePresence, motion} from "framer-motion";
 import {Rezept} from "../models/Rezept.tsx";
 import RezeptCard from "./RezeptCard.tsx";
 
-type RecepieGalleryProps = {
+type RezeptGalleryProps = {
     rezeptList: Rezept[]
     searchTerm: string
 }
@@ -22,7 +22,7 @@ const variants = {
     }
 };
 
-export default function RezeptGallery({rezeptList, searchTerm}: RecepieGalleryProps) {
+export default function RezeptGallery({rezeptList, searchTerm}: RezeptGalleryProps) {
 
 
     return (
@@ -35,7 +35,8 @@ export default function RezeptGallery({rezeptList, searchTerm}: RecepieGalleryPr
                         .toLowerCase()
                         .includes(searchTerm) || searchTerm === "" ||
                     rezept.rezeptBeschreibung.toLowerCase()
-                        .includes(searchTerm)).map(rezept => {
+                        .includes(searchTerm) ||
+                    rezept.rezeptKurzbeschreibung.toLowerCase().includes(searchTerm)).map(rezept => {
                 return (
                     <motion.div className="Rezept Card basis-1/3  m-2 p-4
                     rounded-2xl border-2 border-transparent color-textPrime" key={rezept.id}

@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 @Service
@@ -34,9 +35,6 @@ public class RezeptService {
     public void deleteRezept(String id) {
         Rezept rezept = rezeptRepo.findById(id).orElseThrow(() -> new IllegalArgumentException("Rezept not found"));
         rezeptRepo.delete(rezept);
-        /*rezeptRepo.findById(id).ifPresent(rezept1 -> {
-            throw new IllegalArgumentException("Rezept not deleted");
-        });*/
     }
 
     public Rezept updateRezept(String id, RequestRezept rezept) {
@@ -85,7 +83,7 @@ public class RezeptService {
 
             rezeptRepo.save(presentRezept);
         } else {
-            throw new IllegalArgumentException("Rezept not found" + id);
+            throw new NoSuchElementException("Rezept not found" + id);
         }
     }
 }

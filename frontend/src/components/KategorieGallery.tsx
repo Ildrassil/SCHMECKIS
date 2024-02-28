@@ -25,9 +25,10 @@ const variants = {
 
 type KategorieGalleryProps = {
     kategorieList: Kategorie[]
+    searchTerm: string
 }
 
-export default function KategorieGallery({kategorieList}: KategorieGalleryProps) {
+export default function KategorieGallery({kategorieList, searchTerm}: KategorieGalleryProps) {
 
     const {kategorieName} = useParams<{ kategorieName: string }>();
 
@@ -54,7 +55,13 @@ export default function KategorieGallery({kategorieList}: KategorieGalleryProps)
             <motion.div className="RezeptGallery flex flex-wrap
             flex-row justify-center m-2 p-1"
                         variants={variants.container}>
-                {rezeptlist && rezeptlist.map(rezept => {
+                {rezeptlist && rezeptlist.filter(rezept =>
+                    rezept.rezeptName
+                        .toLowerCase()
+                        .includes(searchTerm) || searchTerm === "" ||
+                    rezept.rezeptBeschreibung.toLowerCase()
+                        .includes(searchTerm) ||
+                    rezept.rezeptKurzbeschreibung.toLowerCase().includes(searchTerm)).map(rezept => {
                     return (
                         <motion.div className="Rezept Card basis-1/3 m-2 p-4
                                     rounded-2xl border-2 border-transparent color-textPrime"

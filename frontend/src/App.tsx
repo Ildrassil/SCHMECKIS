@@ -1,10 +1,10 @@
-import {Link, Route, Routes, useNavigate} from "react-router-dom";
+import {Link, Route, Routes} from "react-router-dom";
 import React, {ChangeEvent, useEffect, useState} from "react";
 import {Rezept} from "./models/Rezept.tsx";
 import axios from "axios";
 import {Kategorie} from "./models/Kategorie.tsx";
 import KategorieMenu from "./components/KategorieMenu.tsx";
-import RezeptGallery from "./components/RecepieGallery.tsx";
+import RezeptGallery from "./components/RezeptGallery.tsx";
 import './App.css';
 import DetailPage from "./components/EditPage.tsx";
 import {AddRezept} from "./components/AddRezept.tsx";
@@ -18,19 +18,11 @@ function App() {
     const [kategorieList, setKategorieList] = useState<Kategorie[]>([]);
     const [rezeptList, setRezeptList] = useState<Rezept[]>([]);
     const [logIN, setLogIN] = useState<boolean>(false);
-    const [filteredRezepte, setFilteredRezepte] = useState<Rezept[]>([]);
     const [searchTerm, setSearchTerm] = useState<string>("");
     const [loggedIn, setLoggedIn] = useState<boolean>(false);
     const items = ['AdminLogin'];
-    const nav = useNavigate();
 
-    const onClick = (item: string) => {
-        if (item === "AdminLogin") {
-            nav("/admin/login");
-        } else {
-            console.log("Error");
-        }
-    }
+
 
     function handleOnChange(event: ChangeEvent<HTMLInputElement>) {
         setSearchTerm(event.target.value.toLowerCase());
@@ -96,7 +88,7 @@ function App() {
                        element={<DetailPage setKategorie={onCategoryClick} loggedIn={loggedIn}/>}/>
                 <Route path={"/addRezept"} element={<AddRezept/>}/>
                 <Route path={"/kategorie/:kategorieName"}
-                       element={<KategorieGallery kategorieList={kategorieList}/>}/>
+                       element={<KategorieGallery searchTerm={searchTerm} kategorieList={kategorieList}/>}/>
             </Routes>
         </>
     )

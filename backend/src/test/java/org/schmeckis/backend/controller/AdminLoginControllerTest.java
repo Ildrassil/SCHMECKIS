@@ -10,6 +10,7 @@ import org.springframework.test.web.servlet.MvcResult;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 
 @AutoConfigureMockMvc
 @SpringBootTest
@@ -21,12 +22,25 @@ public class AdminLoginControllerTest {
 
     @Test
     @WithMockUser(roles = "ADMIN")
-    void loginTest() throws Exception {
+    void meTest() throws Exception {
         //ARRANGE
         //ACT
-        MvcResult mvcResult = mockMvc.perform(get("/api/admin/login")).andReturn();
+        MvcResult mvcResult = mockMvc.perform(get("/api/admin/me"))
+                .andExpect(content().json("{\"role\":\"[ROLE_ADMIN]\"}"))
+                .andReturn();
         //ASSERT
-        assertEquals(202, mvcResult.getResponse().getStatus());
+        assertEquals(200, mvcResult.getResponse().getStatus());
+
+    }
+
+    @Test
+    void meTestNotLoggedIn() throws Exception {
+        //ARRANGE
+        //ACT
+        MvcResult mvcResult = mockMvc.perform(get("/api/admin/me")).andReturn();
+        //ASSERT
+        assertEquals(401, mvcResult.getResponse().getStatus());
+
 
     }
 
@@ -38,5 +52,16 @@ public class AdminLoginControllerTest {
         //ASSERT
         assertEquals(401, mvcResult.getResponse().getStatus());
 
+
+    }
+
+    @Test
+    @WithMockUser(roles = "ADMIN")
+    void loginTestLoggedIn() throws Exception {
+        //ARRANGE
+        //ACT
+        MvcResult mvcResult = mockMvc.perform(get("/api/admin/login")).andReturn();
+        //ASSERT
+        assertEquals(202, mvcResult.getResponse().getStatus());
     }
 }

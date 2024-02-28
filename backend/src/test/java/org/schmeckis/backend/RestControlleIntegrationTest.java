@@ -7,6 +7,7 @@ import org.schmeckis.backend.repo.RezeptRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
@@ -86,6 +87,7 @@ class RestControlleIntegrationTest {
 
     @Test
     @DirtiesContext
+    @WithMockUser
     void testCreateRezept() throws Exception {
         //ARRANGE
         String rezept = """
@@ -148,6 +150,7 @@ class RestControlleIntegrationTest {
 
     @Test
     @DirtiesContext
+    @WithMockUser
     void testDeleteRezept() throws Exception {
         //ARRANGE
         Rezept rezept = new Rezept("1", "Kartoffelsalat", "Kartoffelsalat mit Mayo", "Kartoffelsalat", "Kartoffelsalat",
@@ -165,6 +168,7 @@ class RestControlleIntegrationTest {
 
     @Test
     @DirtiesContext
+    @WithMockUser
     void testUpdateRezept() throws Exception {
         //ARRANGE
         Rezept rezept = new Rezept("1", "Kartoffelsalat", "Kartoffelsalat mit Mayo", "Kartoffelsalat", "Kartoffelsalat",
@@ -213,6 +217,7 @@ class RestControlleIntegrationTest {
 
     @Test
     @DirtiesContext
+    @WithMockUser
     void addKategorieTest() throws Exception {
         Rezept rezept = new Rezept("1", "Nudelsalat", "Nudelsalat mit Mayo", "Nudelsalat", "Nudelsalat",
                 List.of(new Kategorie("Salat", "Salat")));
@@ -261,6 +266,7 @@ class RestControlleIntegrationTest {
 
     @Test
     @DirtiesContext
+    @WithMockUser
     void deleteKategorieTest() throws Exception {
         Rezept rezept = new Rezept("1", "Nudelsalat", "Nudelsalat mit Mayo", "Nudelsalat", "Nudelsalat",
                 List.of(new Kategorie("Salat", "Salat"), new Kategorie("Nudeln", "Nudeln")));

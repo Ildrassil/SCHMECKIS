@@ -8,12 +8,11 @@ public record User(
         @Id
         String id,
         String username,
-        String password,
-        String email,
-        String masterPassword
+        String password
+
 ) {
-    public User(String username, String password, String email, String masterPassword) {
-        this(UUID.randomUUID().toString(), username, password, email, masterPassword);
+    public User(String username, String password) {
+        this(UUID.randomUUID().toString(), username, password);
     }
 
 }

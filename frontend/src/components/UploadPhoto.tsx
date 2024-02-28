@@ -2,7 +2,7 @@ import {ChangeEvent, useRef} from "react";
 import {SlCloudUpload} from "react-icons/sl";
 
 type RezeptPhotoProps = {
-    savePhoto: (file: File) => void
+    onChangePhoto: (file: File) => void
 }
 
 export default function RezeptPhotoUpload(props: RezeptPhotoProps) {
@@ -10,18 +10,19 @@ export default function RezeptPhotoUpload(props: RezeptPhotoProps) {
     function savePhoto(event: ChangeEvent<HTMLInputElement>) {
         if (event.target.files && event.target.files.length > 0) {
             const file = event.target.files[0];
-            props.savePhoto(file);
+            props.onChangePhoto(file);
         }
     }
 
-    const handleClick = (event) => {
-        hiddenFileInput.current.click();
+    const handleClick = () => {
+        hiddenFileInput.current!.click();
     };
-    const hiddenFileInput = useRef(null);
+    const hiddenFileInput = useRef<HTMLInputElement>(null);
     return (
         <>
             <button
-                className="flex-row w-fit h-14 p-4 m-4 text-center font-semibold rounded-2xl shadow-buttonOut active:shadow-buttonIn hover:shadow-buttonIn"
+                type={"button"}
+                className="flex-row justify-center align-middle w-fit h-14 p-4 m-4 text-center font-semibold rounded-2xl shadow-buttonOut active:shadow-buttonIn hover:shadow-buttonIn"
                 onClick={handleClick}>
                 UPLOAD PHOTO HERE
                 <SlCloudUpload className="inline mx-4" width={20} height={20}/>

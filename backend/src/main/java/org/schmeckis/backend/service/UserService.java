@@ -1,31 +1,31 @@
 package org.schmeckis.backend.service;
 
 
-import lombok.RequiredArgsConstructor;
 import org.schmeckis.backend.model.User;
 import org.schmeckis.backend.repo.UserRepo;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import java.util.Optional;
+import java.util.List;
 
 @Service
-@RequiredArgsConstructor
-public class UserService {
+public class UserService implements UserDetailsService {
 
-    UserRepo userRepo;
+    private final UserRepo userRepo;
 
-    public void saveUser(User user) {
-        userRepo.save(user);
+
+    public UserService(UserRepo userRepo) {
+        this.userRepo = userRepo;
     }
 
-    public User getUser(String username, String password) {
-        Optional<User> isUser = userRepo.findByUsername(username);
-        boolean isPasswordCorrect = isUser.map(user -> user.password().equals(password)).orElse(false);
 
-        if (isPasswordCorrect) {
-            return isUser.get();
-        }
-        else throw new IllegalArgumentException("Password is not correct");
+    @Override
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        User optionalUser = userRepo.findByUsername(username).orElseThrow(() -> new UsernameNotFoundException("User not found"));
+
+        return new org.springframework.security.core.userdetails.User(optionalUser.username(), optionalUser.password(), List.of(new SimpleGrantedAuthority("ADMIN")));
     }
-
 }

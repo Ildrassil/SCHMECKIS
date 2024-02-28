@@ -3,12 +3,13 @@ package org.schmeckis.backend.service;
 
 import org.schmeckis.backend.model.User;
 import org.schmeckis.backend.repo.UserRepo;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
+import java.util.List;
 
 @Service
 public class UserService implements UserDetailsService {
@@ -25,6 +26,6 @@ public class UserService implements UserDetailsService {
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         User optionalUser = userRepo.findByUsername(username).orElseThrow(() -> new UsernameNotFoundException("User not found"));
 
-        return new org.springframework.security.core.userdetails.User(optionalUser.username(), optionalUser.password(), new ArrayList<>());
+        return new org.springframework.security.core.userdetails.User(optionalUser.username(), optionalUser.password(), List.of(new SimpleGrantedAuthority("ADMIN")));
     }
 }

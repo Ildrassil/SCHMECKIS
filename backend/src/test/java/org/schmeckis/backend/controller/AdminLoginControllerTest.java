@@ -20,13 +20,23 @@ public class AdminLoginControllerTest {
     private MockMvc mockMvc;
 
     @Test
-    @WithMockUser
+    @WithMockUser(roles = "ADMIN")
     void loginTest() throws Exception {
         //ARRANGE
         //ACT
         MvcResult mvcResult = mockMvc.perform(get("/api/admin/login")).andReturn();
         //ASSERT
         assertEquals(202, mvcResult.getResponse().getStatus());
+
+    }
+
+    @Test
+    void loginTestNotLoggedIn() throws Exception {
+        //ARRANGE
+        //ACT
+        MvcResult mvcResult = mockMvc.perform(get("/api/admin/login")).andReturn();
+        //ASSERT
+        assertEquals(401, mvcResult.getResponse().getStatus());
 
     }
 }

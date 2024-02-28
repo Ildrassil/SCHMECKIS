@@ -25,23 +25,22 @@ export default function Login({setLoggedIn, setLogIn}: LoginProps) {
     function authenticate(event: React.FormEvent<HTMLFormElement | HTMLButtonElement>) {
         event.preventDefault();
 
-        axios.get("/api/admin/login", {
+        axios.get("/api/admin/me", {
             auth: {
                 username: username,
                 password: password
             }
-        }).then(response => {
-            if (response.status === 202) {
+        }).then(() => {
                 setLoggedIn(true);
                 setLogIn(false);
                 setDisplayError(false);
                 Nav("/");
 
-            } else {
+        })
+            .catch(() => {
                 setLoggedIn(false);
                 setDisplayError(true);
-            }
-        })
+            });
     }
 
     function cancel(event: React.FormEvent<HTMLButtonElement>) {

@@ -130,7 +130,7 @@ export default function DetailPage({setKategorie, loggedIn}: RezeptProps) {
             <motion.div
                 layout={true}
                 initial={animateDetails.initial} animate={animateDetails.animate} transition={animateDetails.transition}
-                className={"flex flex-col self-center justify-center align-middle shadow-doubleOut mt-10 content-center h-auto max-w-xl p-10 rounded-2xl object-center"}>
+                className={"flex flex-col self-center justify-center align-middle shadow-doubleOut mt-10 content-center h-auto w-8/12 p-10 rounded-2xl object-center"}>
 
                 {openEdit && <Edit setOpenEdit={setOpenEdit} state={openEdit} setPhoto={setPhoto} rezept={currentRezept}
                                    saveEdit={saveEdit}/>}
@@ -143,7 +143,9 @@ export default function DetailPage({setKategorie, loggedIn}: RezeptProps) {
                               d="M12 14l9-5-9-5-9 5 9 5zm0 0v6m-4-4h8"/>
                 </svg>}
 
-                <img className="flex-col mt-4" src={currentRezept?.rezeptImageUrl} alt={currentRezept?.rezeptName}/>
+                <img
+                    className="flex flex-wrap flex-col justify-center content-center justify-items-center items-center mt-10 w-7/12"
+                    src={currentRezept?.rezeptImageUrl} alt={currentRezept?.rezeptName}/>
                 <TipTapRender content={outputHTML}/>
             <div>
                 {currentRezept?.kategorieList.map(kategorie => (

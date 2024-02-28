@@ -48,7 +48,7 @@ export default function TipTapRender({content}: props) {
         content: content,
         editorProps: {
             attributes: {
-                class: "rounded bg-transparent border-none p-12 mx-5 my-8 min-h-[300px] shadow-doubleIn active:shadow-doubleIn",
+                class: "rounded bg-transparent border-none p-12 mx-5 my-8 min-h-[300px]",
             }
 
         }

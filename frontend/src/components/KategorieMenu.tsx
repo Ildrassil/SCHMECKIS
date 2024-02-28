@@ -81,8 +81,6 @@ export default function KategorieMenu({onCategoryClick}: KategorieMenuProps) {
         setCurrentCategorie(onkategorie.kategorieName);
         onCategoryClick(onkategorie.kategorieName.toLowerCase());
         setUnfold(false);
-
-
     }
 
 

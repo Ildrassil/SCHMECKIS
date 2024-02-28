@@ -88,15 +88,16 @@ function App() {
             </div>
                 </div>}
             <Routes>
-                <Route path={"/admin/login"} element={<Login setLoggedIn={setLoggedIn} setLogIn={setLogIN}/>}/>
+                <Route path={"/admin/login"}
+                       element={<Login setLoggedIn={setLoggedIn} setLogIn={setLogIN}/>}/>
                 <Route path={"/"}
                        element={<RezeptGallery searchTerm={searchTerm} rezeptList={rezeptList}/>}/>
                 <Route path={`/rezept/:rezeptId`}
                        element={<DetailPage setKategorie={onCategoryClick} loggedIn={loggedIn}/>}/>
                 <Route path={"/addRezept"} element={<AddRezept/>}/>
-                <Route path={"/kategorie/:kategorieName"} element={<KategorieGallery rezeptList={rezeptList}/>}/>
+                <Route path={"/kategorie/:kategorieName"}
+                       element={<KategorieGallery kategorieList={kategorieList}/>}/>
             </Routes>
-
         </>
     )
 }

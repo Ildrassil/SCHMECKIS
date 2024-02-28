@@ -11,16 +11,12 @@ type EditProps = {
     state: boolean,
     rezept: Rezept,
     saveEdit: (rezept: Rezept) => void,
-    setCurrentRezept: (rezept: Rezept) => void,
     setOpenEdit: (state: boolean) => void,
     setPhoto: (file: File) => void,
 };
-type OptionType = {
-    value: Kategorie,
-    label: string
-};
 
-export function Edit({state, rezept, saveEdit, setCurrentRezept, setOpenEdit, setPhoto}: EditProps) {
+
+export function Edit({state, rezept, saveEdit, setOpenEdit, setPhoto}: EditProps) {
     const [showEdit, setShowEdit] = useState<boolean>(state);
     const [newKategorie, setNewKategorie] = useState<Kategorie[]>([...rezept.kategorieList]);
     const [actualRezept, setActualRezept] = useState<Rezept>(rezept)
@@ -119,11 +115,17 @@ export function Edit({state, rezept, saveEdit, setCurrentRezept, setOpenEdit, se
                                                name="kategorieName"
                                                value={kategorie.kategorieName}
                                                onChange={(e) => onChangeKategorie(e, index)}
-                                               className=" flex-row bg-offWhite shadow-buttonOut hover:shadow-buttonIn active:shadow-buttonIn border-2 w-fit justify-center self-center border-transparent rounded-2xl p-2 m-5"/>
+                                               className=" flex-row bg-offWhite shadow-buttonOut
+                                               hover:shadow-buttonIn active:shadow-buttonIn
+                                               border-2 w-fit justify-center self-center border-transparent
+                                               rounded-2xl p-2 m-5"/>
                                         <label className="flex-row text-center mx-4 my-5">Kategorie Beschreibung</label>
                                         <textarea name="kategorieBeschreibung" value={kategorie.kategorieBeschreibung}
                                                   onChange={(e) => onChangeKategorie(e, index)}
-                                                  className="flex flex-wrap flex-row justify-stretch bg-offWhite  hover:shadow-buttonIn active:shadow-buttonIn shadow-buttonOut border-2 border-transparent active:shadow-hashtagbutton w-full h-64 rounded-2xl p-5 ml-6 m-5 self-baseline"
+                                                  className="flex flex-wrap flex-row justify-stretch bg-offWhite
+                                                  hover:shadow-buttonIn active:shadow-buttonIn shadow-buttonOut
+                                                  border-2 border-transparent active:shadow-hashtagbutton w-full
+                                                  h-64 rounded-2xl p-5 ml-6 m-5 self-baseline"
                                         />
                                     </div>);
                             })}
@@ -133,8 +135,7 @@ export function Edit({state, rezept, saveEdit, setCurrentRezept, setOpenEdit, se
                                 self-center
                                 shadow-hashtagbuttonOut active:shadow-buttonIn
                                 w-32 h-fit hover:shadow-buttonIn
-                                rounded-2xl p-2 my-6">Add
-
+                                rounded-2xl p-2 my-6">ADD
                             </button>
 
 

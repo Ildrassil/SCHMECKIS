@@ -35,6 +35,7 @@ export default function DetailPage({setKategorie, loggedIn}: RezeptProps) {
     const outputHTML = (() => {
         if (currentRezept) {
 
+
             return generateHTML(JSON.parse(currentRezept.rezeptBeschreibung), [
 
                     Color.configure({types: [TextStyle.name, ListItem.name]}),
@@ -45,14 +46,14 @@ export default function DetailPage({setKategorie, loggedIn}: RezeptProps) {
                                 class: "list-disc"
                             },
                             keepMarks: true,
-                            keepAttributes: true, // TODO : Making this as `false` becase marks are not preserved when I try to preserve attrs, awaiting a bit of help
+                            keepAttributes: true,
                         },
                         orderedList: {
                             HTMLAttributes: {
                                 class: "list-decimal"
                             },
                             keepMarks: true,
-                            keepAttributes: true, // TODO : Making this as `false` becase marks are not preserved when I try to preserve attrs, awaiting a bit of help
+                            keepAttributes: true,
                         },
                     }),
                 ],
@@ -129,10 +130,10 @@ export default function DetailPage({setKategorie, loggedIn}: RezeptProps) {
             <motion.div
                 layout={true}
                 initial={animateDetails.initial} animate={animateDetails.animate} transition={animateDetails.transition}
-                className={"flex flex-col self-center justify-center align-middle shadow-doubleOut mt-10-ml-56 content-center h-auto max-w-xl p-10 rounded-2xl object-center"}>
+                className={"flex flex-col self-center justify-center align-middle shadow-doubleOut mt-10 content-center h-auto max-w-xl p-10 rounded-2xl object-center"}>
 
                 {openEdit && <Edit setOpenEdit={setOpenEdit} state={openEdit} setPhoto={setPhoto} rezept={currentRezept}
-                                   setCurrentRezept={setCurrentRezept} saveEdit={saveEdit}/>}
+                                   saveEdit={saveEdit}/>}
                 <h2 className="flex-row font-bold self self-center text-textHeader text-3xl">{currentRezept?.rezeptName}</h2>
                 {loggedIn && <svg xmlns="http://www.w3.org/2000/svg"
                      className="h-5 w-5 m-4 flex-row shadow-none hover:shadow-buttonIn rounded-2xl" fill="none"
@@ -150,7 +151,9 @@ export default function DetailPage({setKategorie, loggedIn}: RezeptProps) {
                         type={"button"}
                         onClick={onCategoryClick}
                         value={kategorie.kategorieName}
-                        className="flex-row hover:shadow-hashtagbuttonOut active:shadow-hashtagbuttonOut shadow-hashtagbutton overflow-clip bg-offWhite w-fit rounded-full px-5 text-sm font-semibold text-textPrime mr-2 mb-2 p-1"
+                        className="flex-row hover:shadow-hashtagbuttonOut active:shadow-hashtagbuttonOut
+                                   shadow-hashtagbutton overflow-clip bg-offWhite w-fit rounded-full
+                                   px-5 text-sm font-semibold text-textPrime mr-2 mb-2 p-1"
                         key={kategorie.kategorieName}>#{kategorie.kategorieName}</button>
                 ))}
             </div>

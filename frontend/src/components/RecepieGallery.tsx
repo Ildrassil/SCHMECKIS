@@ -27,12 +27,17 @@ export default function RezeptGallery({rezeptList, searchTerm}: RecepieGalleryPr
 
     return (
         <AnimatePresence>
-            <motion.div className="RezeptGallery flex flex-wrap flex-row justify-center m-2 p-1"
+            <motion.div className="RezeptGallery flex flex-wrap flex-row justify-center w-full m-10 p-1"
                         variants={variants.container}>
 
-                {rezeptList && rezeptList.filter(rezept => rezept.rezeptName.toLowerCase().includes(searchTerm) || searchTerm === "" || rezept.rezeptBeschreibung.toLowerCase().includes(searchTerm)).map(rezept => {
+                {rezeptList && rezeptList.filter(rezept =>
+                    rezept.rezeptName
+                        .toLowerCase()
+                        .includes(searchTerm) || searchTerm === "" ||
+                    rezept.rezeptBeschreibung.toLowerCase()
+                        .includes(searchTerm)).map(rezept => {
                 return (
-                    <motion.div className="Rezept Card basis-1/3 m-2 p-4
+                    <motion.div className="Rezept Card basis-1/3  m-2 p-4
                     rounded-2xl border-2 border-transparent color-textPrime" key={rezept.id}
                                 initial={variants.initial}
                                 animate={variants.animate}>

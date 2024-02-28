@@ -30,7 +30,9 @@ type KategorieGalleryProps = {
 export default function KategorieGallery({kategorieList}: KategorieGalleryProps) {
 
     const {kategorieName} = useParams<{ kategorieName: string }>();
+
     const [rezeptlist, setRezeptList] = useState<Rezept[]>([]);
+
     const kategorie: Kategorie = kategorieList.filter(kategorie => kategorie.kategorieName === kategorieName)[0];
 
     function fetchRezepteFuerKategorie() {
@@ -48,19 +50,19 @@ export default function KategorieGallery({kategorieList}: KategorieGalleryProps)
     return (
         <AnimatePresence>
             <h1 className="text-3xl font-bold text-center m-4">{kategorie.kategorieName}</h1>
-            <p>kategorie.kategorieBeschreibung</p>
-            <motion.div className="RezeptGallery flex flex-wrap flex-row justify-center m-2 p-1"
+            <h4 className="flex flex-wrap text-center text-xl p-5 w-1/3 shadow-kategorieIn mt-14 rounded-2xl">{kategorie.kategorieBeschreibung}</h4>
+            <motion.div className="RezeptGallery flex flex-wrap
+            flex-row justify-center m-2 p-1"
                         variants={variants.container}>
-
                 {rezeptlist && rezeptlist.map(rezept => {
                     return (
                         <motion.div className="Rezept Card basis-1/3 m-2 p-4
-                    rounded-2xl border-2 border-transparent color-textPrime" key={rezept.id}
+                                    rounded-2xl border-2 border-transparent color-textPrime"
+                                    key={rezept.id}
                                     initial={variants.initial}
                                     animate={variants.animate}>
                             <RezeptCard rezept={rezept}/>
                         </motion.div>)
-
                 })}
             </motion.div>
         </AnimatePresence>)

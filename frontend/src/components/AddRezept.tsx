@@ -10,12 +10,8 @@ import {JSONContent} from "@tiptap/react";
 
 
 export function AddRezept() {
-    const navigate = useNavigate();
 
-    /* const [newKategorie, setNewKategorie] = useState<Kategorie[]>([{
-         kategorieName: "",
-         kategorieBeschreibung: "",
-     }]);*/
+    const navigate = useNavigate();
 
     const [actualRezept, setActualRezept] = useState({
         rezeptName: "",
@@ -118,19 +114,19 @@ export function AddRezept() {
                     <div className="flex flex-col w-full justify-center items-center bg-offWhite rounded-2xl">
                         <div className="flex flex-col w-full">
                             <h2 className="flex-coltext-textHeader text-3xl text-center my-2">ERSTELLE REZEPT</h2>
-                            <label className="flex-col text-textPrime text-xl text-center mt-4">Rezept Name</label>
+                            <label className="flex-col text-textPrime text-xl text-center mt-4">REZEPT NAME</label>
                             <input type="text" name="rezeptName" value={actualRezept.rezeptName}
                                    onChange={onEditChange}
                                    className="flex-col border-2 border-transparent rounded-2xl p-2 m-2"/>
                             <label className="flex-col text-textPrime text-xl text-center">IMAGE</label>
                             <RezeptPhotoUpload onChangePhoto={onChangePhoto}/>
-                            <label className="flex-col text-textPrime text-xl text-center">Kurzbeschreibung</label>
+                            <label className="flex-col text-textPrime text-xl text-center">KURZSCHREIBUNG</label>
                             <RichTextEditor rezeptBeschreibung={actualRezept.rezeptKurzbeschreibung}
                                             onChange={onChangeKurzbeschreibung}/>
-                            <label className="flex-col text-textPrime text-xl text-center mt-4">Beschreibung</label>
+                            <label className="flex-col text-textPrime text-xl text-center mt-4">BESCHREIBUNG</label>
                             <RichTextEditor onChange={onChangeEditor}
                                             rezeptBeschreibung={actualRezept.rezeptBeschreibung}/>
-                            <label className="flex-col text-textPrime text-xl text-center">Kategorien</label>
+                            <label className="flex-col text-textPrime text-xl text-center">KATEGORIEN</label>
                             {actualRezept.kategorieList.map((kategorie, index) => {
                                 return (
                                     <div className="flex-col" key={index}>{index + 1}.<input type="text"
@@ -153,8 +149,6 @@ export function AddRezept() {
                                 rounded-2xl p-2 my-6">Add
 
                             </button>
-
-
                         </div>
                         <div className="flex flex-row space-x-1">
                             <button onClick={closeFunction}

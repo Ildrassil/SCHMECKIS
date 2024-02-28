@@ -73,7 +73,6 @@ export default function RichTextEditor({
         },
         onUpdate({editor}) {
             onChange(editor.getJSON());
-            console.log(editor.getJSON());
         },
     });
     return (

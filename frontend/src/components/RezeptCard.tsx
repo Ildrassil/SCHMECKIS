@@ -15,7 +15,9 @@ type RezeptProps = {
 }
 
 export default function RezeptCard({rezept}: RezeptProps) {
+
     const navigate = useNavigate();
+
     const outputHTML = generateHTML(JSON.parse(rezept.rezeptKurzbeschreibung), [
 
             Color.configure({types: [TextStyle.name, ListItem.name]}),
@@ -33,15 +35,17 @@ export default function RezeptCard({rezept}: RezeptProps) {
         ],
     );
 
-
     function openDetails() {
         navigate("/rezept/" + rezept.id);
     }
+
     return (
         <div className="bg-offWhite rounded-xl shadow-doubleOut p-10 m-2 border-none hover:shadow-doubleIn">
             <div className="flex justify-between items-center">
                 <h2 className="text-2xl font-bold text-center justify-center text-textHeader ml-4">{rezept.rezeptName}</h2>
-                <button className="bg-offWhite hover:shadow-buttonIn rounded-full p-2 w-auto" onClick={openDetails}>
+                <button className="bg-offWhite hover:shadow-buttonIn
+                                   rounded-full p-2 w-auto"
+                        onClick={openDetails}>
                     <MdInfoOutline size="30" color="#646464"/>
                 </button>
             </div>
@@ -52,10 +56,12 @@ export default function RezeptCard({rezept}: RezeptProps) {
                 {rezept.kategorieList.map(kategorie => (
                     <button key={kategorie.kategorieName}
                             onClick={() => navigate("/kategorie/" + kategorie.kategorieName)}
-                            className="flex-row shadow-hashtagbutton active:shadow-hashtagbutton hover:shadow-hashtagbuttonOut bg-offWhite rounded-full px-6 py-1.5 text-m font-semibold text-textPrime mr-2 mb-2 ">#{kategorie.kategorieName}</button>
+                            className="flex-row shadow-hashtagbutton active:shadow-hashtagbutton hover:shadow-hashtagbuttonOut
+                             bg-offWhite rounded-full px-6 py-1.5 text-m font-semibold text-textPrime mr-2 mb-2 ">
+                        #{kategorie.kategorieName.toUpperCase()}
+                    </button>
                 ))}
             </div>
         </div>
-
     );
 }

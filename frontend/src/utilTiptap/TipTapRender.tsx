@@ -36,6 +36,7 @@ export default function TipTapRender({content}: props) {
                         heading: {
 
                             HTMLAttributes: {
+                                level: "1",
                                 class: "font-bold text-center justify-center text-textHeader ml-4"
                             },
                         },
@@ -47,7 +48,7 @@ export default function TipTapRender({content}: props) {
         content: content,
         editorProps: {
             attributes: {
-                class: "rounded bg-transparent border-none p-4 m-4 min-h-[300px] shadow-doubleOut active:shadow-doubleIn",
+                class: "rounded bg-transparent border-none p-12 mx-5 my-8 min-h-[300px] shadow-doubleIn active:shadow-doubleIn",
             }
 
         }
@@ -68,7 +69,7 @@ export default function TipTapRender({content}: props) {
 
     return (
         <>
-            <EditorContent editor={editor}/>
+            <EditorContent className="bg-transparent" editor={editor}/>
         </>
     )
 }

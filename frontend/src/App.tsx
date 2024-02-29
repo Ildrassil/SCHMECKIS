@@ -12,6 +12,7 @@ import {SearchBar} from "./components/SearchBarAutoComplete.tsx";
 import Login from "./components/LoginAdmin.tsx";
 import {ContextMenu} from "./components/ContextMenu.tsx";
 import KategorieGallery from "./components/KategorieGallery.tsx";
+import {PlusIcon} from "lucide-react";
 
 
 function App() {
@@ -20,6 +21,7 @@ function App() {
     const [logIN, setLogIN] = useState<boolean>(false);
     const [searchTerm, setSearchTerm] = useState<string>("");
     const [loggedIn, setLoggedIn] = useState<boolean>(false);
+    const [kategorienGallery, setKategorienGallery] = useState<boolean>(false);
     const items = ['AdminLogin'];
 
 
@@ -59,6 +61,7 @@ function App() {
 
     useEffect(() => {
         fetchRecipes();
+
     }, []);
 
     return (
@@ -72,12 +75,19 @@ function App() {
                 fontfamily-roboto font-sans
                 text-textHeader
                 pt-32 m-2">#SCHMECKIS</h1></Link>
-                {loggedIn && <Link to={"/addRezept"}>+</Link>}
+
             </div>
-            <KategorieMenu onCategoryClick={onCategoryClick}/>
+                    {!kategorienGallery && <KategorieMenu onCategoryClick={onCategoryClick}/>}
             <div className={"flex flex-col bg-offWhite align-middle self-center justify-center border-none ml-35"}>
                 <SearchBar handleOnChange={handleOnChange}/>
             </div>
+                    {loggedIn && <div className="flex flex-row justify-center">
+                        <Link to={"/addRezept"}>
+                            <PlusIcon size={55} className=
+                                {"flex-wrap p-4 m-8 justify-center flex-row bg-offWhite shadow-buttonOut " +
+                                    "hover:shadow-buttonIn active:shadow-buttonIn"}/>
+                        </Link>
+                    </div>}
                 </div>}
             <Routes>
                 <Route path={"/admin/login"}
@@ -88,7 +98,8 @@ function App() {
                        element={<DetailPage setKategorie={onCategoryClick} loggedIn={loggedIn}/>}/>
                 <Route path={"/addRezept"} element={<AddRezept/>}/>
                 <Route path={"/kategorie/:kategorieName"}
-                       element={<KategorieGallery searchTerm={searchTerm} kategorieList={kategorieList}/>}/>
+                       element={<KategorieGallery setKategorienGallery={setKategorienGallery} searchTerm={searchTerm}
+                                                  kategorieList={kategorieList}/>}/>
             </Routes>
         </>
     )

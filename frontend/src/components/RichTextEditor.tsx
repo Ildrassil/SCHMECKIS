@@ -69,7 +69,7 @@ export default function RichTextEditor({
         content: outputHTML,
         editorProps: {
             attributes: {
-                class: "rounded border-none p-4 m-5 min-h-[300px] shadow-doubleOut active:shadow-doubleIn",
+                class: "rounded border-none p-4 m-5 min-h-[300px] shadow-doubleOut active:shadow-doubleIn prose",
             }
 
         },

@@ -25,21 +25,14 @@ export default function TipTapRender({content}: props) {
                                 class: "list-disc"
                             },
                             keepMarks: true,
-                            keepAttributes: false, // TODO : Making this as `false` becase marks are not preserved when I try to preserve attrs, awaiting a bit of help
+                            keepAttributes: false,
                         },
                         orderedList: {
                             HTMLAttributes: {
                                 class: "list-decimal"
                             },
                             keepMarks: true,
-                            keepAttributes: false, // TODO : Making this as `false` becase marks are not preserved when I try to preserve attrs, awaiting a bit of help
-                        },
-                        heading: {
-
-                            HTMLAttributes: {
-                                level: "1",
-                                class: "font-bold text-center justify-center text-textHeader ml-4"
-                            },
+                            keepAttributes: false,
                         },
 
                     }),
@@ -49,7 +42,7 @@ export default function TipTapRender({content}: props) {
         content: content,
         editorProps: {
             attributes: {
-                class: "rounded bg-transparent border-none p-12 mx-5 my-8 min-h-[300px]",
+                class: "rounded bg-transparent border-none p-12 mx-5 my-8 min-h-[300px] prose",
             }
 
         }

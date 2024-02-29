@@ -10,6 +10,7 @@ import TextStyle from "@tiptap/extension-text-style";
 import ListItem from "@tiptap/extension-list-item";
 import StarterKit from "@tiptap/starter-kit";
 import TipTapRender from "../utilTiptap/TipTapRender.tsx";
+import {Pen} from "lucide-react";
 
 
 const animateDetails = {
@@ -148,31 +149,32 @@ export default function DetailPage({setKategorie, loggedIn}: RezeptProps) {
 
                 {openEdit && <Edit setOpenEdit={setOpenEdit} state={openEdit} setPhoto={setPhoto} rezept={currentRezept}
                                    saveEdit={saveEdit}/>}
-                <h2 className="flex-row font-bold self self-center text-textHeader text-3xl">{currentRezept?.rezeptName}</h2>
-                {loggedIn && <svg xmlns="http://www.w3.org/2000/svg"
-                     className="h-5 w-5 m-4 flex-row shadow-none hover:shadow-buttonIn rounded-2xl" fill="none"
-                     viewBox="0 0 24 24"
-                     stroke="currentColor" onClick={() => setOpenEdit(true)}>
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
-                              d="M12 14l9-5-9-5-9 5 9 5zm0 0v6m-4-4h8"/>
-                </svg>}
-
-                <img
-                    className="flex flex-wrap flex-col justify-center content-center justify-items-center items-center mt-10 w-7/12"
-                    src={currentRezept?.rezeptImageUrl} alt={currentRezept?.rezeptName}/>
+                <div className="flex justify-between items-center">
+                    <h2 className="text-2xl font-bold text-center justify-center text-textHeader ml-4">{currentRezept?.rezeptName}</h2>
+                    {loggedIn && <button className="bg-offWhite hover:shadow-buttonIn
+                                   rounded-full p-2 w-auto"
+                                         onClick={() => setOpenEdit(true)}>
+                        <Pen size="30" color="#646464"/>
+                    </button>}
+                </div>
+                <div className="flex justify-center content-center align-middle mx-10">
+                    <img
+                        className="border-transparent shadow-doubleIn object-cover mt-6 mb-2 rounded-2xl w-8/12 h-auto"
+                        src={currentRezept?.rezeptImageUrl} alt={currentRezept?.rezeptName}/>
+                </div>
                 <TipTapRender content={outputHTML}/>
-            <div>
-                {currentRezept?.kategorieList.map(kategorie => (
-                    <button
-                        type={"button"}
-                        onClick={onCategoryClick}
-                        value={kategorie.kategorieName}
-                        className="flex-row hover:shadow-hashtagbuttonOut active:shadow-hashtagbuttonOut
+                <div>
+                    {currentRezept?.kategorieList.map(kategorie => (
+                        <button
+                            type={"button"}
+                            onClick={onCategoryClick}
+                            value={kategorie.kategorieName}
+                            className="flex-row hover:shadow-hashtagbuttonOut active:shadow-hashtagbuttonOut
                                    shadow-hashtagbutton overflow-clip bg-offWhite w-fit rounded-full
                                    px-5 text-sm font-semibold text-textPrime mr-2 mb-2 p-1"
-                        key={kategorie.kategorieName}>#{kategorie.kategorieName}</button>
-                ))}
-            </div>
+                            key={kategorie.kategorieName}>#{kategorie.kategorieName}</button>
+                    ))}
+                </div>
             </motion.div>
         </AnimatePresence>
     </div>);

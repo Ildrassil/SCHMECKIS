@@ -4,7 +4,7 @@ import RezeptCard from "./RezeptCard.tsx";
 
 type RezeptGalleryProps = {
     rezeptList: Rezept[]
-    searchTerm: string
+    searchTerm: string,
 }
 const variants = {
     type: "slide",

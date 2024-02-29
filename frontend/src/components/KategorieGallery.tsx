@@ -26,9 +26,11 @@ const variants = {
 type KategorieGalleryProps = {
     kategorieList: Kategorie[]
     searchTerm: string
+    setKategorienGallery: (value: boolean) => void
 }
 
-export default function KategorieGallery({kategorieList, searchTerm}: KategorieGalleryProps) {
+export default function KategorieGallery({kategorieList, searchTerm, setKategorienGallery}: KategorieGalleryProps) {
+
 
     const {kategorieName} = useParams<{ kategorieName: string }>();
 
@@ -38,22 +40,27 @@ export default function KategorieGallery({kategorieList, searchTerm}: KategorieG
 
     function fetchRezepteFuerKategorie() {
         axios.get("/api/rezepte/kategorie/" + kategorieName).then(response => {
-            console.log(response.data);
             setRezeptList(response.data);
         });
     }
 
     useEffect(() => {
         fetchRezepteFuerKategorie();
+        setKategorienGallery(true);
+        return () => {
+            setKategorienGallery(false);
+        }
     }, []);
 
 
-    return (
+    return (<>
+        <h1 className="text-3xl font-bold text-center m-4">{kategorie.kategorieName}</h1>
+        <div className="flex justify-center">
+            <h4 className="text-center text-lg p-8 w-1/3 shadow-kategorieIn mt-14 rounded-2xl text-wrap">{kategorie.kategorieBeschreibung}</h4>
+        </div>
         <AnimatePresence>
-            <h1 className="text-3xl font-bold text-center m-4">{kategorie.kategorieName}</h1>
-            <h4 className="flex flex-wrap text-center text-xl p-5 w-1/3 shadow-kategorieIn mt-14 rounded-2xl">{kategorie.kategorieBeschreibung}</h4>
-            <motion.div className="RezeptGallery flex flex-wrap
-            flex-row justify-center m-2 p-1"
+
+            <motion.div className="RezeptGallery flex flex-wrap flex-row justify-center w-full m-10 p-1"
                         variants={variants.container}>
                 {rezeptlist && rezeptlist.filter(rezept =>
                     rezept.rezeptName
@@ -67,11 +74,13 @@ export default function KategorieGallery({kategorieList, searchTerm}: KategorieG
                                     rounded-2xl border-2 border-transparent color-textPrime"
                                     key={rezept.id}
                                     initial={variants.initial}
-                                    animate={variants.animate}>
+                                    animate={variants.animate}
+                        >
                             <RezeptCard rezept={rezept}/>
                         </motion.div>)
                 })}
             </motion.div>
-        </AnimatePresence>)
+        </AnimatePresence>
+    </>)
 
 }

@@ -1,4 +1,6 @@
 /** @type {import('tailwindcss').Config} */
+import typography from '@tailwindcss/typography'
+
 export default {
   content: [
     "./index.html",
@@ -34,6 +36,6 @@ export default {
       transitionDuration: ['responsive', 'hover', 'focus', 'active'],
     },
   },
-  plugins: [],
+  plugins: [typography],
 }
 

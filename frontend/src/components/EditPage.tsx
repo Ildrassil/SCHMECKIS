@@ -36,9 +36,11 @@ export default function DetailPage({setKategorie, loggedIn}: RezeptProps) {
         if (currentRezept) {
 
 
+
             return generateHTML(JSON.parse(currentRezept.rezeptBeschreibung), [
 
                     Color.configure({types: [TextStyle.name, ListItem.name]}),
+                // @ts-expect-error - starter kit is Libary Example
                     TextStyle.configure({types: [ListItem.name]}),
                     StarterKit.configure({
                         bulletList: {
@@ -124,7 +126,19 @@ export default function DetailPage({setKategorie, loggedIn}: RezeptProps) {
         navigate("/");
     }
 
-
+    if (currentRezept === undefined) {
+        return <div className="flex justify-center w-screen">
+            <AnimatePresence>
+                <motion.div
+                    layout={true}
+                    initial={animateDetails.initial} animate={animateDetails.animate}
+                    transition={animateDetails.transition}
+                    className={"flex flex-col self-center justify-center align-middle shadow-doubleOut mt-10 content-center h-auto w-8/12 p-10 rounded-2xl object-center"}>
+                    <h2 className="flex-row font-bold self self-center text-textHeader text-3xl">Loading...</h2>
+                </motion.div>
+            </AnimatePresence>
+        </div>;
+    }
     return (<div className="flex justify-center w-screen">
         <AnimatePresence>
             <motion.div

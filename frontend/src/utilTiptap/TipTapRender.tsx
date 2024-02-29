@@ -17,6 +17,7 @@ export default function TipTapRender({content}: props) {
     const editor = useEditor({
                 extensions: [
                     Color.configure({types: [TextStyle.name, ListItem.name]}),
+                    // @ts-expect-error - starter kit is Libary Example
                     TextStyle.configure({types: [ListItem.name]}),
                     StarterKit.configure({
                         bulletList: {

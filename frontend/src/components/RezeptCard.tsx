@@ -21,6 +21,7 @@ export default function RezeptCard({rezept}: RezeptProps) {
     const outputHTML = generateHTML(JSON.parse(rezept.rezeptKurzbeschreibung), [
 
             Color.configure({types: [TextStyle.name, ListItem.name]}),
+        // @ts-expect-error - starter kit is Libary Example
             TextStyle.configure({types: [ListItem.name]}),
             StarterKit.configure({
                 bulletList: {

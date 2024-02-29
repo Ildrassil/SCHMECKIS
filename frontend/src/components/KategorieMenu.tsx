@@ -35,9 +35,8 @@ const conatainer = {
             staggerChildren: 0.2,
             duration: 0.5,
         }
-        }
+    }
 };
-
 
 
 type KategorieMenuProps = {
@@ -77,10 +76,12 @@ export default function KategorieMenu({onCategoryClick}: KategorieMenuProps) {
 
     function onCategorie(event: React.MouseEvent<HTMLButtonElement>) {
         setKategorie(kategorieList.filter(kategorie => kategorie.kategorieName !== event.currentTarget.value));
-        const onkategorie: Kategorie = kategorieList.find(kategorie => kategorie.kategorieName === event.currentTarget.value);
-        setCurrentCategorie(onkategorie.kategorieName);
-        onCategoryClick(onkategorie.kategorieName.toLowerCase());
-        setUnfold(false);
+        const onkategorie: Kategorie | undefined = kategorieList.find(kategorie => kategorie.kategorieName === event.currentTarget.value);
+        if (onkategorie !== undefined) {
+            setCurrentCategorie(onkategorie.kategorieName);
+            onCategoryClick(onkategorie.kategorieName.toLowerCase());
+            setUnfold(false);
+        }
     }
 
 
@@ -94,8 +95,8 @@ export default function KategorieMenu({onCategoryClick}: KategorieMenuProps) {
         focus:text-blue-400  focus:border-transparent mt-36 `}>
 
             <button className="flex bg-transparent text-4xl text-current p-4" onClick={menuTrigger}>
-                    <h1>{currentCategorie}</h1>
-                </button>
+                <h1>{currentCategorie}</h1>
+            </button>
 
             {unfold && (
                 <AnimatePresence>

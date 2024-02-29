@@ -28,7 +28,7 @@ export function AddRezept() {
 
     const [rezept, setRezept] = useState<Rezept>()
 
-    function onEditChange(event: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>) {
+    function onEditChange(event: React.ChangeEvent<HTMLInputElement>) {
         event.preventDefault();
         setActualRezept({...actualRezept, [event.target.name]: event.target.value})
     }

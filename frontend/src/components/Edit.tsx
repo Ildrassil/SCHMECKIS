@@ -23,10 +23,16 @@ export function Edit({state, rezept, saveEdit, setOpenEdit, setPhoto}: EditProps
 
 
     function onChangeKategorie(event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>, index: number) {
-        const foundKategorie = newKategorie.find((kategorie, i) => i === index);
-        const updatedKategorie = {...foundKategorie, [event.currentTarget.name]: event.currentTarget.value};
-        const kategorie = newKategorie.map((kategorie, i) => i === index ? updatedKategorie : kategorie);
-        setNewKategorie(kategorie);
+        const foundKategorie: Kategorie | undefined = newKategorie.find((kategorie, i) => i === index);
+        if (foundKategorie !== undefined) {
+            const updatedKategorie: Kategorie = {
+                ...foundKategorie,
+                [event.currentTarget.name]: event.currentTarget.value
+            };
+            const kategorie: Kategorie[] = newKategorie.map((kategorie, i) => i === index ? updatedKategorie : kategorie);
+
+            setNewKategorie(kategorie);
+        }
     }
 
 
@@ -34,7 +40,7 @@ export function Edit({state, rezept, saveEdit, setOpenEdit, setPhoto}: EditProps
         setNewKategorie([...newKategorie, {kategorieName: "", kategorieBeschreibung: ""}]);
     }
 
-    function onEditChange(event: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>) {
+    function onEditChange(event: React.ChangeEvent<HTMLInputElement>) {
         setActualRezept({...actualRezept, [event.target.name]: event.target.value})
     }
 

@@ -21,6 +21,7 @@ export default function RichTextEditor({
             return generateHTML(JSON.parse(rezeptBeschreibung), [
 
                     Color.configure({types: [TextStyle.name, ListItem.name]}),
+                // @ts-expect-error - starter kit is Libary Example
                     TextStyle.configure({types: [ListItem.name]}),
                     StarterKit.configure({
                         bulletList: {
@@ -46,6 +47,7 @@ export default function RichTextEditor({
     const editor = useEditor({
         extensions: [
             Color.configure({types: [TextStyle.name, ListItem.name]}),
+            // @ts-expect-error - starter kit is Libary Example
             TextStyle.configure({types: [ListItem.name]}),
             StarterKit.configure({
                 bulletList: {

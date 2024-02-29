@@ -5,9 +5,10 @@ import {useState} from "react";
 type LoginProps = {
     setLoggedIn: (loggedIn: boolean) => void
     setLogIn: (logIn: boolean) => void
+    redirect: boolean
 }
 
-export default function Login({setLoggedIn, setLogIn}: LoginProps) {
+export default function Login({setLoggedIn, setLogIn, redirect}: LoginProps) {
     setLogIn(true);
     const Nav = useNavigate();
     const [displayError, setDisplayError] = useState<boolean>(false);
@@ -34,7 +35,9 @@ export default function Login({setLoggedIn, setLogIn}: LoginProps) {
                 setLoggedIn(true);
                 setLogIn(false);
                 setDisplayError(false);
+            if (redirect) {
                 Nav("/");
+            }
 
         })
             .catch(() => {

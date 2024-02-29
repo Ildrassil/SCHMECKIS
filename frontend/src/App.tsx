@@ -84,19 +84,19 @@ function App() {
                     {loggedIn && <div className="flex flex-row justify-center">
                         <Link to={"/addRezept"}>
                             <PlusIcon size={55} className=
-                                {"flex-wrap p-4 m-8 justify-center flex-row bg-offWhite shadow-buttonOut " +
+                                {"flex-wrap p-4 m-8 justify-center rounded-2xl flex-row bg-offWhite shadow-buttonOut " +
                                     "hover:shadow-buttonIn active:shadow-buttonIn"}/>
                         </Link>
                     </div>}
                 </div>}
             <Routes>
                 <Route path={"/admin/login"}
-                       element={<Login setLoggedIn={setLoggedIn} setLogIn={setLogIN}/>}/>
+                       element={<Login setLoggedIn={setLoggedIn} setLogIn={setLogIN} redirect={true}/>}/>
                 <Route path={"/"}
                        element={<RezeptGallery searchTerm={searchTerm} rezeptList={rezeptList}/>}/>
                 <Route path={`/rezept/:rezeptId`}
                        element={<DetailPage setKategorie={onCategoryClick} loggedIn={loggedIn}/>}/>
-                <Route path={"/addRezept"} element={<AddRezept/>}/>
+                <Route path={"/addRezept"} element={<AddRezept setLoggedIn={setLoggedIn} setLogIn={setLogIN}/>}/>
                 <Route path={"/kategorie/:kategorieName"}
                        element={<KategorieGallery setKategorienGallery={setKategorienGallery} searchTerm={searchTerm}
                                                   kategorieList={kategorieList}/>}/>

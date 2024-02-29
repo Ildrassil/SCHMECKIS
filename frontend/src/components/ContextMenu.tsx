@@ -1,5 +1,6 @@
 import * as React from 'react';
 import {useContextMenu} from './useContextMenu';
+import {Link} from "react-router-dom";
 
 
 type Props = {
@@ -22,7 +23,7 @@ const ContextMenu = ({items}: Props) => {
             style={{top: anchorPoint.y, left: anchorPoint.x}}
         >
             {items.map((item) => (
-                <li key={item}><a href={"/admin/login"}>{item}</a></li>
+                <li key={item}><Link to={"/admin/login"}>{item}</Link></li>
             ))}
         </ul>
     );

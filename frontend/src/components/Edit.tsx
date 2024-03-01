@@ -37,8 +37,8 @@ export function Edit({state, rezept, saveEdit, setOpenEdit, setPhoto, deleteReze
         }
     }
 
-    function entKategorie(event: React.ChangeEvent<HTMLButtonElement>) {
-        const kategorie: Kategorie[] = newKategorie.filter((kategorie, i) => i !== parseInt(event.currentTarget.id));
+    function entKategorie(index: number) {
+        const kategorie: Kategorie[] = newKategorie.filter((kategorie, i) => i !== index);
         setNewKategorie([...kategorie]);
     }
 
@@ -148,7 +148,9 @@ export function Edit({state, rezept, saveEdit, setOpenEdit, setPhoto, deleteReze
                                                   border-2 border-transparent active:shadow-hashtagbutton w-full
                                                   h-64 rounded-2xl p-5 ml-6 m-5 self-baseline"
                                         />
-                                        <button type="button" onChange={entKategorie} id={index.toString()}
+                                        <button type="button" onClick={() => {
+                                            entKategorie(index)
+                                        }}
                                                 className="flex-row justify-self-start border-2 border-transparent
                                                  bg-offWhite text-textPrime self-center
                                                  active:shadow-buttonIn w-fit h-fit hover:shadow-buttonIn rounded-2xl py-1 px-6 my-8">

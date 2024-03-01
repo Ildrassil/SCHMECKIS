@@ -67,7 +67,7 @@ export default function KategorieMenu({onCategoryClick}: KategorieMenuProps) {
         },
         {
             kategorieName: "KATEGORIEN",
-            kategorieBeschreibung: "Philipp and Jakobs list of Recipes from Websites, TikTok, Instagram and also own creations."
+            kategorieBeschreibung: "Zusammengetragen von mir für euch und andersrum. If you don´t know now you know."
         }
     ];
     const [kategorie, setKategorie] = React.useState<Kategorie[]>(kategorieList);

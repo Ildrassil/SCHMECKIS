@@ -5,6 +5,7 @@ import ReactModal from "react-modal";
 import RichTextEditor from "./RichTextEditor.tsx";
 import {JSONContent} from "@tiptap/react";
 import RezeptPhotoUpload from "./UploadPhoto.tsx";
+import {DeleteIcon} from "lucide-react";
 
 
 type EditProps = {
@@ -13,10 +14,11 @@ type EditProps = {
     saveEdit: (rezept: Rezept) => void,
     setOpenEdit: (state: boolean) => void,
     setPhoto: (file: File) => void,
+    deleteRezept: () => void
 };
 
 
-export function Edit({state, rezept, saveEdit, setOpenEdit, setPhoto}: EditProps) {
+export function Edit({state, rezept, saveEdit, setOpenEdit, setPhoto, deleteRezept}: EditProps) {
     const [showEdit, setShowEdit] = useState<boolean>(state);
     const [newKategorie, setNewKategorie] = useState<Kategorie[]>([...rezept.kategorieList]);
     const [actualRezept, setActualRezept] = useState<Rezept>(rezept)
@@ -33,6 +35,16 @@ export function Edit({state, rezept, saveEdit, setOpenEdit, setPhoto}: EditProps
 
             setNewKategorie(kategorie);
         }
+    }
+
+    function entKategorie(index: number) {
+        const kategorie: Kategorie[] = newKategorie.filter((kategorie, i) => i !== index);
+        setNewKategorie([...kategorie]);
+    }
+
+    function entferneRezept() {
+        deleteRezept();
+        closeFunction();
     }
 
 
@@ -66,6 +78,7 @@ export function Edit({state, rezept, saveEdit, setOpenEdit, setPhoto}: EditProps
         setActualRezept({...actualRezept, rezeptKurzbeschreibung: JsonString})
 
     }
+
 
 
     function closeFunction() {
@@ -116,6 +129,7 @@ export function Edit({state, rezept, saveEdit, setOpenEdit, setPhoto}: EditProps
                                 return (
                                     <div key={index}
                                          className="flex flex-wrap flex-col justify-center justify-items-center">
+
                                         <label className="flex-row text-center mx-4 my-5">Kategorie Name</label>
                                         <input type="text"
                                                name="kategorieName"
@@ -126,6 +140,7 @@ export function Edit({state, rezept, saveEdit, setOpenEdit, setPhoto}: EditProps
                                                border-2 w-fit justify-center self-center border-transparent
                                                rounded-2xl p-2 m-5"/>
                                         <label className="flex-row text-center mx-4 my-5">Kategorie Beschreibung</label>
+
                                         <textarea name="kategorieBeschreibung" value={kategorie.kategorieBeschreibung}
                                                   onChange={(e) => onChangeKategorie(e, index)}
                                                   className="flex flex-wrap flex-row justify-stretch bg-offWhite
@@ -133,6 +148,14 @@ export function Edit({state, rezept, saveEdit, setOpenEdit, setPhoto}: EditProps
                                                   border-2 border-transparent active:shadow-hashtagbutton w-full
                                                   h-64 rounded-2xl p-5 ml-6 m-5 self-baseline"
                                         />
+                                        <button type="button" onClick={() => {
+                                            entKategorie(index)
+                                        }}
+                                                className="flex-row justify-self-start border-2 border-transparent
+                                                 bg-offWhite text-textPrime self-center
+                                                 active:shadow-buttonIn w-fit h-fit hover:shadow-buttonIn rounded-2xl py-1 px-6 my-8">
+                                            <DeleteIcon className={"align-middle"} size="40" color="#646464"/>
+                                        </button>
                                     </div>);
                             })}
                             <button type="button" onClick={addKategorie}
@@ -141,24 +164,34 @@ export function Edit({state, rezept, saveEdit, setOpenEdit, setPhoto}: EditProps
                                 self-center
                                 shadow-hashtagbuttonOut active:shadow-buttonIn
                                 w-32 h-fit hover:shadow-buttonIn
-                                rounded-2xl p-2 my-6">ADD
+                                rounded-2xl p-2 my-8">ADD
                             </button>
 
 
                         </div>
                         <div className="flex flex-row space-x-1">
-                            <button onClick={closeFunction}
+                            <button
+                                type={"button"}
+                                onClick={closeFunction}
                                     className="flex-row justify-self-start
                                 w-28 h-fit
                                 bg-offWhite text-textPrime shadow-buttonOut hover:shadow-buttonIn
-                                rounded-2xl p-2 m-2">Close
+                                rounded-2xl p-2 m-2">CLOSE
+                            </button>
+                            <button
+                                type={"button"}
+                                onClick={entferneRezept}
+                                className="flex-row justify-self-start
+                                w-28 h-fit
+                                bg-offWhite text-textPrime shadow-buttonOut hover:shadow-buttonIn
+                                rounded-2xl p-2 m-2">DELETE
                             </button>
                             <button type="button"
                                     onClick={submitEdit}
                                     className="flex-row justify-end h-fit w-32 bg-offWhite
                                  font-semibold
                                  text-textHeader shadow-buttonOut hover:shadow-buttonIn
-                                 rounded-2xl p-2 mx-2 mt-2 mb-8">Save
+                                 rounded-2xl p-2 mx-2 mt-2 mb-8">SAVE
                             </button>
 
                         </div>

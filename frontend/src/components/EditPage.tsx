@@ -65,6 +65,13 @@ export default function DetailPage({setKategorie, loggedIn}: RezeptProps) {
         return "";
     })();
 
+    const deleteRezept = () => {
+        axios.delete('/api/rezepte/' + rezeptId).then(response => {
+            if (response.status === 204) {
+                navigate("/");
+            }
+        });
+    }
 
     const saveEdit = async (rezept: Rezept) => {
 
@@ -147,7 +154,9 @@ export default function DetailPage({setKategorie, loggedIn}: RezeptProps) {
                 initial={animateDetails.initial} animate={animateDetails.animate} transition={animateDetails.transition}
                 className={"flex flex-col self-center justify-center align-middle shadow-doubleOut mt-10 content-center h-auto w-8/12 p-10 rounded-2xl object-center"}>
 
-                {openEdit && <Edit setOpenEdit={setOpenEdit} state={openEdit} setPhoto={setPhoto} rezept={currentRezept}
+                {openEdit &&
+                    <Edit deleteRezept={deleteRezept} setOpenEdit={setOpenEdit} state={openEdit} setPhoto={setPhoto}
+                          rezept={currentRezept}
                                    saveEdit={saveEdit}/>}
                 <div className="flex justify-between items-center">
                     <h2 className="text-2xl font-bold text-center justify-center text-textHeader ml-4">{currentRezept?.rezeptName}</h2>

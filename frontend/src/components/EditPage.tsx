@@ -37,7 +37,6 @@ export default function DetailPage({setKategorie, loggedIn}: RezeptProps) {
         if (currentRezept) {
 
 
-
             return generateHTML(JSON.parse(currentRezept.rezeptBeschreibung), [
 
                     Color.configure({types: [TextStyle.name, ListItem.name]}),
@@ -122,9 +121,6 @@ export default function DetailPage({setKategorie, loggedIn}: RezeptProps) {
     }, []);
 
 
-
-
-
     function onCategoryClick(event: React.MouseEvent<HTMLButtonElement>) {
         const kategorie = currentRezept?.kategorieList.map(kategorie => kategorie.kategorieName).includes(event.currentTarget.value);
         if (kategorie === undefined) {
@@ -148,44 +144,46 @@ export default function DetailPage({setKategorie, loggedIn}: RezeptProps) {
         </div>;
     }
     return (<div className="flex justify-center w-screen">
-        <AnimatePresence>
-            <motion.div
-                layout={true}
-                initial={animateDetails.initial} animate={animateDetails.animate} transition={animateDetails.transition}
-                className={"flex flex-col self-center justify-center align-middle shadow-doubleOut mt-10 content-center h-auto w-8/12 p-10 rounded-2xl object-center"}>
+            <AnimatePresence>
+                <motion.div
+                    layout={true}
+                    initial={animateDetails.initial} animate={animateDetails.animate}
+                    transition={animateDetails.transition}
+                    className={"flex flex-col self-center items-center justify-center align-middle shadow-doubleOut mt-10 content-center h-auto w-8/12 p-10 rounded-2xl object-center"}>
 
-                {openEdit &&
-                    <Edit deleteRezept={deleteRezept} setOpenEdit={setOpenEdit} state={openEdit} setPhoto={setPhoto}
-                          rezept={currentRezept}
-                                   saveEdit={saveEdit}/>}
-                <div className="flex justify-between items-center">
-                    <h2 className="text-2xl font-bold text-center justify-center text-textHeader ml-4">{currentRezept?.rezeptName}</h2>
-                    {loggedIn && <button className="bg-offWhite hover:shadow-buttonIn
+                    {openEdit &&
+                        <Edit deleteRezept={deleteRezept} setOpenEdit={setOpenEdit} state={openEdit} setPhoto={setPhoto}
+                              rezept={currentRezept}
+                              saveEdit={saveEdit}/>}
+                    <div className="flex justify-between items-center">
+                        <h2 className="flex-row  text-4xl font-bold text-center justify-center text-textHeader my-10">{currentRezept?.rezeptName}</h2>
+                        {loggedIn && <button className="bg-offWhite hover:shadow-buttonIn
                                    rounded-full p-2 w-auto"
-                                         onClick={() => setOpenEdit(true)}>
-                        <Pen size="30" color="#646464"/>
-                    </button>}
-                </div>
-                <div className="flex justify-center content-center align-middle mx-10">
-                    <img
-                        className="border-transparent shadow-doubleIn object-cover mt-6 mb-2 rounded-2xl w-8/12 h-auto"
-                        src={currentRezept?.rezeptImageUrl} alt={currentRezept?.rezeptName}/>
-                </div>
-                <TipTapRender content={outputHTML}/>
-                <div>
-                    {currentRezept?.kategorieList.map(kategorie => (
-                        <button
-                            type={"button"}
-                            onClick={onCategoryClick}
-                            value={kategorie.kategorieName}
-                            className="flex-row hover:shadow-hashtagbuttonOut active:shadow-hashtagbuttonOut
+                                             onClick={() => setOpenEdit(true)}>
+                            <Pen size="30" color="#646464"/>
+                        </button>}
+                    </div>
+                    <div className="flex justify-center content-center align-middle mx-10">
+                        <img
+                            className="border-transparent shadow-doubleIn object-cover mt-6 mb-2 rounded-2xl w-8/12 h-auto"
+                            src={currentRezept?.rezeptImageUrl} alt={currentRezept?.rezeptName}/>
+                    </div>
+                    <TipTapRender content={outputHTML}/>
+                    <div>
+                        {currentRezept?.kategorieList.map(kategorie => (
+                            <button
+                                type={"button"}
+                                onClick={onCategoryClick}
+                                value={kategorie.kategorieName}
+                                className="flex-row hover:shadow-hashtagbuttonOut text-xl font-sans active:shadow-hashtagbuttonOut
                                    shadow-hashtagbutton overflow-clip bg-offWhite w-fit rounded-full
-                                   px-5 text-sm font-semibold text-textPrime mr-2 mb-2 p-1"
-                            key={kategorie.kategorieName}>#{kategorie.kategorieName}</button>
-                    ))}
-                </div>
-            </motion.div>
-        </AnimatePresence>
-    </div>);
+                                   font-semibold text-textPrime mx-4 mb-2 px-6 py-2"
+                                key={kategorie.kategorieName}>#{kategorie.kategorieName}</button>
+                        ))}
+                    </div>
+                </motion.div>
+            </AnimatePresence>
+        </div>
+    );
 
 }

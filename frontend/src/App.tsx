@@ -18,11 +18,10 @@ import {PlusIcon} from "lucide-react";
 function App() {
     const [kategorieList, setKategorieList] = useState<Kategorie[]>([]);
     const [rezeptList, setRezeptList] = useState<Rezept[]>([]);
-    const [logIN, setLogIN] = useState<boolean>(false);
     const [searchTerm, setSearchTerm] = useState<string>("");
-    const [loggedIn, setLoggedIn] = useState<boolean>(false);
+    let loggedIn: boolean;
     const [kategorienGallery, setKategorienGallery] = useState<boolean>(false);
-    const items = ['AdminLogin'];
+    const items = ['AdminLogin', 'LogOut'];
 
 
 
@@ -30,12 +29,23 @@ function App() {
         setSearchTerm(event.target.value.toLowerCase());
     }
 
+
     function fetchRecipes() {
         axios.get("/api/rezepte").then(response => {
             setRezeptList(response.data);
             getKategories(response.data);
         });
 
+    }
+
+    function logInCheck() {
+        axios.get('/api/admin/me').then(response => {
+            if (response.status === 200) {
+                loggedIn = true;
+            } else {
+                loggedIn = false;
+            }
+        })
     }
 
     function getKategories(rezeptListUpdate: Rezept[]) {
@@ -61,14 +71,16 @@ function App() {
 
     useEffect(() => {
         fetchRecipes();
+        logInCheck();
+
 
     }, []);
 
     return (
         <>
-            {!logIN && <ContextMenu items={items}/>}
+            <ContextMenu loggedIn={loggedIn} items={items}/>
 
-            {!logIN &&
+
                 <div>
                     <div className="Header">
                 <Link to={"/"}><h1 className="HeadLine justify-center sticky align-middle text-4xl text-center font-semibold
@@ -88,15 +100,15 @@ function App() {
                                     "hover:shadow-buttonIn active:shadow-buttonIn"}/>
                         </Link>
                     </div>}
-                </div>}
+                </div>
             <Routes>
                 <Route path={"/admin/login"}
-                       element={<Login setLoggedIn={setLoggedIn} setLogIn={setLogIN} redirect={true}/>}/>
+                       element={<Login loggedIn={loggedIn} redirect={true}/>}/>
                 <Route path={"/"}
                        element={<RezeptGallery searchTerm={searchTerm} rezeptList={rezeptList}/>}/>
                 <Route path={`/rezept/:rezeptId`}
                        element={<DetailPage setKategorie={onCategoryClick} loggedIn={loggedIn}/>}/>
-                <Route path={"/addRezept"} element={<AddRezept setLoggedIn={setLoggedIn} setLogIn={setLogIN}/>}/>
+                <Route path={"/addRezept"} element={<AddRezept loggedIn={loggedIn}/>}/>
                 <Route path={"/kategorie/:kategorieName"}
                        element={<KategorieGallery setKategorienGallery={setKategorienGallery} searchTerm={searchTerm}
                                                   kategorieList={kategorieList}/>}/>

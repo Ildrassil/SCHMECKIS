@@ -10,12 +10,11 @@ import {JSONContent} from "@tiptap/react";
 import Login from "./LoginAdmin.tsx";
 
 type AddRezeptProps = {
-    setLogIn: (value: boolean) => void,
-    setLoggedIn: (value: boolean) => void
+    loggedIn: boolean
 }
 
 
-export function AddRezept({setLoggedIn, setLogIn}: AddRezeptProps) {
+export function AddRezept({loggedIn}: AddRezeptProps) {
 
     const navigate = useNavigate();
 
@@ -32,7 +31,7 @@ export function AddRezept({setLoggedIn, setLogIn}: AddRezeptProps) {
 
     function relogin(event: boolean) {
         if (event) {
-            setLoggedIn(true);
+            loggedIn = true;
             setError(false);
         }
     }
@@ -130,7 +129,7 @@ export function AddRezept({setLoggedIn, setLogIn}: AddRezeptProps) {
     return (<>
             {error && <div className="flex flex-col justify-center w-screen">
                 <h1 className="text-3xl text-center mt-36 text-red-600">Error: Rezept konnte nicht erstellt werden</h1>
-                <Login setLogIn={setLogIn} setLoggedIn={relogin} redirect={false}/>
+                <Login loggedIn={loggedIn} redirect={false}/>
             </div>}
             {!error && <div className="flex flex-row justify-center w-screen">
 

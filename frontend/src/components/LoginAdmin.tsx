@@ -3,13 +3,12 @@ import {useNavigate} from "react-router-dom";
 import {useState} from "react";
 
 type LoginProps = {
-    setLoggedIn: (loggedIn: boolean) => void
-    setLogIn: (logIn: boolean) => void
+    loggedIn: boolean;
     redirect: boolean
 }
 
-export default function Login({setLoggedIn, setLogIn, redirect}: LoginProps) {
-    setLogIn(true);
+export default function Login({loggedIn, redirect}: LoginProps) {
+
     const Nav = useNavigate();
     const [displayError, setDisplayError] = useState<boolean>(false);
     const [username, setUsername] = useState<string>("");
@@ -32,8 +31,7 @@ export default function Login({setLoggedIn, setLogIn, redirect}: LoginProps) {
                 password: password
             }
         }).then(() => {
-                setLoggedIn(true);
-                setLogIn(false);
+            loggedIn = true;
                 setDisplayError(false);
             if (redirect) {
                 Nav("/");
@@ -41,7 +39,7 @@ export default function Login({setLoggedIn, setLogIn, redirect}: LoginProps) {
 
         })
             .catch(() => {
-                setLoggedIn(false);
+                loggedIn = false;
                 setDisplayError(true);
             });
     }

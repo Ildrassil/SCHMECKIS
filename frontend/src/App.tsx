@@ -19,10 +19,9 @@ function App() {
     const [kategorieList, setKategorieList] = useState<Kategorie[]>([]);
     const [rezeptList, setRezeptList] = useState<Rezept[]>([]);
     const [searchTerm, setSearchTerm] = useState<string>("");
-    let loggedIn: boolean;
+    const [loggedIn, setLoggedIn] = useState<boolean>(false)
     const [kategorienGallery, setKategorienGallery] = useState<boolean>(false);
     const items = ['AdminLogin', 'LogOut'];
-
 
 
     function handleOnChange(event: ChangeEvent<HTMLInputElement>) {
@@ -39,14 +38,16 @@ function App() {
     }
 
     function logInCheck() {
-        axios.get('/api/admin/me').then(response => {
-            if (response.status === 200) {
-                loggedIn = true;
-            } else {
-                loggedIn = false;
-            }
+
+        axios.get('/api/admin/me').then(() => {
+
+            setLoggedIn(true);
+
+        }).catch(() => {
+            setLoggedIn(false);
         })
     }
+
 
     function getKategories(rezeptListUpdate: Rezept[]) {
         const allKategories: Kategorie[] = [...kategorieList];
@@ -68,7 +69,6 @@ function App() {
     }
 
 
-
     useEffect(() => {
         fetchRecipes();
         logInCheck();
@@ -78,37 +78,37 @@ function App() {
 
     return (
         <>
-            <ContextMenu loggedIn={loggedIn} items={items}/>
+            <ContextMenu setLoggedIn={setLoggedIn} loggedIn={loggedIn} items={items}/>
 
 
-                <div>
-                    <div className="Header">
-                <Link to={"/"}><h1 className="HeadLine justify-center sticky align-middle text-4xl text-center font-semibold
+            <div>
+                <div className="Header">
+                    <Link to={"/"}><h1 className="HeadLine justify-center sticky align-middle text-4xl text-center font-semibold
                 fontfamily-roboto font-sans
                 text-textHeader
                 pt-32 m-2">#SCHMECKIS</h1></Link>
 
-            </div>
-                    {!kategorienGallery && <KategorieMenu onCategoryClick={onCategoryClick}/>}
-            <div className={"flex flex-col bg-offWhite align-middle self-center justify-center border-none ml-35"}>
-                <SearchBar handleOnChange={handleOnChange}/>
-            </div>
-                    {loggedIn && <div className="flex flex-row justify-center">
-                        <Link to={"/addRezept"}>
-                            <PlusIcon size={55} className=
-                                {"flex-wrap p-4 m-8 justify-center rounded-2xl flex-row bg-offWhite shadow-buttonOut " +
-                                    "hover:shadow-buttonIn active:shadow-buttonIn"}/>
-                        </Link>
-                    </div>}
                 </div>
+                {!kategorienGallery && <KategorieMenu onCategoryClick={onCategoryClick}/>}
+                <div className={"flex flex-col bg-offWhite align-middle self-center justify-center border-none ml-35"}>
+                    <SearchBar handleOnChange={handleOnChange}/>
+                </div>
+                {loggedIn && <div className="flex flex-row justify-center">
+                    <Link to={"/addRezept"}>
+                        <PlusIcon size={55} className=
+                            {"flex-wrap p-4 m-8 justify-center rounded-2xl flex-row bg-offWhite shadow-buttonOut " +
+                                "hover:shadow-buttonIn active:shadow-buttonIn"}/>
+                    </Link>
+                </div>}
+            </div>
             <Routes>
                 <Route path={"/admin/login"}
-                       element={<Login loggedIn={loggedIn} redirect={true}/>}/>
+                       element={<Login setLoggedIn={setLoggedIn} loggedIn={loggedIn} redirect={true}/>}/>
                 <Route path={"/"}
                        element={<RezeptGallery searchTerm={searchTerm} rezeptList={rezeptList}/>}/>
                 <Route path={`/rezept/:rezeptId`}
                        element={<DetailPage setKategorie={onCategoryClick} loggedIn={loggedIn}/>}/>
-                <Route path={"/addRezept"} element={<AddRezept loggedIn={loggedIn}/>}/>
+                <Route path={"/addRezept"} element={<AddRezept loggedIn={loggedIn} setLoggedIn={setLoggedIn}/>}/>
                 <Route path={"/kategorie/:kategorieName"}
                        element={<KategorieGallery setKategorienGallery={setKategorienGallery} searchTerm={searchTerm}
                                                   kategorieList={kategorieList}/>}/>

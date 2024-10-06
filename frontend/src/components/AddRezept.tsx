@@ -10,11 +10,12 @@ import {JSONContent} from "@tiptap/react";
 import Login from "./LoginAdmin.tsx";
 
 type AddRezeptProps = {
-    loggedIn: boolean
+    loggedIn: boolean;
+    setLoggedIn: (value: boolean) => void;
 }
 
 
-export function AddRezept({loggedIn}: AddRezeptProps) {
+export function AddRezept({loggedIn, setLoggedIn}: AddRezeptProps) {
 
     const navigate = useNavigate();
 
@@ -31,7 +32,7 @@ export function AddRezept({loggedIn}: AddRezeptProps) {
 
     function relogin(event: boolean) {
         if (event) {
-            loggedIn = true;
+            setLoggedIn(true);
             setError(false);
         }
     }

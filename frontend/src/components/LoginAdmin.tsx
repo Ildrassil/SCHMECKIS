@@ -4,10 +4,11 @@ import {useState} from "react";
 
 type LoginProps = {
     loggedIn: boolean;
+    setLoggedIn: (value: boolean) => void;
     redirect: boolean
 }
 
-export default function Login({loggedIn, redirect}: LoginProps) {
+export default function Login({loggedIn, setLoggedIn, redirect}: LoginProps) {
 
     const Nav = useNavigate();
     const [displayError, setDisplayError] = useState<boolean>(false);
@@ -31,7 +32,7 @@ export default function Login({loggedIn, redirect}: LoginProps) {
                 password: password
             }
         }).then(() => {
-            loggedIn = true;
+            setLoggedIn(true);
                 setDisplayError(false);
             if (redirect) {
                 Nav("/");
@@ -39,7 +40,7 @@ export default function Login({loggedIn, redirect}: LoginProps) {
 
         })
             .catch(() => {
-                loggedIn = false;
+                setLoggedIn(false);
                 setDisplayError(true);
             });
     }

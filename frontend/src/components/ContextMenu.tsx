@@ -6,10 +6,11 @@ import {Link} from "react-router-dom";
 type Props = {
     items: Array<string>;
     loggedIn: boolean;
+    setLoggedIn: (value: boolean) => void;
 
 };
 
-const ContextMenu = ({items, loggedIn}: Props) => {
+const ContextMenu = ({items, setLoggedIn, loggedIn}: Props) => {
     const {anchorPoint, isShown} = useContextMenu();
 
     if (!isShown) {
@@ -17,7 +18,7 @@ const ContextMenu = ({items, loggedIn}: Props) => {
     }
 
     function changeLogIn() {
-        loggedIn = false;
+        setLoggedIn(false);
     }
 
 
@@ -28,9 +29,9 @@ const ContextMenu = ({items, loggedIn}: Props) => {
             style={{top: anchorPoint.y, left: anchorPoint.x}}
         >
 
-            {!loggedIn && <li key={items[1]}><Link to={"/admin/login"}>{items[1]}</Link></li>}
-            {loggedIn && <li key={items[2]}>
-                <button onClick={changeLogIn}>{items[2]}</button>
+            {!loggedIn && <li key={items[0]}><Link to={"/admin/login"}>{items[0]}</Link></li>}
+            {loggedIn && <li key={items[1]}>
+                <button onClick={changeLogIn}>{items[1]}</button>
             </li>}
 
         </ul>
